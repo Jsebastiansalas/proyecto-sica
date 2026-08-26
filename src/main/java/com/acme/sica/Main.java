@@ -3,9 +3,10 @@ package com.acme.sica;
 import com.acme.sica.infraestructura.configuracion.ConfiguracionBaseDatos;
 import com.acme.sica.infraestructura.configuracion.ContenedorDependencias;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+
 import javafx.application.Application;
 
-public class Principal {
+public class Main {
 
     public static void main(String[] args) {
         ConfiguracionBaseDatos configuracion = new ConfiguracionBaseDatos();

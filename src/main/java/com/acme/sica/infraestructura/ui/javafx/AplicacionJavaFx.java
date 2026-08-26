@@ -2,9 +2,9 @@ package com.acme.sica.infraestructura.ui.javafx;
 
 import com.acme.sica.infraestructura.configuracion.ContenedorDependencias;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class AplicacionJavaFx extends Application {
@@ -20,12 +20,10 @@ public class AplicacionJavaFx extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        Label etiqueta = new Label("SICA - Zona Acme\nProyecto cargado correctamente");
-        etiqueta.setStyle("-fx-font-size: 16px; -fx-alignment: center;");
-
-        StackPane raiz = new StackPane(etiqueta);
-        Scene escena = new Scene(raiz, 400, 300);
+    public void start(Stage primaryStage) throws Exception {
+        Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+        Scene escena = new Scene(raiz, 400, 500);
+        escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
 
         primaryStage.setTitle("SICA - Zona Acme");
         primaryStage.setScene(escena);

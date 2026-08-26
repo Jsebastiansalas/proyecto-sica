@@ -1,0 +1,55 @@
+.login-root {
+    -fx-background-color: #f4f6f8;
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+}
+
+.login-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3a5c;
+}
+
+.login-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #5a6b7c;
+    -fx-padding: 0 0 20 0;
+}
+
+.login-field {
+    -fx-pref-width: 280px;
+    -fx-pref-height: 36px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #cfd8dc;
+    -fx-border-width: 1px;
+    -fx-background-color: #ffffff;
+    -fx-padding: 0 10 0 10;
+}
+
+.login-field:focused {
+    -fx-border-color: #1a73e8;
+}
+
+.login-button {
+    -fx-pref-width: 280px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #1a73e8;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-background-color: #1557b0;
+}
+
+.login-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: #d32f2f;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-max-width: 280px;
+}

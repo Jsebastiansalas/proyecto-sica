@@ -1,5 +1,7 @@
 package com.acme.sica.infraestructura.configuracion;
 
+import com.acme.sica.aplicacion.autenticacion.IniciarSesionServicio;
+import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.persistencia.jdbc.FabricaConexiones;
 import com.acme.sica.infraestructura.persistencia.jdbc.InicializadorBaseDatos;
@@ -12,6 +14,7 @@ import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcPersona;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcRol;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcUsuario;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVisita;
+import com.acme.sica.infraestructura.seguridad.HasheadorContrasenas;
 
 /**
  * Contenedor manual de dependencias.
@@ -23,6 +26,10 @@ public class ContenedorDependencias {
     private final ConfiguracionBaseDatos configuracionBaseDatos;
     private final FabricaConexiones fabricaConexiones;
     private final InicializadorBaseDatos inicializadorBaseDatos;
+
+    private final HasheadorContrasenas hasheadorContrasenas;
+
+    private final IniciarSesionCasoUso iniciarSesionCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final RolRepositorioPuerto rolRepositorio;
@@ -39,6 +46,8 @@ public class ContenedorDependencias {
         this.fabricaConexiones = new FabricaConexiones(configuracionBaseDatos);
         this.inicializadorBaseDatos = new InicializadorBaseDatos(fabricaConexiones);
 
+        this.hasheadorContrasenas = new HasheadorContrasenas();
+
         this.usuarioRepositorio = new RepositorioJdbcUsuario(fabricaConexiones);
         this.rolRepositorio = new RepositorioJdbcRol(fabricaConexiones);
         this.permisoRepositorio = new RepositorioJdbcPermiso(fabricaConexiones);
@@ -48,6 +57,12 @@ public class ContenedorDependencias {
         this.visitaRepositorio = new RepositorioJdbcVisita(fabricaConexiones);
         this.incidenteRepositorio = new RepositorioJdbcIncidente(fabricaConexiones);
         this.bitacoraRepositorio = new RepositorioJdbcBitacora(fabricaConexiones);
+
+        this.iniciarSesionCasoUso = new IniciarSesionServicio(
+                usuarioRepositorio,
+                hasheadorContrasenas,
+                bitacoraRepositorio
+        );
     }
 
     public ConfiguracionBaseDatos getConfiguracionBaseDatos() {
@@ -96,6 +111,14 @@ public class ContenedorDependencias {
 
     public BitacoraRepositorioPuerto getBitacoraRepositorio() {
         return bitacoraRepositorio;
+    }
+
+    public IniciarSesionCasoUso getIniciarSesionCasoUso() {
+        return iniciarSesionCasoUso;
+    }
+
+    public HasheadorContrasenas getHasheadorContrasenas() {
+        return hasheadorContrasenas;
     }
 
 }

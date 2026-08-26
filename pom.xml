@@ -71,7 +71,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
-                    <mainClass>com.acme.sica.Principal</mainClass>
+                    <mainClass>com.acme.sica.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
