@@ -1,0 +1,29 @@
+package com.acme.sica.dominio.puerto.salida;
+
+import com.acme.sica.dominio.modelo.Visita;
+import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+public interface VisitaRepositorioPuerto {
+
+    Visita guardar(Visita visita);
+
+    Optional<Visita> buscarPorId(Long id);
+
+    List<Visita> buscarPorPersona(Long personaId);
+
+    List<Visita> buscarPorPersonaYEstado(Long personaId, EstadoVisita estado);
+
+    Optional<Visita> buscarVisitaAbiertaPorPersona(Long personaId);
+
+    List<Visita> buscarPendientesPorEmpresa(Long empresaId);
+
+    List<Visita> listarTodos();
+
+    List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId);
+
+    void eliminarPorId(Long id);
+}

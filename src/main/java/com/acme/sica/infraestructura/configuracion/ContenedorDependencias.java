@@ -1,0 +1,101 @@
+package com.acme.sica.infraestructura.configuracion;
+
+import com.acme.sica.dominio.puerto.salida.*;
+import com.acme.sica.infraestructura.persistencia.jdbc.FabricaConexiones;
+import com.acme.sica.infraestructura.persistencia.jdbc.InicializadorBaseDatos;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcBitacora;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcEmpresa;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcFuncionario;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcIncidente;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcPermiso;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcPersona;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcRol;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcUsuario;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVisita;
+
+/**
+ * Contenedor manual de dependencias.
+ * Se encarga de instanciar y conectar todos los adaptadores, servicios y casos de uso.
+ * A medida que avancemos, este archivo irá creciendo con cada funcionalidad nueva.
+ */
+public class ContenedorDependencias {
+
+    private final ConfiguracionBaseDatos configuracionBaseDatos;
+    private final FabricaConexiones fabricaConexiones;
+    private final InicializadorBaseDatos inicializadorBaseDatos;
+
+    private final UsuarioRepositorioPuerto usuarioRepositorio;
+    private final RolRepositorioPuerto rolRepositorio;
+    private final PermisoRepositorioPuerto permisoRepositorio;
+    private final EmpresaRepositorioPuerto empresaRepositorio;
+    private final FuncionarioRepositorioPuerto funcionarioRepositorio;
+    private final PersonaRepositorioPuerto personaRepositorio;
+    private final VisitaRepositorioPuerto visitaRepositorio;
+    private final IncidenteRepositorioPuerto incidenteRepositorio;
+    private final BitacoraRepositorioPuerto bitacoraRepositorio;
+
+    public ContenedorDependencias(ConfiguracionBaseDatos configuracionBaseDatos) {
+        this.configuracionBaseDatos = configuracionBaseDatos;
+        this.fabricaConexiones = new FabricaConexiones(configuracionBaseDatos);
+        this.inicializadorBaseDatos = new InicializadorBaseDatos(fabricaConexiones);
+
+        this.usuarioRepositorio = new RepositorioJdbcUsuario(fabricaConexiones);
+        this.rolRepositorio = new RepositorioJdbcRol(fabricaConexiones);
+        this.permisoRepositorio = new RepositorioJdbcPermiso(fabricaConexiones);
+        this.empresaRepositorio = new RepositorioJdbcEmpresa(fabricaConexiones);
+        this.funcionarioRepositorio = new RepositorioJdbcFuncionario(fabricaConexiones);
+        this.personaRepositorio = new RepositorioJdbcPersona(fabricaConexiones);
+        this.visitaRepositorio = new RepositorioJdbcVisita(fabricaConexiones);
+        this.incidenteRepositorio = new RepositorioJdbcIncidente(fabricaConexiones);
+        this.bitacoraRepositorio = new RepositorioJdbcBitacora(fabricaConexiones);
+    }
+
+    public ConfiguracionBaseDatos getConfiguracionBaseDatos() {
+        return configuracionBaseDatos;
+    }
+
+    public FabricaConexiones getFabricaConexiones() {
+        return fabricaConexiones;
+    }
+
+    public InicializadorBaseDatos getInicializadorBaseDatos() {
+        return inicializadorBaseDatos;
+    }
+
+    public UsuarioRepositorioPuerto getUsuarioRepositorio() {
+        return usuarioRepositorio;
+    }
+
+    public RolRepositorioPuerto getRolRepositorio() {
+        return rolRepositorio;
+    }
+
+    public PermisoRepositorioPuerto getPermisoRepositorio() {
+        return permisoRepositorio;
+    }
+
+    public EmpresaRepositorioPuerto getEmpresaRepositorio() {
+        return empresaRepositorio;
+    }
+
+    public FuncionarioRepositorioPuerto getFuncionarioRepositorio() {
+        return funcionarioRepositorio;
+    }
+
+    public PersonaRepositorioPuerto getPersonaRepositorio() {
+        return personaRepositorio;
+    }
+
+    public VisitaRepositorioPuerto getVisitaRepositorio() {
+        return visitaRepositorio;
+    }
+
+    public IncidenteRepositorioPuerto getIncidenteRepositorio() {
+        return incidenteRepositorio;
+    }
+
+    public BitacoraRepositorioPuerto getBitacoraRepositorio() {
+        return bitacoraRepositorio;
+    }
+
+}

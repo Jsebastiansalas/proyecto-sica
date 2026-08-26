@@ -1,0 +1,285 @@
+package com.acme.sica.infraestructura.persistencia.jdbc;
+
+import com.acme.sica.dominio.modelo.Funcionario;
+import com.acme.sica.dominio.modelo.Persona;
+import com.acme.sica.dominio.modelo.Visita;
+import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
+import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
+import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
+
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
+
+    private final FabricaConexiones fabricaConexiones;
+
+    public RepositorioJdbcVisita(FabricaConexiones fabricaConexiones) {
+        this.fabricaConexiones = fabricaConexiones;
+    }
+
+    @Override
+    public Visita guardar(Visita visita) {
+        if (visita.getId() == null) {
+            return insertar(visita);
+        }
+        return actualizar(visita);
+    }
+
+    private Visita insertar(Visita visita) {
+        String sql = "INSERT INTO visitas (persona_id, funcionario_id, fecha_hora_programada, " +
+                     "fecha_hora_checkin, fecha_hora_checkout, estado, observaciones) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setLong(1, visita.getPersona().getId());
+            stmt.setObject(2, visita.getFuncionario() != null ? visita.getFuncionario().getId() : null, Types.BIGINT);
+            stmt.setTimestamp(3, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
+            stmt.setTimestamp(4, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
+            stmt.setTimestamp(5, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
+            stmt.setString(6, visita.getEstado().name());
+            stmt.setString(7, visita.getMotivo());
+            stmt.executeUpdate();
+
+            try (ResultSet claves = stmt.getGeneratedKeys()) {
+                if (claves.next()) {
+                    visita.setId(claves.getLong(1));
+                }
+            }
+            return visita;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al insertar visita", e);
+        }
+    }
+
+    private Visita actualizar(Visita visita) {
+        String sql = "UPDATE visitas SET persona_id = ?, funcionario_id = ?, fecha_hora_programada = ?, " +
+                     "fecha_hora_checkin = ?, fecha_hora_checkout = ?, estado = ?, observaciones = ? WHERE id = ?";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, visita.getPersona().getId());
+            stmt.setObject(2, visita.getFuncionario() != null ? visita.getFuncionario().getId() : null, Types.BIGINT);
+            stmt.setTimestamp(3, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
+            stmt.setTimestamp(4, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
+            stmt.setTimestamp(5, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
+            stmt.setString(6, visita.getEstado().name());
+            stmt.setString(7, visita.getMotivo());
+            stmt.setLong(8, visita.getId());
+            stmt.executeUpdate();
+            return visita;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al actualizar visita", e);
+        }
+    }
+
+    @Override
+    public Optional<Visita> buscarPorId(Long id) {
+        String sql = construirSelectBase() + " WHERE v.id = ?";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapearFila(rs));
+                }
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visita por id", e);
+        }
+    }
+
+    @Override
+    public List<Visita> buscarPorPersona(Long personaId) {
+        String sql = construirSelectBase() + " WHERE v.persona_id = ? ORDER BY v.fecha_creacion DESC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, personaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visitas por persona", e);
+        }
+    }
+
+    @Override
+    public List<Visita> buscarPorPersonaYEstado(Long personaId, EstadoVisita estado) {
+        String sql = construirSelectBase() + " WHERE v.persona_id = ? AND v.estado = ? ORDER BY v.fecha_creacion DESC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, personaId);
+            stmt.setString(2, estado.name());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visitas por persona y estado", e);
+        }
+    }
+
+    @Override
+    public Optional<Visita> buscarVisitaAbiertaPorPersona(Long personaId) {
+        String sql = construirSelectBase() + " WHERE v.persona_id = ? AND v.estado = 'DENTRO' ORDER BY v.fecha_creacion DESC LIMIT 1";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, personaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapearFila(rs));
+                }
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visita abierta", e);
+        }
+    }
+
+    @Override
+    public List<Visita> buscarPendientesPorEmpresa(Long empresaId) {
+        String sql = construirSelectBase() + " WHERE f.empresa_id = ? AND v.estado IN ('PENDIENTE_APROBACION', 'PENDIENTE_APROBACION_OLVIDO') ORDER BY v.fecha_creacion DESC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, empresaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visitas pendientes por empresa", e);
+        }
+    }
+
+    @Override
+    public List<Visita> listarTodos() {
+        String sql = construirSelectBase() + " ORDER BY v.fecha_creacion DESC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                visitas.add(mapearFila(rs));
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar visitas", e);
+        }
+    }
+
+    @Override
+    public List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId) {
+        StringBuilder sql = new StringBuilder(construirSelectBase());
+        sql.append(" WHERE 1=1 ");
+        List<Object> parametros = new ArrayList<>();
+
+        if (fechaDesde != null) {
+            sql.append(" AND v.fecha_hora_checkin >= ? ");
+            parametros.add(Timestamp.valueOf(fechaDesde));
+        }
+        if (fechaHasta != null) {
+            sql.append(" AND v.fecha_hora_checkin <= ? ");
+            parametros.add(Timestamp.valueOf(fechaHasta));
+        }
+        if (empresaId != null) {
+            sql.append(" AND f.empresa_id = ? ");
+            parametros.add(empresaId);
+        }
+        sql.append(" ORDER BY v.fecha_creacion DESC");
+
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < parametros.size(); i++) {
+                stmt.setObject(i + 1, parametros.get(i));
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al filtrar visitas", e);
+        }
+    }
+
+    @Override
+    public void eliminarPorId(Long id) {
+        String sql = "DELETE FROM visitas WHERE id = ?";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al eliminar visita", e);
+        }
+    }
+
+    private String construirSelectBase() {
+        return "SELECT v.id, v.persona_id, v.funcionario_id, v.fecha_hora_programada, " +
+               "v.fecha_hora_checkin, v.fecha_hora_checkout, v.estado, v.observaciones, v.fecha_creacion, " +
+               "p.documento AS persona_documento, p.nombre AS persona_nombre, p.foto_url AS persona_foto_url, " +
+               "p.tipo AS persona_tipo, p.bloqueada AS persona_bloqueada, " +
+               "f.nombre AS funcionario_nombre, f.empresa_id AS funcionario_empresa_id " +
+               "FROM visitas v " +
+               "INNER JOIN personas p ON v.persona_id = p.id " +
+               "LEFT JOIN funcionarios f ON v.funcionario_id = f.id";
+    }
+
+    private Visita mapearFila(ResultSet rs) throws SQLException {
+        Visita visita = new Visita();
+        visita.setId(rs.getLong("id"));
+        visita.setFechaHoraEsperada(rs.getTimestamp("fecha_hora_programada") != null ?
+                rs.getTimestamp("fecha_hora_programada").toLocalDateTime() : null);
+        visita.setFechaHoraIngreso(rs.getTimestamp("fecha_hora_checkin") != null ?
+                rs.getTimestamp("fecha_hora_checkin").toLocalDateTime() : null);
+        visita.setFechaHoraSalida(rs.getTimestamp("fecha_hora_checkout") != null ?
+                rs.getTimestamp("fecha_hora_checkout").toLocalDateTime() : null);
+        visita.setEstado(EstadoVisita.valueOf(rs.getString("estado")));
+        visita.setMotivo(rs.getString("observaciones"));
+        visita.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
+
+        Persona persona = new Persona();
+        persona.setId(rs.getLong("persona_id"));
+        persona.setDocumentoIdentidad(rs.getString("persona_documento"));
+        persona.setNombreCompleto(rs.getString("persona_nombre"));
+        persona.setFotoUrl(rs.getString("persona_foto_url"));
+        persona.setTipo(TipoPersona.valueOf(rs.getString("persona_tipo")));
+        persona.setBloqueada(rs.getBoolean("persona_bloqueada"));
+        visita.setPersona(persona);
+
+        Long funcionarioId = rs.getObject("funcionario_id", Long.class);
+        if (funcionarioId != null) {
+            Funcionario funcionario = new Funcionario();
+            funcionario.setId(funcionarioId);
+            funcionario.setNombreCompleto(rs.getString("funcionario_nombre"));
+            visita.setFuncionario(funcionario);
+        }
+
+        return visita;
+    }
+}
