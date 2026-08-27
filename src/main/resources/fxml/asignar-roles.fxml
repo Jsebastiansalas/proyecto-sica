@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.AsignarRolesControlador"
+      alignment="CENTER"
+      spacing="16"
+      styleClass="dashboard-root">
+
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <Label text="Asignar Roles a Usuarios" styleClass="login-title"/>
+    <ComboBox fx:id="comboUsuarios" promptText="Seleccione un usuario" prefWidth="350"/>
+    <Label text="Roles activos" styleClass="dashboard-subtitle"/>
+
+    <ScrollPane fitToWidth="true" prefHeight="220" prefWidth="350">
+        <content>
+            <VBox fx:id="contenedorRoles" spacing="10"/>
+        </content>
+    </ScrollPane>
+
+    <Button text="Guardar asignación" onAction="#guardarAsignacion" styleClass="dashboard-button"/>
+    <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+    <Button text="Volver" onAction="#volverAlDashboard" styleClass="dashboard-button secondary"/>
+
+</VBox>

@@ -10,8 +10,11 @@ import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.RolRepositorioPuerto;
+import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Servicio de aplicación para la gestión de roles.
@@ -22,12 +25,15 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
     private static final String PERMISO_REQUERIDO = "gestionar_roles";
 
     private final RolRepositorioPuerto rolRepositorio;
+    private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final BitacoraRepositorioPuerto bitacoraRepositorio;
 
     public GestionarRolServicio(RolRepositorioPuerto rolRepositorio,
-                                BitacoraRepositorioPuerto bitacoraRepositorio) {
+                                BitacoraRepositorioPuerto bitacoraRepositorio,
+                                UsuarioRepositorioPuerto usuarioRepositorio) {
         this.rolRepositorio = rolRepositorio;
         this.bitacoraRepositorio = bitacoraRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Override
@@ -91,6 +97,33 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         validarPermiso("obtener");
         return rolRepositorio.buscarPorId(rolId)
                 .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + rolId));
+    }
+
+    @Override
+    public void asignarRoles(AsignarRolesUsuarioComando comando) {
+        validarPermiso("asignar roles");
+
+        if (comando.getRolIds() == null || comando.getRolIds().isEmpty()) {
+            throw new IllegalArgumentException("El usuario debe conservar al menos un rol");
+        }
+
+        usuarioRepositorio.buscarPorId(comando.getUsuarioId())
+                .orElseThrow(() -> new EntidadNoEncontradaExcepcion(
+                        "Usuario no encontrado con id " + comando.getUsuarioId()));
+
+        Set<Long> rolesValidos = new HashSet<>();
+        for (Long rolId : comando.getRolIds()) {
+            Rol rol = rolRepositorio.buscarPorId(rolId)
+                    .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + rolId));
+            if (!rol.isActivo()) {
+                throw new IllegalArgumentException("El rol '" + rol.getNombre() + "' no está activo");
+            }
+            rolesValidos.add(rolId);
+        }
+
+        usuarioRepositorio.asignarRoles(comando.getUsuarioId(), rolesValidos);
+        auditar(TipoAccionAuditoria.ASIGNAR_ROL_USUARIO, comando.getUsuarioId(),
+                "Roles asignados: " + rolesValidos);
     }
 
     private void validarPermiso(String accion) {

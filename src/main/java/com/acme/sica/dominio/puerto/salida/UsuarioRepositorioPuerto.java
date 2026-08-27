@@ -4,6 +4,7 @@ import com.acme.sica.dominio.modelo.Usuario;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UsuarioRepositorioPuerto {
 
@@ -20,4 +21,8 @@ public interface UsuarioRepositorioPuerto {
     boolean existePorUsername(String username);
 
     long contarUsuariosPorRol(Long rolId);
+
+    void asignarRoles(Long usuarioId, Set<Long> rolIds);
+
+    void eliminarRoles(Long usuarioId);
 }

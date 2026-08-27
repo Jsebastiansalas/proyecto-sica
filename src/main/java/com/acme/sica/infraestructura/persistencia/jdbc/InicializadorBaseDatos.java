@@ -33,15 +33,15 @@ public class InicializadorBaseDatos {
             }
             String sql = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))
                     .lines()
-                    .collect(Collectors.joining("\n"));
+                    .collect(Collectors.joining("\n"))
+                    .replaceAll("(?m)--[^\\r\\n]*", "")
+                    .replaceAll("/\\*.*?\\*/", "");
 
             try (Connection conn = fabricaConexiones.crearConexion();
                  Statement stmt = conn.createStatement()) {
                 Arrays.stream(sql.split(";"))
                         .map(String::trim)
                         .filter(s -> !s.isEmpty())
-                        .filter(s -> !s.startsWith("--"))
-                        .filter(s -> !s.startsWith("/*"))
                         .forEach(sentencia -> ejecutarSilenciosamente(stmt, sentencia));
             }
         } catch (Exception e) {

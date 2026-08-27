@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/21"
@@ -25,9 +26,24 @@
                promptText="Usuario"
                styleClass="login-field"/>
 
-    <PasswordField fx:id="campoContrasena"
+    <HBox spacing="8" alignment="CENTER">
+        <PasswordField fx:id="campoContrasena"
+                       promptText="Contraseña"
+                       styleClass="login-field"
+                       HBox.hgrow="ALWAYS"/>
+
+        <TextField fx:id="campoContrasenaVisible"
                    promptText="Contraseña"
-                   styleClass="login-field"/>
+                   styleClass="login-field"
+                   visible="false"
+                   managed="false"
+                   HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="botonMostrarContrasena"
+                text="👁"
+                onAction="#toggleContrasena"
+                styleClass="eye-button"/>
+    </HBox>
 
     <Button text="Ingresar"
             onAction="#manejarLogin"

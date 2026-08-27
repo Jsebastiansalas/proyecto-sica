@@ -25,6 +25,16 @@
             onAction="#abrirGestionRoles"
             styleClass="dashboard-button"/>
 
+    <Button fx:id="botonGestionarPermisos"
+            text="Gestionar Permisos"
+            onAction="#abrirGestionPermisos"
+            styleClass="dashboard-button"/>
+
+    <Button fx:id="botonAsignarRoles"
+            text="Asignar Roles a Usuarios"
+            onAction="#abrirAsignacionRoles"
+            styleClass="dashboard-button"/>
+
     <Button fx:id="botonCerrarSesion"
             text="Cerrar Sesión"
             onAction="#cerrarSesion"

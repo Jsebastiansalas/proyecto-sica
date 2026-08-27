@@ -23,6 +23,12 @@ public class DashboardControlador {
     private Button botonGestionarRoles;
 
     @FXML
+    private Button botonGestionarPermisos;
+
+    @FXML
+    private Button botonAsignarRoles;
+
+    @FXML
     private Button botonCerrarSesion;
 
     @FXML
@@ -33,11 +39,23 @@ public class DashboardControlador {
         });
 
         botonGestionarRoles.setVisible(SesionContexto.tienePermiso("gestionar_roles"));
+        botonGestionarPermisos.setVisible(SesionContexto.tienePermiso("gestionar_permisos"));
+        botonAsignarRoles.setVisible(SesionContexto.tienePermiso("asignar_roles"));
     }
 
     @FXML
     private void abrirGestionRoles() {
         cargarVista("/fxml/roles.fxml", "SICA - Gestión de Roles");
+    }
+
+    @FXML
+    private void abrirGestionPermisos() {
+        cargarVista("/fxml/permisos.fxml", "SICA - Gestión de Permisos");
+    }
+
+    @FXML
+    private void abrirAsignacionRoles() {
+        cargarVista("/fxml/asignar-roles.fxml", "SICA - Asignar Roles");
     }
 
     @FXML

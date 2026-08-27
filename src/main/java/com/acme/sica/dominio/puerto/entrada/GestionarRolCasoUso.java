@@ -2,6 +2,7 @@ package com.acme.sica.dominio.puerto.entrada;
 
 import com.acme.sica.aplicacion.rol.CrearRolComando;
 import com.acme.sica.aplicacion.rol.EditarRolComando;
+import com.acme.sica.aplicacion.rol.AsignarRolesUsuarioComando;
 import com.acme.sica.dominio.modelo.Rol;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface GestionarRolCasoUso {
     List<Rol> listarTodos();
 
     Rol obtenerPorId(Long rolId);
+
+    void asignarRoles(AsignarRolesUsuarioComando comando);
 
 }

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,13 +26,43 @@ public class LoginControlador {
     private PasswordField campoContrasena;
 
     @FXML
+    private TextField campoContrasenaVisible;
+
+    @FXML
+    private Button botonMostrarContrasena;
+
+    @FXML
     private Label etiquetaMensaje;
 
     private IniciarSesionCasoUso casoUso;
+    private boolean contrasenaVisible = false;
 
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getIniciarSesionCasoUso();
+        campoContrasenaVisible.setVisible(false);
+        campoContrasenaVisible.setManaged(false);
+    }
+
+    @FXML
+    private void toggleContrasena() {
+        contrasenaVisible = !contrasenaVisible;
+
+        if (contrasenaVisible) {
+            campoContrasenaVisible.setText(campoContrasena.getText());
+            campoContrasenaVisible.setVisible(true);
+            campoContrasenaVisible.setManaged(true);
+            campoContrasena.setVisible(false);
+            campoContrasena.setManaged(false);
+            botonMostrarContrasena.setText("🙈");
+        } else {
+            campoContrasena.setText(campoContrasenaVisible.getText());
+            campoContrasena.setVisible(true);
+            campoContrasena.setManaged(true);
+            campoContrasenaVisible.setVisible(false);
+            campoContrasenaVisible.setManaged(false);
+            botonMostrarContrasena.setText("👁");
+        }
     }
 
     @FXML
@@ -39,7 +70,7 @@ public class LoginControlador {
         etiquetaMensaje.setText("");
 
         String username = campoUsuario.getText().trim();
-        String password = campoContrasena.getText();
+        String password = contrasenaVisible ? campoContrasenaVisible.getText() : campoContrasena.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
             etiquetaMensaje.setText("Ingrese usuario y contraseña");
