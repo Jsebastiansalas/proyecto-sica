@@ -73,9 +73,9 @@ WHERE r.nombre = 'SISTEMA'
 -- Contraseñas hasheadas con PBKDF2 (PasswordHasher)
 -- =====================================================
 INSERT INTO usuarios (username, password_hash, nombre_completo, activo) VALUES
-    ('admin', '1JS4alcj20uRyNyfQhT4zA==$pCu7pPuZUp/WKAkrzPLwxgXbcj/gdKElvQoE3uctUVo=', 'Administrador Principal', TRUE),
-    ('guarda1', 'ik6F6MJU4H9qJ1JgCMgHGQ==$IIp03J0QobCQ1DGX8SmPXGsWd9Tc2G7vtUzssSrWpt8=', 'Guarda de Seguridad 1', TRUE),
-    ('funcionario1', 'wS5dMPgr8VSqNiVyo+x2eQ==$eNkGhgLjQ+Va2MqYA0W0w1YvuE/eG1cENKd0JmSpH3Q=', 'Funcionario Empresa A', TRUE);
+    ('admin', 'xoWeOEDC0i+oC89VUV9K5Q==$aUCB33OP4Rv6U2L5a99k0xxz0fPB1YYxy8ZKj8LV5fs=', 'Administrador Principal', TRUE),
+    ('guarda1', 'wEEezEgLqd+t5OIKhFHjvg==$lIdFlb1VOmKhIJG4Dvg4l11bJjV39xGkEkPCaT2iE5w=', 'Guarda de Seguridad 1', TRUE),
+    ('funcionario1', 'OKaauufh8swmU+YinrrhOA==$Rknj3C3t/MtqXtJzCa4T+sBWVavHPH8nB7l6axJUlug=', 'Funcionario Empresa A', TRUE);
 
 -- =====================================================
 -- ASIGNACIÓN DE ROLES A USUARIOS
