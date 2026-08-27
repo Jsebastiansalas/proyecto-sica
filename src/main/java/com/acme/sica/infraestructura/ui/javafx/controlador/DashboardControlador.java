@@ -38,6 +38,12 @@ public class DashboardControlador {
     private Button botonGestionarFuncionarios;
 
     @FXML
+    private Button botonGestionarPersonas;
+
+    @FXML
+    private Button botonPreRegistrarInvitado;
+
+    @FXML
     private Button botonCerrarSesion;
 
     @FXML
@@ -53,6 +59,8 @@ public class DashboardControlador {
         botonConsultarBitacora.setVisible(SesionContexto.tienePermiso("consultar_bitacora"));
         botonGestionarEmpresas.setVisible(SesionContexto.tienePermiso("gestionar_empresas"));
         botonGestionarFuncionarios.setVisible(SesionContexto.tienePermiso("gestionar_funcionarios"));
+        botonGestionarPersonas.setVisible(SesionContexto.tienePermiso("registrar_persona"));
+        botonPreRegistrarInvitado.setVisible(SesionContexto.tienePermiso("pre_registrar_invitado"));
     }
 
     @FXML
@@ -83,6 +91,16 @@ public class DashboardControlador {
     @FXML
     private void abrirGestionFuncionarios() {
         cargarVista("/fxml/funcionarios.fxml", "SICA - Gestión de Funcionarios");
+    }
+
+    @FXML
+    private void abrirGestionPersonas() {
+        cargarVista("/fxml/personas.fxml", "SICA - Gestión de Personas");
+    }
+
+    @FXML
+    private void abrirPreRegistrarInvitado() {
+        cargarVista("/fxml/pre-registrar-invitado.fxml", "SICA - Pre-registrar Invitado");
     }
 
     @FXML

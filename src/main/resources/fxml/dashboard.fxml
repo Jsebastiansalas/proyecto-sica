@@ -50,6 +50,16 @@
             onAction="#abrirGestionFuncionarios"
             styleClass="dashboard-button"/>
 
+    <Button fx:id="botonGestionarPersonas"
+            text="Gestionar Personas"
+            onAction="#abrirGestionPersonas"
+            styleClass="dashboard-button"/>
+
+    <Button fx:id="botonPreRegistrarInvitado"
+            text="Pre-registrar Invitado"
+            onAction="#abrirPreRegistrarInvitado"
+            styleClass="dashboard-button"/>
+
     <Button fx:id="botonCerrarSesion"
             text="Cerrar Sesión"
             onAction="#cerrarSesion"
