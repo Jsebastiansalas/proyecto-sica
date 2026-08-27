@@ -29,6 +29,9 @@ public class DashboardControlador {
     private Button botonAsignarRoles;
 
     @FXML
+    private Button botonConsultarBitacora;
+
+    @FXML
     private Button botonCerrarSesion;
 
     @FXML
@@ -41,6 +44,7 @@ public class DashboardControlador {
         botonGestionarRoles.setVisible(SesionContexto.tienePermiso("gestionar_roles"));
         botonGestionarPermisos.setVisible(SesionContexto.tienePermiso("gestionar_permisos"));
         botonAsignarRoles.setVisible(SesionContexto.tienePermiso("asignar_roles"));
+        botonConsultarBitacora.setVisible(SesionContexto.tienePermiso("consultar_bitacora"));
     }
 
     @FXML
@@ -56,6 +60,11 @@ public class DashboardControlador {
     @FXML
     private void abrirAsignacionRoles() {
         cargarVista("/fxml/asignar-roles.fxml", "SICA - Asignar Roles");
+    }
+
+    @FXML
+    private void abrirConsultarBitacora() {
+        cargarVista("/fxml/bitacora.fxml", "SICA - Bitácora de Auditoría");
     }
 
     @FXML

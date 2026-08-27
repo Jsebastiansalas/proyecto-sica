@@ -1,8 +1,12 @@
 package com.acme.sica.infraestructura.configuracion;
 
 import com.acme.sica.aplicacion.autenticacion.IniciarSesionServicio;
+import com.acme.sica.aplicacion.bitacora.ConsultarBitacoraServicio;
+import com.acme.sica.aplicacion.permiso.AuditoriaPermisoDecorador;
 import com.acme.sica.aplicacion.permiso.GestionarPermisoServicio;
+import com.acme.sica.aplicacion.rol.AuditoriaRolDecorador;
 import com.acme.sica.aplicacion.rol.GestionarRolServicio;
+import com.acme.sica.dominio.puerto.entrada.ConsultarBitacoraCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
@@ -39,6 +43,7 @@ public class ContenedorDependencias {
     private final IniciarSesionCasoUso iniciarSesionCasoUso;
     private final GestionarRolCasoUso gestionarRolCasoUso;
     private final GestionarPermisoCasoUso gestionarPermisoCasoUso;
+    private final ConsultarBitacoraCasoUso consultarBitacoraCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final RolRepositorioPuerto rolRepositorio;
@@ -75,15 +80,17 @@ public class ContenedorDependencias {
                 bitacoraRepositorio
         );
 
-        this.gestionarRolCasoUso = new GestionarRolServicio(
-                rolRepositorio,
-                bitacoraRepositorio,
-                usuarioRepositorio,
-                cadenaAutorizacion
+        this.gestionarRolCasoUso = new AuditoriaRolDecorador(
+                new GestionarRolServicio(rolRepositorio, usuarioRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
         );
 
-        this.gestionarPermisoCasoUso = new GestionarPermisoServicio(
-                permisoRepositorio,
+        this.gestionarPermisoCasoUso = new AuditoriaPermisoDecorador(
+                new GestionarPermisoServicio(permisoRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.consultarBitacoraCasoUso = new ConsultarBitacoraServicio(
                 bitacoraRepositorio,
                 cadenaAutorizacion
         );
@@ -147,6 +154,10 @@ public class ContenedorDependencias {
 
     public GestionarPermisoCasoUso getGestionarPermisoCasoUso() {
         return gestionarPermisoCasoUso;
+    }
+
+    public ConsultarBitacoraCasoUso getConsultarBitacoraCasoUso() {
+        return consultarBitacoraCasoUso;
     }
 
     public HasheadorContrasenas getHasheadorContrasenas() {

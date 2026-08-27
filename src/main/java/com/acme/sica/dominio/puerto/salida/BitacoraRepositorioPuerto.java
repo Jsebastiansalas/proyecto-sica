@@ -15,6 +15,13 @@ public interface BitacoraRepositorioPuerto {
                                              LocalDateTime fechaDesde, LocalDateTime fechaHasta);
 
     /**
+     * Consulta avanzada por username, accion, entidad y rango de fechas.
+     * Cualquier filtro null o vacío se ignora.
+     */
+    List<BitacoraAuditoria> buscarPorFiltrosAvanzado(String username, String accion, String entidad,
+                                                     LocalDateTime fechaDesde, LocalDateTime fechaHasta);
+
+    /**
      * La bitácora es inmutable: no se actualiza ni elimina.
      */
 }

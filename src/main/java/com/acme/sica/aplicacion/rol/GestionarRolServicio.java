@@ -1,13 +1,9 @@
 package com.acme.sica.aplicacion.rol;
 
-import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
 import com.acme.sica.dominio.excepciones.RolEnUsoExcepcion;
-import com.acme.sica.dominio.modelo.BitacoraAuditoria;
 import com.acme.sica.dominio.modelo.Rol;
-import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
-import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.RolRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
@@ -18,8 +14,11 @@ import java.util.Set;
 
 /**
  * Servicio de aplicación para la gestión de roles.
- * La autorización se delega a una cadena de responsabilidad (Chain of Responsibility),
- * y la auditoría se mantiene centralizada en este servicio.
+ *
+ * Se encarga únicamente de la lógica de negocio y de la autorización
+ * (Chain of Responsibility). La auditoría de acciones críticas se realiza
+ * de forma automática mediante un decorador (HU-06), por lo que este
+ * servicio ya no registra la bitácora manualmente.
  */
 public class GestionarRolServicio implements GestionarRolCasoUso {
 
@@ -27,15 +26,12 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
 
     private final RolRepositorioPuerto rolRepositorio;
     private final UsuarioRepositorioPuerto usuarioRepositorio;
-    private final BitacoraRepositorioPuerto bitacoraRepositorio;
     private final ManejadorAutorizacion cadenaAutorizacion;
 
     public GestionarRolServicio(RolRepositorioPuerto rolRepositorio,
-                                BitacoraRepositorioPuerto bitacoraRepositorio,
                                 UsuarioRepositorioPuerto usuarioRepositorio,
                                 ManejadorAutorizacion cadenaAutorizacion) {
         this.rolRepositorio = rolRepositorio;
-        this.bitacoraRepositorio = bitacoraRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
@@ -46,10 +42,7 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         verificarNombreDuplicado(comando.getNombre());
 
         Rol rol = new Rol(comando.getNombre(), comando.getDescripcion());
-        Rol guardado = rolRepositorio.guardar(rol);
-
-        auditar(TipoAccionAuditoria.CREAR_ROL, guardado.getId(), "Rol creado: " + guardado.getNombre());
-        return guardado;
+        return rolRepositorio.guardar(rol);
     }
 
     @Override
@@ -65,10 +58,7 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
 
         rol.setNombre(comando.getNombre());
         rol.setDescripcion(comando.getDescripcion());
-        Rol actualizado = rolRepositorio.guardar(rol);
-
-        auditar(TipoAccionAuditoria.EDITAR_ROL, actualizado.getId(), "Rol editado: " + actualizado.getNombre());
-        return actualizado;
+        return rolRepositorio.guardar(rol);
     }
 
     @Override
@@ -85,7 +75,6 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         }
 
         rolRepositorio.eliminarPorId(rolId);
-        auditar(TipoAccionAuditoria.ELIMINAR_ROL, rolId, "Rol eliminado: " + rol.getNombre());
     }
 
     @Override
@@ -124,8 +113,6 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         }
 
         usuarioRepositorio.asignarRoles(comando.getUsuarioId(), rolesValidos);
-        auditar(TipoAccionAuditoria.ASIGNAR_ROL_USUARIO, comando.getUsuarioId(),
-                "Roles asignados: " + rolesValidos);
     }
 
     private void autorizar(String accion) {
@@ -137,18 +124,4 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
             throw new IllegalArgumentException("Ya existe un rol con el nombre '" + nombre + "'");
         }
     }
-
-    private void auditar(TipoAccionAuditoria accion, Long entidadId, String detalle) {
-        BitacoraAuditoria registro = new BitacoraAuditoria(
-                SesionContexto.obtener().map(s -> s.getUsuarioId()).orElse(null),
-                SesionContexto.obtener().map(s -> s.getUsername()).orElse("sistema"),
-                accion.name(),
-                "ROL",
-                entidadId,
-                detalle,
-                null
-        );
-        bitacoraRepositorio.guardar(registro);
-    }
-
 }

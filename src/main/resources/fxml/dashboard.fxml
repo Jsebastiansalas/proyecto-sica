@@ -35,6 +35,11 @@
             onAction="#abrirAsignacionRoles"
             styleClass="dashboard-button"/>
 
+    <Button fx:id="botonConsultarBitacora"
+            text="Consultar Bitácora"
+            onAction="#abrirConsultarBitacora"
+            styleClass="dashboard-button"/>
+
     <Button fx:id="botonCerrarSesion"
             text="Cerrar Sesión"
             onAction="#cerrarSesion"
