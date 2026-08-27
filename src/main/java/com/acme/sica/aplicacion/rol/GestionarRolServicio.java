@@ -2,7 +2,6 @@ package com.acme.sica.aplicacion.rol;
 
 import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
-import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.excepciones.RolEnUsoExcepcion;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
 import com.acme.sica.dominio.modelo.Rol;
@@ -11,14 +10,16 @@ import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.RolRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
+import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
 
-import java.util.List;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Servicio de aplicación para la gestión de roles.
- * Valida permisos, reglas de negocio y audita cada operación crítica.
+ * La autorización se delega a una cadena de responsabilidad (Chain of Responsibility),
+ * y la auditoría se mantiene centralizada en este servicio.
  */
 public class GestionarRolServicio implements GestionarRolCasoUso {
 
@@ -27,22 +28,22 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
     private final RolRepositorioPuerto rolRepositorio;
     private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final BitacoraRepositorioPuerto bitacoraRepositorio;
+    private final ManejadorAutorizacion cadenaAutorizacion;
 
     public GestionarRolServicio(RolRepositorioPuerto rolRepositorio,
                                 BitacoraRepositorioPuerto bitacoraRepositorio,
-                                UsuarioRepositorioPuerto usuarioRepositorio) {
+                                UsuarioRepositorioPuerto usuarioRepositorio,
+                                ManejadorAutorizacion cadenaAutorizacion) {
         this.rolRepositorio = rolRepositorio;
         this.bitacoraRepositorio = bitacoraRepositorio;
         this.usuarioRepositorio = usuarioRepositorio;
+        this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
     @Override
     public Rol crear(CrearRolComando comando) {
-        validarPermiso("crear");
-
-        if (rolRepositorio.existePorNombre(comando.getNombre())) {
-            throw new IllegalArgumentException("Ya existe un rol con el nombre '" + comando.getNombre() + "'");
-        }
+        autorizar("crear roles");
+        verificarNombreDuplicado(comando.getNombre());
 
         Rol rol = new Rol(comando.getNombre(), comando.getDescripcion());
         Rol guardado = rolRepositorio.guardar(rol);
@@ -53,13 +54,13 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
 
     @Override
     public Rol editar(EditarRolComando comando) {
-        validarPermiso("editar");
+        autorizar("editar roles");
 
         Rol rol = rolRepositorio.buscarPorId(comando.getId())
                 .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + comando.getId()));
 
-        if (!rol.getNombre().equals(comando.getNombre()) && rolRepositorio.existePorNombre(comando.getNombre())) {
-            throw new IllegalArgumentException("Ya existe un rol con el nombre '" + comando.getNombre() + "'");
+        if (!rol.getNombre().equals(comando.getNombre())) {
+            verificarNombreDuplicado(comando.getNombre());
         }
 
         rol.setNombre(comando.getNombre());
@@ -72,14 +73,15 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
 
     @Override
     public void eliminar(Long rolId) {
-        validarPermiso("eliminar");
+        autorizar("eliminar roles");
 
         Rol rol = rolRepositorio.buscarPorId(rolId)
                 .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + rolId));
 
         long usuariosConRol = rolRepositorio.contarUsuariosConRol(rolId);
         if (usuariosConRol > 0) {
-            throw new RolEnUsoExcepcion("No se puede eliminar el rol '" + rol.getNombre() + "' porque tiene " + usuariosConRol + " usuario(s) asignado(s)");
+            throw new RolEnUsoExcepcion("No se puede eliminar el rol '" + rol.getNombre()
+                    + "' porque tiene " + usuariosConRol + " usuario(s) asignado(s)");
         }
 
         rolRepositorio.eliminarPorId(rolId);
@@ -88,20 +90,20 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
 
     @Override
     public List<Rol> listarTodos() {
-        validarPermiso("listar");
+        autorizar("listar roles");
         return rolRepositorio.listarTodos();
     }
 
     @Override
     public Rol obtenerPorId(Long rolId) {
-        validarPermiso("obtener");
+        autorizar("obtener roles");
         return rolRepositorio.buscarPorId(rolId)
                 .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + rolId));
     }
 
     @Override
     public void asignarRoles(AsignarRolesUsuarioComando comando) {
-        validarPermiso("asignar roles");
+        autorizar("asignar roles");
 
         if (comando.getRolIds() == null || comando.getRolIds().isEmpty()) {
             throw new IllegalArgumentException("El usuario debe conservar al menos un rol");
@@ -126,10 +128,13 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
                 "Roles asignados: " + rolesValidos);
     }
 
-    private void validarPermiso(String accion) {
-        if (!SesionContexto.tienePermiso(PERMISO_REQUERIDO)) {
-            registrarAccesoDenegado(accion);
-            throw new PermisoDenegadoExcepcion("No tiene permiso para " + accion + " roles");
+    private void autorizar(String accion) {
+        cadenaAutorizacion.verificar(PERMISO_REQUERIDO, accion);
+    }
+
+    private void verificarNombreDuplicado(String nombre) {
+        if (rolRepositorio.existePorNombre(nombre)) {
+            throw new IllegalArgumentException("Ya existe un rol con el nombre '" + nombre + "'");
         }
     }
 
@@ -141,19 +146,6 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
                 "ROL",
                 entidadId,
                 detalle,
-                null
-        );
-        bitacoraRepositorio.guardar(registro);
-    }
-
-    private void registrarAccesoDenegado(String accion) {
-        BitacoraAuditoria registro = new BitacoraAuditoria(
-                SesionContexto.obtener().map(s -> s.getUsuarioId()).orElse(null),
-                SesionContexto.obtener().map(s -> s.getUsername()).orElse("anonimo"),
-                TipoAccionAuditoria.ACCESO_DENEGADO.name(),
-                "ROL",
-                null,
-                "Intento de " + accion + " rol sin permiso",
                 null
         );
         bitacoraRepositorio.guardar(registro);

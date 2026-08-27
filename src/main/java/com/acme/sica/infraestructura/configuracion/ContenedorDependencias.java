@@ -19,6 +19,8 @@ import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcRol;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcUsuario;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVisita;
 import com.acme.sica.infraestructura.seguridad.HasheadorContrasenas;
+import com.acme.sica.infraestructura.seguridad.autorizacion.FabricaCadenaAutorizacion;
+import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
 
 /**
  * Contenedor manual de dependencias.
@@ -32,6 +34,7 @@ public class ContenedorDependencias {
     private final InicializadorBaseDatos inicializadorBaseDatos;
 
     private final HasheadorContrasenas hasheadorContrasenas;
+    private final ManejadorAutorizacion cadenaAutorizacion;
 
     private final IniciarSesionCasoUso iniciarSesionCasoUso;
     private final GestionarRolCasoUso gestionarRolCasoUso;
@@ -64,6 +67,8 @@ public class ContenedorDependencias {
         this.incidenteRepositorio = new RepositorioJdbcIncidente(fabricaConexiones);
         this.bitacoraRepositorio = new RepositorioJdbcBitacora(fabricaConexiones);
 
+        this.cadenaAutorizacion = FabricaCadenaAutorizacion.crear(bitacoraRepositorio);
+
         this.iniciarSesionCasoUso = new IniciarSesionServicio(
                 usuarioRepositorio,
                 hasheadorContrasenas,
@@ -73,12 +78,14 @@ public class ContenedorDependencias {
         this.gestionarRolCasoUso = new GestionarRolServicio(
                 rolRepositorio,
                 bitacoraRepositorio,
-                usuarioRepositorio
+                usuarioRepositorio,
+                cadenaAutorizacion
         );
 
         this.gestionarPermisoCasoUso = new GestionarPermisoServicio(
                 permisoRepositorio,
-                bitacoraRepositorio
+                bitacoraRepositorio,
+                cadenaAutorizacion
         );
     }
 
@@ -144,6 +151,10 @@ public class ContenedorDependencias {
 
     public HasheadorContrasenas getHasheadorContrasenas() {
         return hasheadorContrasenas;
+    }
+
+    public ManejadorAutorizacion getCadenaAutorizacion() {
+        return cadenaAutorizacion;
     }
 
 }
