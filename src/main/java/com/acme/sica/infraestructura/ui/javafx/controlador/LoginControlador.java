@@ -6,9 +6,15 @@ import com.acme.sica.dominio.excepciones.CredencialesInvalidasExcepcion;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class LoginControlador {
 
@@ -44,10 +50,25 @@ public class LoginControlador {
 
         try {
             LoginResultado resultado = casoUso.ejecutar(comando);
-            etiquetaMensaje.setText("Bienvenido, " + resultado.getNombreCompleto());
-            // TODO: navegar al dashboard según el rol
+            navegarAlDashboard();
         } catch (CredencialesInvalidasExcepcion e) {
             etiquetaMensaje.setText(e.getMessage());
+        }
+    }
+
+    private void navegarAlDashboard() {
+        try {
+            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
+            Scene escena = new Scene(raiz);
+            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+
+            Stage stage = (Stage) etiquetaMensaje.getScene().getWindow();
+            stage.setTitle("SICA - Dashboard");
+            stage.setScene(escena);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar el dashboard", e);
         }
     }
 

@@ -53,3 +53,43 @@
     -fx-alignment: center;
     -fx-max-width: 280px;
 }
+
+.dashboard-root {
+    -fx-background-color: #f4f6f8;
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+}
+
+.dashboard-welcome {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3a5c;
+}
+
+.dashboard-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #5a6b7c;
+    -fx-padding: 0 0 20 0;
+}
+
+.dashboard-button {
+    -fx-pref-width: 280px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #1a73e8;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+}
+
+.dashboard-button:hover {
+    -fx-background-color: #1557b0;
+}
+
+.dashboard-button.secondary {
+    -fx-background-color: #5a6b7c;
+}
+
+.dashboard-button.secondary:hover {
+    -fx-background-color: #3c4b5a;
+}

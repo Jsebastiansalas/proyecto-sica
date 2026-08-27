@@ -1,6 +1,8 @@
 package com.acme.sica.infraestructura.configuracion;
 
 import com.acme.sica.aplicacion.autenticacion.IniciarSesionServicio;
+import com.acme.sica.aplicacion.rol.GestionarRolServicio;
+import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.persistencia.jdbc.FabricaConexiones;
@@ -30,6 +32,7 @@ public class ContenedorDependencias {
     private final HasheadorContrasenas hasheadorContrasenas;
 
     private final IniciarSesionCasoUso iniciarSesionCasoUso;
+    private final GestionarRolCasoUso gestionarRolCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final RolRepositorioPuerto rolRepositorio;
@@ -61,6 +64,11 @@ public class ContenedorDependencias {
         this.iniciarSesionCasoUso = new IniciarSesionServicio(
                 usuarioRepositorio,
                 hasheadorContrasenas,
+                bitacoraRepositorio
+        );
+
+        this.gestionarRolCasoUso = new GestionarRolServicio(
+                rolRepositorio,
                 bitacoraRepositorio
         );
     }
@@ -115,6 +123,10 @@ public class ContenedorDependencias {
 
     public IniciarSesionCasoUso getIniciarSesionCasoUso() {
         return iniciarSesionCasoUso;
+    }
+
+    public GestionarRolCasoUso getGestionarRolCasoUso() {
+        return gestionarRolCasoUso;
     }
 
     public HasheadorContrasenas getHasheadorContrasenas() {
