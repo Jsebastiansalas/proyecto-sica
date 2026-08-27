@@ -40,6 +40,16 @@
             onAction="#abrirConsultarBitacora"
             styleClass="dashboard-button"/>
 
+    <Button fx:id="botonGestionarEmpresas"
+            text="Gestionar Empresas"
+            onAction="#abrirGestionEmpresas"
+            styleClass="dashboard-button"/>
+
+    <Button fx:id="botonGestionarFuncionarios"
+            text="Gestionar Funcionarios"
+            onAction="#abrirGestionFuncionarios"
+            styleClass="dashboard-button"/>
+
     <Button fx:id="botonCerrarSesion"
             text="Cerrar Sesión"
             onAction="#cerrarSesion"

@@ -2,11 +2,17 @@ package com.acme.sica.infraestructura.configuracion;
 
 import com.acme.sica.aplicacion.autenticacion.IniciarSesionServicio;
 import com.acme.sica.aplicacion.bitacora.ConsultarBitacoraServicio;
+import com.acme.sica.aplicacion.empresa.AuditoriaEmpresaDecorador;
+import com.acme.sica.aplicacion.empresa.GestionarEmpresaServicio;
+import com.acme.sica.aplicacion.funcionario.AuditoriaFuncionarioDecorador;
+import com.acme.sica.aplicacion.funcionario.GestionarFuncionarioServicio;
 import com.acme.sica.aplicacion.permiso.AuditoriaPermisoDecorador;
 import com.acme.sica.aplicacion.permiso.GestionarPermisoServicio;
 import com.acme.sica.aplicacion.rol.AuditoriaRolDecorador;
 import com.acme.sica.aplicacion.rol.GestionarRolServicio;
 import com.acme.sica.dominio.puerto.entrada.ConsultarBitacoraCasoUso;
+import com.acme.sica.dominio.puerto.entrada.GestionarEmpresaCasoUso;
+import com.acme.sica.dominio.puerto.entrada.GestionarFuncionarioCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
@@ -43,6 +49,8 @@ public class ContenedorDependencias {
     private final IniciarSesionCasoUso iniciarSesionCasoUso;
     private final GestionarRolCasoUso gestionarRolCasoUso;
     private final GestionarPermisoCasoUso gestionarPermisoCasoUso;
+    private final GestionarEmpresaCasoUso gestionarEmpresaCasoUso;
+    private final GestionarFuncionarioCasoUso gestionarFuncionarioCasoUso;
     private final ConsultarBitacoraCasoUso consultarBitacoraCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
@@ -87,6 +95,17 @@ public class ContenedorDependencias {
 
         this.gestionarPermisoCasoUso = new AuditoriaPermisoDecorador(
                 new GestionarPermisoServicio(permisoRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.gestionarEmpresaCasoUso = new AuditoriaEmpresaDecorador(
+                new GestionarEmpresaServicio(empresaRepositorio, funcionarioRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.gestionarFuncionarioCasoUso = new AuditoriaFuncionarioDecorador(
+                new GestionarFuncionarioServicio(funcionarioRepositorio, empresaRepositorio,
+                        usuarioRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
         );
 
@@ -158,6 +177,14 @@ public class ContenedorDependencias {
 
     public ConsultarBitacoraCasoUso getConsultarBitacoraCasoUso() {
         return consultarBitacoraCasoUso;
+    }
+
+    public GestionarEmpresaCasoUso getGestionarEmpresaCasoUso() {
+        return gestionarEmpresaCasoUso;
+    }
+
+    public GestionarFuncionarioCasoUso getGestionarFuncionarioCasoUso() {
+        return gestionarFuncionarioCasoUso;
     }
 
     public HasheadorContrasenas getHasheadorContrasenas() {

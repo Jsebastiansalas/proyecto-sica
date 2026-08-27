@@ -32,6 +32,12 @@ public class DashboardControlador {
     private Button botonConsultarBitacora;
 
     @FXML
+    private Button botonGestionarEmpresas;
+
+    @FXML
+    private Button botonGestionarFuncionarios;
+
+    @FXML
     private Button botonCerrarSesion;
 
     @FXML
@@ -45,6 +51,8 @@ public class DashboardControlador {
         botonGestionarPermisos.setVisible(SesionContexto.tienePermiso("gestionar_permisos"));
         botonAsignarRoles.setVisible(SesionContexto.tienePermiso("asignar_roles"));
         botonConsultarBitacora.setVisible(SesionContexto.tienePermiso("consultar_bitacora"));
+        botonGestionarEmpresas.setVisible(SesionContexto.tienePermiso("gestionar_empresas"));
+        botonGestionarFuncionarios.setVisible(SesionContexto.tienePermiso("gestionar_funcionarios"));
     }
 
     @FXML
@@ -65,6 +73,16 @@ public class DashboardControlador {
     @FXML
     private void abrirConsultarBitacora() {
         cargarVista("/fxml/bitacora.fxml", "SICA - Bitácora de Auditoría");
+    }
+
+    @FXML
+    private void abrirGestionEmpresas() {
+        cargarVista("/fxml/empresas.fxml", "SICA - Gestión de Empresas");
+    }
+
+    @FXML
+    private void abrirGestionFuncionarios() {
+        cargarVista("/fxml/funcionarios.fxml", "SICA - Gestión de Funcionarios");
     }
 
     @FXML
