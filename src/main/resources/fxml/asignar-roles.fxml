@@ -4,29 +4,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.AsignarRolesControlador"
-      alignment="CENTER"
-      spacing="16"
-      styleClass="dashboard-root">
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.AsignarRolesControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
 
-    <padding>
-        <Insets top="30" right="40" bottom="30" left="40"/>
-    </padding>
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
 
-    <Label text="Asignar Roles a Usuarios" styleClass="login-title"/>
-    <ComboBox fx:id="comboUsuarios" promptText="Seleccione un usuario" prefWidth="350"/>
-    <Label text="Roles activos" styleClass="dashboard-subtitle"/>
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Asignar Roles a Usuarios" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
 
-    <ScrollPane fitToWidth="true" prefHeight="220" prefWidth="350">
-        <content>
-            <VBox fx:id="contenedorRoles" spacing="10"/>
-        </content>
-    </ScrollPane>
+            <Label text="Seleccione un usuario" styleClass="dashboard-subtitle"/>
+            <ComboBox fx:id="comboUsuarios" promptText="Seleccione un usuario" prefWidth="500"/>
 
-    <Button text="Guardar asignación" onAction="#guardarAsignacion" styleClass="dashboard-button"/>
-    <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
-    <Button text="Volver" onAction="#volverAlDashboard" styleClass="dashboard-button secondary"/>
+            <Label text="Roles activos" styleClass="dashboard-subtitle"/>
+            <ScrollPane fitToWidth="true" prefHeight="240" prefWidth="500" styleClass="form-scroll">
+                <content>
+                    <VBox fx:id="contenedorRoles" spacing="10"/>
+                </content>
+            </ScrollPane>
 
-</VBox>
+            <Button text="Guardar asignación" onAction="#guardarAsignacion" styleClass="dashboard-button"/>
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+        </VBox>
+    </VBox>
+</ScrollPane>

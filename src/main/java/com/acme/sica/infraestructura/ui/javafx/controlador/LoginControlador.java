@@ -96,7 +96,7 @@ public class LoginControlador {
             Stage stage = (Stage) etiquetaMensaje.getScene().getWindow();
             stage.setTitle("SICA - Dashboard");
             stage.setScene(escena);
-            stage.setResizable(false);
+            stage.setResizable(true);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException("Error al cargar el dashboard", e);

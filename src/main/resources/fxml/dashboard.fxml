@@ -3,66 +3,125 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.DashboardControlador"
-      alignment="CENTER"
-      spacing="16"
-      styleClass="dashboard-root">
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.DashboardControlador"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            styleClass="dashboard-scroll">
 
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
+    <VBox alignment="TOP_CENTER" spacing="20" styleClass="dashboard-root">
 
-    <Label text="SICA" styleClass="login-title"/>
-    <Label fx:id="etiquetaBienvenida" styleClass="dashboard-welcome"/>
-    <Label fx:id="etiquetaRol" styleClass="dashboard-subtitle"/>
+        <padding>
+            <Insets top="28" right="56" bottom="28" left="56"/>
+        </padding>
 
-    <Button fx:id="botonGestionarRoles"
-            text="Gestionar Roles"
-            onAction="#abrirGestionRoles"
-            styleClass="dashboard-button"/>
+        <!-- Brand strip -->
+        <HBox styleClass="brand-strip"/>
 
-    <Button fx:id="botonGestionarPermisos"
-            text="Gestionar Permisos"
-            onAction="#abrirGestionPermisos"
-            styleClass="dashboard-button"/>
+        <!-- Header -->
+        <HBox styleClass="dashboard-header" alignment="CENTER_LEFT">
+            <VBox alignment="CENTER_LEFT" spacing="2" HBox.hgrow="ALWAYS">
+                <Label text="SICA" styleClass="dashboard-title"/>
+                <Label text="Panel de Control — Zona Acme" styleClass="dashboard-subtitle"/>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT" spacing="2">
+                <Label fx:id="etiquetaBienvenida" styleClass="dashboard-welcome"/>
+                <Label fx:id="etiquetaRol" styleClass="dashboard-user-tag"/>
+            </VBox>
+        </HBox>
 
-    <Button fx:id="botonAsignarRoles"
-            text="Asignar Roles a Usuarios"
-            onAction="#abrirAsignacionRoles"
-            styleClass="dashboard-button"/>
+        <!-- Stats bar -->
+        <Label text="Resumen del Sistema" styleClass="stats-section-title"/>
+        <HBox styleClass="stats-bar" spacing="16">
+            <VBox styleClass="stat-card stat-violet" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="statUsuarios" styleClass="stat-number" text="0"/>
+                <Label text="Usuarios" styleClass="stat-label"/>
+            </VBox>
+            <VBox styleClass="stat-card stat-cyan" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="statRoles" styleClass="stat-number" text="0"/>
+                <Label text="Roles" styleClass="stat-label"/>
+            </VBox>
+            <VBox styleClass="stat-card stat-pink" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="statEmpresas" styleClass="stat-number" text="0"/>
+                <Label text="Empresas" styleClass="stat-label"/>
+            </VBox>
+            <VBox styleClass="stat-card stat-emerald" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="statPersonas" styleClass="stat-number" text="0"/>
+                <Label text="Personas" styleClass="stat-label"/>
+            </VBox>
+            <VBox styleClass="stat-card stat-amber" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="statVisitasPendientes" styleClass="stat-number" text="0"/>
+                <Label text="Visitas Pend." styleClass="stat-label"/>
+            </VBox>
+        </HBox>
 
-    <Button fx:id="botonConsultarBitacora"
-            text="Consultar Bitácora"
-            onAction="#abrirConsultarBitacora"
-            styleClass="dashboard-button"/>
+        <!-- Main content: modules + activity -->
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
 
-    <Button fx:id="botonGestionarEmpresas"
-            text="Gestionar Empresas"
-            onAction="#abrirGestionEmpresas"
-            styleClass="dashboard-button"/>
+            <!-- Left: Module grid -->
+            <GridPane hgap="16" vgap="16" HBox.hgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
 
-    <Button fx:id="botonGestionarFuncionarios"
-            text="Gestionar Funcionarios"
-            onAction="#abrirGestionFuncionarios"
-            styleClass="dashboard-button"/>
+                <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="12">
+                    <Label text=" Seguridad y Acceso" styleClass="section-title"/>
+                    <Label text="Gestión de roles y permisos del sistema" styleClass="section-desc"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="botonGestionarRoles" text="Roles" onAction="#abrirGestionRoles" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonGestionarPermisos" text="Permisos" onAction="#abrirGestionPermisos" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonAsignarRoles" text="Asignar Roles" onAction="#abrirAsignacionRoles" styleClass="dashboard-tile-button"/>
+                    </HBox>
+                </VBox>
 
-    <Button fx:id="botonGestionarPersonas"
-            text="Gestionar Personas"
-            onAction="#abrirGestionPersonas"
-            styleClass="dashboard-button"/>
+                <VBox styleClass="dashboard-section" GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="12">
+                    <Label text=" Auditoría" styleClass="section-title"/>
+                    <Label text="Consulta del historial de acciones" styleClass="section-desc"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="botonConsultarBitacora" text="Consultar Bitácora" onAction="#abrirConsultarBitacora" styleClass="dashboard-tile-button"/>
+                    </HBox>
+                </VBox>
 
-    <Button fx:id="botonPreRegistrarInvitado"
-            text="Pre-registrar Invitado"
-            onAction="#abrirPreRegistrarInvitado"
-            styleClass="dashboard-button"/>
+                <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="12">
+                    <Label text=" Gestión Organizacional" styleClass="section-title"/>
+                    <Label text="Empresas, funcionarios y personas" styleClass="section-desc"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="botonGestionarEmpresas" text="Empresas" onAction="#abrirGestionEmpresas" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonGestionarFuncionarios" text="Funcionarios" onAction="#abrirGestionFuncionarios" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonGestionarPersonas" text="Personas" onAction="#abrirGestionPersonas" styleClass="dashboard-tile-button"/>
+                    </HBox>
+                </VBox>
 
-    <Button fx:id="botonCerrarSesion"
-            text="Cerrar Sesión"
-            onAction="#cerrarSesion"
-            styleClass="dashboard-button secondary"/>
+                <VBox styleClass="dashboard-section" GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="12">
+                    <Label text=" Operaciones de Acceso" styleClass="section-title"/>
+                    <Label text="Registro y control de visitas" styleClass="section-desc"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="botonPreRegistrarInvitado" text="Pre-registrar Invitado" onAction="#abrirPreRegistrarInvitado" styleClass="dashboard-tile-button"/>
+                    </HBox>
+                </VBox>
+            </GridPane>
 
-</VBox>
+            <!-- Right: Activity panel -->
+            <VBox styleClass="dashboard-section activity-section" spacing="10">
+                <Label text=" Actividad Reciente" styleClass="section-title"/>
+                <Label text="Últimos movimientos en el sistema" styleClass="section-desc"/>
+                <VBox fx:id="contenedorActividadReciente" styleClass="activity-list" spacing="8"/>
+            </VBox>
+        </HBox>
+
+        <!-- Footer -->
+        <HBox styleClass="dashboard-footer" alignment="CENTER_LEFT">
+            <Label fx:id="etiquetaFecha" styleClass="footer-text" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="botonCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion" styleClass="dashboard-button secondary"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

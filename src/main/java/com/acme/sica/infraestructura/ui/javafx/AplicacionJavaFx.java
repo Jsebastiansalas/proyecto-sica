@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class AplicacionJavaFx extends Application {
@@ -22,12 +23,16 @@ public class AplicacionJavaFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-        Scene escena = new Scene(raiz, 400, 500);
+
+        double ancho = Screen.getPrimary().getVisualBounds().getWidth() * 0.9;
+        double alto = Screen.getPrimary().getVisualBounds().getHeight() * 0.9;
+        Scene escena = new Scene(raiz, ancho, alto);
         escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
 
         primaryStage.setTitle("SICA - Zona Acme");
         primaryStage.setScene(escena);
-        primaryStage.setResizable(false);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 

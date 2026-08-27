@@ -4,60 +4,59 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.FuncionarioControlador"
-      alignment="CENTER"
-      spacing="16"
-      styleClass="dashboard-root">
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.FuncionarioControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
 
-    <padding>
-        <Insets top="24" right="24" bottom="24" left="24"/>
-    </padding>
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
 
-    <Label text="Gestión de Funcionarios" styleClass="login-title"/>
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Gestión de Funcionarios" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
 
-    <GridPane hgap="10" vgap="10">
-        <Label text="Empresa:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="comboEmpresas" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="300"/>
+            <GridPane hgap="10" vgap="10">
+                <Label text="Empresa:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboEmpresas" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="400"/>
 
-        <Label text="Usuario:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="comboUsuarios" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="300"
-                  promptText="Opcional"/>
+                <Label text="Usuario:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboUsuarios" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="400" promptText="Opcional"/>
 
-        <Label text="Nombre:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="campoNombre" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Nombre:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoNombre" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Cargo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="campoCargo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Label text="Cargo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoCargo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-        <Label text="Activo:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <CheckBox fx:id="checkActivo" GridPane.rowIndex="4" GridPane.columnIndex="1" selected="true"/>
+                <Label text="Activo:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <CheckBox fx:id="checkActivo" GridPane.rowIndex="4" GridPane.columnIndex="1" selected="true"/>
 
-        <columnConstraints>
-            <ColumnConstraints minWidth="100"/>
-            <ColumnConstraints minWidth="300"/>
-        </columnConstraints>
-    </GridPane>
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100"/>
+                    <ColumnConstraints minWidth="450"/>
+                </columnConstraints>
+            </GridPane>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="botonGuardar" text="Guardar" onAction="#guardarFuncionario" styleClass="dashboard-button"/>
-        <Button fx:id="botonEliminar" text="Eliminar" onAction="#eliminarFuncionario" styleClass="dashboard-button secondary"/>
-        <Button fx:id="botonLimpiar" text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
-    </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="botonGuardar" text="Guardar" onAction="#guardarFuncionario" styleClass="dashboard-button"/>
+                <Button fx:id="botonEliminar" text="Eliminar" onAction="#eliminarFuncionario" styleClass="dashboard-button secondary"/>
+                <Button fx:id="botonLimpiar" text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
+            </HBox>
 
-    <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
 
-    <TableView fx:id="tablaFuncionarios" prefHeight="250" prefWidth="760">
-        <columns>
-            <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="200"/>
-            <TableColumn fx:id="columnaCargo" text="Cargo" prefWidth="130"/>
-            <TableColumn fx:id="columnaEmpresa" text="Empresa" prefWidth="170"/>
-            <TableColumn fx:id="columnaUsuario" text="Usuario" prefWidth="130"/>
-            <TableColumn fx:id="columnaEstado" text="Estado" prefWidth="80"/>
-        </columns>
-    </TableView>
-
-    <Button fx:id="botonVolver" text="Volver" onAction="#volverAlDashboard" styleClass="dashboard-button secondary"/>
-
-</VBox>
+            <TableView fx:id="tablaFuncionarios" prefHeight="340" prefWidth="900">
+                <columns>
+                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="240"/>
+                    <TableColumn fx:id="columnaCargo" text="Cargo" prefWidth="160"/>
+                    <TableColumn fx:id="columnaEmpresa" text="Empresa" prefWidth="200"/>
+                    <TableColumn fx:id="columnaUsuario" text="Usuario" prefWidth="160"/>
+                    <TableColumn fx:id="columnaEstado" text="Estado" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

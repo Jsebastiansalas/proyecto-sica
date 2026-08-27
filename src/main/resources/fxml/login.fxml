@@ -12,44 +12,47 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.LoginControlador"
       alignment="CENTER"
-      spacing="16"
       styleClass="login-root">
 
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
-    <Label text="SICA" styleClass="login-title"/>
-    <Label text="Zona Acme" styleClass="login-subtitle"/>
+    <VBox styleClass="login-card">
+        <Label text="SICA" styleClass="login-title" alignment="CENTER"/>
+        <Label text="ZONA ACME" styleClass="login-tagline" alignment="CENTER"/>
+        <Label text="Sistema Integrado de Control de Acceso"
+               styleClass="login-subtitle" alignment="CENTER"/>
 
-    <TextField fx:id="campoUsuario"
-               promptText="Usuario"
-               styleClass="login-field"/>
+        <TextField fx:id="campoUsuario"
+                   promptText="Usuario"
+                   styleClass="login-field"/>
 
-    <HBox spacing="8" alignment="CENTER">
-        <PasswordField fx:id="campoContrasena"
+        <HBox spacing="8" alignment="CENTER">
+            <PasswordField fx:id="campoContrasena"
+                           promptText="Contraseña"
+                           styleClass="login-field"
+                           HBox.hgrow="ALWAYS"/>
+
+            <TextField fx:id="campoContrasenaVisible"
                        promptText="Contraseña"
                        styleClass="login-field"
+                       visible="false"
+                       managed="false"
                        HBox.hgrow="ALWAYS"/>
 
-        <TextField fx:id="campoContrasenaVisible"
-                   promptText="Contraseña"
-                   styleClass="login-field"
-                   visible="false"
-                   managed="false"
-                   HBox.hgrow="ALWAYS"/>
+            <Button fx:id="botonMostrarContrasena"
+                    text="👁"
+                    onAction="#toggleContrasena"
+                    styleClass="eye-button"/>
+        </HBox>
 
-        <Button fx:id="botonMostrarContrasena"
-                text="👁"
-                onAction="#toggleContrasena"
-                styleClass="eye-button"/>
-    </HBox>
+        <Button text="Ingresar"
+                onAction="#manejarLogin"
+                styleClass="login-button"/>
 
-    <Button text="Ingresar"
-            onAction="#manejarLogin"
-            styleClass="login-button"/>
-
-    <Label fx:id="etiquetaMensaje"
-           styleClass="login-message"/>
+        <Label fx:id="etiquetaMensaje"
+               styleClass="login-message"/>
+    </VBox>
 
 </VBox>
