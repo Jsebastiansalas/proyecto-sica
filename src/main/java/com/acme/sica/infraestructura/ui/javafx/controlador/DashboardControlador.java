@@ -55,6 +55,8 @@ public class DashboardControlador {
     @FXML private Button botonPreRegistrarInvitado;
     @FXML private Button botonCheckIn;
     @FXML private Button botonRegistrarNoAnunciado;
+    @FXML private Button botonAprobarRechazar;
+    @FXML private Button botonRegistrarTrabajador;
     @FXML private Button botonCerrarSesion;
 
     @FXML
@@ -74,6 +76,8 @@ public class DashboardControlador {
         botonPreRegistrarInvitado.setVisible(SesionContexto.tienePermiso("pre_registrar_invitado"));
         botonCheckIn.setVisible(SesionContexto.tienePermiso("check_in_invitado"));
         botonRegistrarNoAnunciado.setVisible(SesionContexto.tienePermiso("registrar_no_anunciado"));
+        botonAprobarRechazar.setVisible(SesionContexto.tienePermiso("aprobar_rechazar"));
+        botonRegistrarTrabajador.setVisible(SesionContexto.tienePermiso("registrar_trabajador"));
 
         cargarEstadisticas();
         cargarActividadReciente();
@@ -166,6 +170,8 @@ public class DashboardControlador {
     @FXML private void abrirPreRegistrarInvitado() { cargarVista("/fxml/pre-registrar-invitado.fxml", "SICA - Pre-registrar Invitado"); }
     @FXML private void abrirCheckIn() { cargarVista("/fxml/check-in.fxml", "SICA - Check-in de Invitados"); }
     @FXML private void abrirRegistrarNoAnunciado() { cargarVista("/fxml/registrar-no-anunciado.fxml", "SICA - Registrar No Anunciado"); }
+    @FXML private void abrirAprobarRechazar() { cargarVista("/fxml/aprobar-rechazar.fxml", "SICA - Aprobar/Rechazar Visitas"); }
+    @FXML private void abrirRegistrarTrabajador() { cargarVista("/fxml/registrar-trabajador.fxml", "SICA - Registrar Trabajador"); }
 
     @FXML
     private void cerrarSesion() {

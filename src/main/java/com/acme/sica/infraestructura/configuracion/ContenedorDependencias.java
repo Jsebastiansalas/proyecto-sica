@@ -18,8 +18,13 @@ import com.acme.sica.aplicacion.visita.AuditoriaCheckInDecorador;
 import com.acme.sica.aplicacion.visita.CheckInInvitadoServicio;
 import com.acme.sica.aplicacion.visita.AuditoriaRegistrarNoAnunciadoDecorador;
 import com.acme.sica.aplicacion.visita.RegistrarNoAnunciadoServicio;
+import com.acme.sica.aplicacion.visita.AuditoriaAprobarRechazarDecorador;
+import com.acme.sica.aplicacion.visita.AprobarRechazarVisitaServicio;
+import com.acme.sica.aplicacion.visita.AuditoriaRegistrarTrabajadorDecorador;
+import com.acme.sica.aplicacion.visita.RegistrarTrabajadorServicio;
 import com.acme.sica.dominio.puerto.entrada.ConsultarBitacoraCasoUso;
 import com.acme.sica.dominio.puerto.entrada.CheckInInvitadoCasoUso;
+import com.acme.sica.dominio.puerto.entrada.AprobarRechazarVisitaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarEmpresaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarFuncionarioCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPersonaCasoUso;
@@ -28,6 +33,7 @@ import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.entrada.PreRegistrarInvitadoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.RegistrarNoAnunciadoCasoUso;
+import com.acme.sica.dominio.puerto.entrada.RegistrarTrabajadorCasoUso;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.persistencia.jdbc.FabricaConexiones;
 import com.acme.sica.infraestructura.persistencia.jdbc.InicializadorBaseDatos;
@@ -67,6 +73,8 @@ public class ContenedorDependencias {
     private final PreRegistrarInvitadoCasoUso preRegistrarInvitadoCasoUso;
     private final CheckInInvitadoCasoUso checkInInvitadoCasoUso;
     private final RegistrarNoAnunciadoCasoUso registrarNoAnunciadoCasoUso;
+    private final AprobarRechazarVisitaCasoUso aprobarRechazarCasoUso;
+    private final RegistrarTrabajadorCasoUso registrarTrabajadorCasoUso;
     private final ConsultarBitacoraCasoUso consultarBitacoraCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
@@ -144,6 +152,16 @@ public class ContenedorDependencias {
         this.registrarNoAnunciadoCasoUso = new AuditoriaRegistrarNoAnunciadoDecorador(
                 new RegistrarNoAnunciadoServicio(visitaRepositorio, personaRepositorio,
                         funcionarioRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.aprobarRechazarCasoUso = new AuditoriaAprobarRechazarDecorador(
+                new AprobarRechazarVisitaServicio(visitaRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.registrarTrabajadorCasoUso = new AuditoriaRegistrarTrabajadorDecorador(
+                new RegistrarTrabajadorServicio(visitaRepositorio, personaRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
         );
 
@@ -239,6 +257,14 @@ public class ContenedorDependencias {
 
     public RegistrarNoAnunciadoCasoUso getRegistrarNoAnunciadoCasoUso() {
         return registrarNoAnunciadoCasoUso;
+    }
+
+    public AprobarRechazarVisitaCasoUso getAprobarRechazarCasoUso() {
+        return aprobarRechazarCasoUso;
+    }
+
+    public RegistrarTrabajadorCasoUso getRegistrarTrabajadorCasoUso() {
+        return registrarTrabajadorCasoUso;
     }
 
     public HasheadorContrasenas getHasheadorContrasenas() {

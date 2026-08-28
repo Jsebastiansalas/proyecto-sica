@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.RegistrarTrabajadorControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Registrar Trabajador" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Documento:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoDocumento" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Documento del trabajador"/>
+
+                <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoNombre" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="Nombre completo"/>
+
+                <Label text="Foto URL:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoFotoUrl" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="Opcional"/>
+
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100"/>
+                    <ColumnConstraints minWidth="450"/>
+                </columnConstraints>
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Registrar Ingreso" onAction="#registrar" styleClass="dashboard-button"/>
+                <Button text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Trabajadores dentro del recinto" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaTrabajadores" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="200"/>
+                    <TableColumn fx:id="columnaNombre" text="Trabajador" prefWidth="350"/>
+                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

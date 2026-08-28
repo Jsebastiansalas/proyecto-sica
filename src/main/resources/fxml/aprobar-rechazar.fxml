@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.AprobarRechazarControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Aprobar / Rechazar Visitas" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="✓ Aprobar" onAction="#aprobar" styleClass="dashboard-button"/>
+                <Button text="✗ Rechazar" onAction="#rechazar" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Visitas pendientes de aprobación" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaPendientes" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="150"/>
+                    <TableColumn fx:id="columnaNombre" text="Invitado" prefWidth="250"/>
+                    <TableColumn fx:id="columnaFuncionario" text="Funcionario" prefWidth="230"/>
+                    <TableColumn fx:id="columnaFecha" text="Fecha/Hora" prefWidth="160"/>
+                    <TableColumn fx:id="columnaTipo" text="Tipo" prefWidth="180"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>
