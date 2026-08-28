@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.CheckInControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Check-in de Invitados" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Documento:"/>
+                <TextField fx:id="campoDocumento" promptText="Documento del invitado" prefWidth="280"/>
+                <Button text="Confirmar Ingreso" onAction="#confirmarIngreso" styleClass="dashboard-button"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Visitas aprobadas pendientes de ingreso" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaAprobadas" prefHeight="220">
+                <columns>
+                    <TableColumn fx:id="columnaAprobadaDocumento" text="Documento" prefWidth="180"/>
+                    <TableColumn fx:id="columnaAprobadaNombre" text="Invitado" prefWidth="280"/>
+                    <TableColumn fx:id="columnaAprobadaFuncionario" text="Funcionario" prefWidth="260"/>
+                </columns>
+            </TableView>
+
+            <Label text="Invitados dentro del recinto" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaDentro" prefHeight="220">
+                <columns>
+                    <TableColumn fx:id="columnaDentroDocumento" text="Documento" prefWidth="180"/>
+                    <TableColumn fx:id="columnaDentroNombre" text="Invitado" prefWidth="280"/>
+                    <TableColumn fx:id="columnaDentroIngreso" text="Hora de Ingreso" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

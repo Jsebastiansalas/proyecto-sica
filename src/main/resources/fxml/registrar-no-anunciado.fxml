@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.RegistrarNoAnunciadoControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Registrar Invitado No Anunciado" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Documento:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoDocumento" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Documento del invitado"/>
+
+                <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoNombre" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="Nombre completo"/>
+
+                <Label text="Foto URL:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoFotoUrl" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="Opcional"/>
+
+                <Label text="Funcionario:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboFuncionarios" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="450" promptText="Funcionario responsable"/>
+
+                <Label text="Motivo:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextArea fx:id="campoMotivo" GridPane.rowIndex="4" GridPane.columnIndex="1" prefRowCount="3" wrapText="true"/>
+
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100"/>
+                    <ColumnConstraints minWidth="450"/>
+                </columnConstraints>
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Registrar" onAction="#registrar" styleClass="dashboard-button"/>
+                <Button text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Visitas no anunciadas pendientes de aprobación" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaNoAnunciados" prefHeight="280">
+                <columns>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="160"/>
+                    <TableColumn fx:id="columnaNombre" text="Invitado" prefWidth="260"/>
+                    <TableColumn fx:id="columnaFuncionario" text="Funcionario" prefWidth="240"/>
+                    <TableColumn fx:id="columnaFecha" text="Fecha/Hora" prefWidth="180"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

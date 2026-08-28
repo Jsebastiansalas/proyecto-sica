@@ -53,6 +53,8 @@ public class DashboardControlador {
     @FXML private Button botonGestionarFuncionarios;
     @FXML private Button botonGestionarPersonas;
     @FXML private Button botonPreRegistrarInvitado;
+    @FXML private Button botonCheckIn;
+    @FXML private Button botonRegistrarNoAnunciado;
     @FXML private Button botonCerrarSesion;
 
     @FXML
@@ -70,6 +72,8 @@ public class DashboardControlador {
         botonGestionarFuncionarios.setVisible(SesionContexto.tienePermiso("gestionar_funcionarios"));
         botonGestionarPersonas.setVisible(SesionContexto.tienePermiso("registrar_persona"));
         botonPreRegistrarInvitado.setVisible(SesionContexto.tienePermiso("pre_registrar_invitado"));
+        botonCheckIn.setVisible(SesionContexto.tienePermiso("check_in_invitado"));
+        botonRegistrarNoAnunciado.setVisible(SesionContexto.tienePermiso("registrar_no_anunciado"));
 
         cargarEstadisticas();
         cargarActividadReciente();
@@ -160,6 +164,8 @@ public class DashboardControlador {
     @FXML private void abrirGestionFuncionarios() { cargarVista("/fxml/funcionarios.fxml", "SICA - Gestión de Funcionarios"); }
     @FXML private void abrirGestionPersonas() { cargarVista("/fxml/personas.fxml", "SICA - Gestión de Personas"); }
     @FXML private void abrirPreRegistrarInvitado() { cargarVista("/fxml/pre-registrar-invitado.fxml", "SICA - Pre-registrar Invitado"); }
+    @FXML private void abrirCheckIn() { cargarVista("/fxml/check-in.fxml", "SICA - Check-in de Invitados"); }
+    @FXML private void abrirRegistrarNoAnunciado() { cargarVista("/fxml/registrar-no-anunciado.fxml", "SICA - Registrar No Anunciado"); }
 
     @FXML
     private void cerrarSesion() {
