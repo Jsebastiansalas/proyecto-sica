@@ -26,7 +26,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
     }
 
     private Persona insertar(Persona persona) {
-        String sql = "INSERT INTO personas (documento, nombre, foto_url, tipo, bloqueada) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO personas (documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -35,6 +35,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
             stmt.setString(3, persona.getFotoUrl());
             stmt.setString(4, persona.getTipo().name());
             stmt.setBoolean(5, persona.isBloqueada());
+            stmt.setString(6, persona.getMotivoBloqueo());
             stmt.executeUpdate();
 
             try (ResultSet claves = stmt.getGeneratedKeys()) {
@@ -49,7 +50,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
     }
 
     private Persona actualizar(Persona persona) {
-        String sql = "UPDATE personas SET documento = ?, nombre = ?, foto_url = ?, tipo = ?, bloqueada = ? WHERE id = ?";
+        String sql = "UPDATE personas SET documento = ?, nombre = ?, foto_url = ?, tipo = ?, bloqueada = ?, motivo_bloqueo = ? WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -58,7 +59,8 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
             stmt.setString(3, persona.getFotoUrl());
             stmt.setString(4, persona.getTipo().name());
             stmt.setBoolean(5, persona.isBloqueada());
-            stmt.setLong(6, persona.getId());
+            stmt.setString(6, persona.getMotivoBloqueo());
+            stmt.setLong(7, persona.getId());
             stmt.executeUpdate();
             return persona;
         } catch (SQLException e) {
@@ -68,7 +70,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
 
     @Override
     public Optional<Persona> buscarPorId(Long id) {
-        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, fecha_creacion FROM personas WHERE id = ?";
+        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -86,7 +88,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
 
     @Override
     public Optional<Persona> buscarPorDocumento(String documento) {
-        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, fecha_creacion FROM personas WHERE documento = ?";
+        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE documento = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -104,7 +106,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
 
     @Override
     public List<Persona> listarTodos() {
-        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, fecha_creacion FROM personas ORDER BY nombre";
+        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas ORDER BY nombre";
         List<Persona> personas = new ArrayList<>();
         try (Connection conn = fabricaConexiones.crearConexion();
              Statement stmt = conn.createStatement();
@@ -121,7 +123,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
 
     @Override
     public List<Persona> listarBloqueadas() {
-        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, fecha_creacion FROM personas WHERE bloqueada = TRUE ORDER BY nombre";
+        String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE bloqueada = TRUE ORDER BY nombre";
         List<Persona> personas = new ArrayList<>();
         try (Connection conn = fabricaConexiones.crearConexion();
              Statement stmt = conn.createStatement();
@@ -172,6 +174,7 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         persona.setFotoUrl(rs.getString("foto_url"));
         persona.setTipo(TipoPersona.valueOf(rs.getString("tipo")));
         persona.setBloqueada(rs.getBoolean("bloqueada"));
+        persona.setMotivoBloqueo(rs.getString("motivo_bloqueo"));
         persona.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
         return persona;
     }

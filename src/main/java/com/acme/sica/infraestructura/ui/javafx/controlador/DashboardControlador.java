@@ -59,6 +59,10 @@ public class DashboardControlador {
     @FXML private Button botonRegistrarTrabajador;
     @FXML private Button botonRegularizarSalida;
     @FXML private Button botonCheckOut;
+    @FXML private Button botonGestionarIncidentes;
+    @FXML private Button botonBloquearPersonas;
+    @FXML private Button botonReporteAccesos;
+    @FXML private Button botonReporteIncidentes;
     @FXML private Button botonCerrarSesion;
 
     @FXML
@@ -82,6 +86,10 @@ public class DashboardControlador {
         botonRegistrarTrabajador.setVisible(SesionContexto.tienePermiso("registrar_trabajador"));
         botonRegularizarSalida.setVisible(SesionContexto.tienePermiso("regularizar_salida"));
         botonCheckOut.setVisible(SesionContexto.tienePermiso("check_out"));
+        botonGestionarIncidentes.setVisible(SesionContexto.tienePermiso("registrar_incidente"));
+        botonBloquearPersonas.setVisible(SesionContexto.tienePermiso("bloquear_persona"));
+        botonReporteAccesos.setVisible(SesionContexto.tienePermiso("generar_reporte_accesos"));
+        botonReporteIncidentes.setVisible(SesionContexto.tienePermiso("generar_reporte_incidentes"));
 
         cargarEstadisticas();
         cargarActividadReciente();
@@ -178,6 +186,10 @@ public class DashboardControlador {
     @FXML private void abrirRegistrarTrabajador() { cargarVista("/fxml/registrar-trabajador.fxml", "SICA - Registrar Trabajador"); }
     @FXML private void abrirRegularizarSalida() { cargarVista("/fxml/regularizar-salida.fxml", "SICA - Regularizar Salidas"); }
     @FXML private void abrirCheckOut() { cargarVista("/fxml/check-out.fxml", "SICA - Check-out"); }
+    @FXML private void abrirGestionIncidentes() { cargarVista("/fxml/incidentes.fxml", "SICA - Registrar Incidente"); }
+    @FXML private void abrirBloqueoPersonas() { cargarVista("/fxml/bloqueo-personas.fxml", "SICA - Bloquear Personas"); }
+    @FXML private void abrirReporteAccesos() { cargarVista("/fxml/reporte-accesos.fxml", "SICA - Reporte de Accesos"); }
+    @FXML private void abrirReporteIncidentes() { cargarVista("/fxml/reporte-incidentes.fxml", "SICA - Reporte de Incidentes"); }
 
     @FXML
     private void cerrarSesion() {

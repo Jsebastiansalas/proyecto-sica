@@ -6,10 +6,16 @@ import com.acme.sica.aplicacion.empresa.AuditoriaEmpresaDecorador;
 import com.acme.sica.aplicacion.empresa.GestionarEmpresaServicio;
 import com.acme.sica.aplicacion.funcionario.AuditoriaFuncionarioDecorador;
 import com.acme.sica.aplicacion.funcionario.GestionarFuncionarioServicio;
+import com.acme.sica.aplicacion.incidente.AuditoriaIncidenteDecorador;
+import com.acme.sica.aplicacion.incidente.GestionarIncidenteServicio;
 import com.acme.sica.aplicacion.permiso.AuditoriaPermisoDecorador;
 import com.acme.sica.aplicacion.permiso.GestionarPermisoServicio;
 import com.acme.sica.aplicacion.persona.AuditoriaPersonaDecorador;
 import com.acme.sica.aplicacion.persona.GestionarPersonaServicio;
+import com.acme.sica.aplicacion.reporte.ConsultarReporteAccesosServicio;
+import com.acme.sica.aplicacion.reporte.ConsultarReporteIncidentesServicio;
+import com.acme.sica.aplicacion.persona.AuditoriaBloqueoPersonaDecorador;
+import com.acme.sica.aplicacion.persona.GestionarBloqueoPersonaServicio;
 import com.acme.sica.aplicacion.rol.AuditoriaRolDecorador;
 import com.acme.sica.aplicacion.rol.GestionarRolServicio;
 import com.acme.sica.aplicacion.visita.AuditoriaPreRegistrarInvitadoDecorador;
@@ -35,6 +41,10 @@ import com.acme.sica.dominio.puerto.entrada.AprobarRechazarVisitaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.CheckOutCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarEmpresaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarFuncionarioCasoUso;
+import com.acme.sica.dominio.puerto.entrada.GestionarIncidenteCasoUso;
+import com.acme.sica.dominio.puerto.entrada.GestionarBloqueoPersonaCasoUso;
+import com.acme.sica.dominio.puerto.entrada.ConsultarReporteAccesosCasoUso;
+import com.acme.sica.dominio.puerto.entrada.ConsultarReporteIncidentesCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPersonaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
@@ -81,6 +91,10 @@ public class ContenedorDependencias {
     private final GestionarPermisoCasoUso gestionarPermisoCasoUso;
     private final GestionarEmpresaCasoUso gestionarEmpresaCasoUso;
     private final GestionarFuncionarioCasoUso gestionarFuncionarioCasoUso;
+    private final GestionarIncidenteCasoUso gestionarIncidenteCasoUso;
+    private final GestionarBloqueoPersonaCasoUso gestionarBloqueoPersonaCasoUso;
+    private final ConsultarReporteAccesosCasoUso consultarReporteAccesosCasoUso;
+    private final ConsultarReporteIncidentesCasoUso consultarReporteIncidentesCasoUso;
     private final GestionarPersonaCasoUso gestionarPersonaCasoUso;
     private final PreRegistrarInvitadoCasoUso preRegistrarInvitadoCasoUso;
     private final CheckInInvitadoCasoUso checkInInvitadoCasoUso;
@@ -146,6 +160,21 @@ public class ContenedorDependencias {
                         usuarioRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
         );
+
+        this.gestionarIncidenteCasoUso = new AuditoriaIncidenteDecorador(
+                new GestionarIncidenteServicio(incidenteRepositorio, personaRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.gestionarBloqueoPersonaCasoUso = new AuditoriaBloqueoPersonaDecorador(
+                new GestionarBloqueoPersonaServicio(personaRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        this.consultarReporteAccesosCasoUso = new ConsultarReporteAccesosServicio(
+                visitaRepositorio, cadenaAutorizacion);
+        this.consultarReporteIncidentesCasoUso = new ConsultarReporteIncidentesServicio(
+                incidenteRepositorio, cadenaAutorizacion);
 
         this.gestionarPersonaCasoUso = new AuditoriaPersonaDecorador(
                 new GestionarPersonaServicio(personaRepositorio, cadenaAutorizacion),
@@ -270,6 +299,22 @@ public class ContenedorDependencias {
 
     public GestionarFuncionarioCasoUso getGestionarFuncionarioCasoUso() {
         return gestionarFuncionarioCasoUso;
+    }
+
+    public GestionarIncidenteCasoUso getGestionarIncidenteCasoUso() {
+        return gestionarIncidenteCasoUso;
+    }
+
+    public GestionarBloqueoPersonaCasoUso getGestionarBloqueoPersonaCasoUso() {
+        return gestionarBloqueoPersonaCasoUso;
+    }
+
+    public ConsultarReporteAccesosCasoUso getConsultarReporteAccesosCasoUso() {
+        return consultarReporteAccesosCasoUso;
+    }
+
+    public ConsultarReporteIncidentesCasoUso getConsultarReporteIncidentesCasoUso() {
+        return consultarReporteIncidentesCasoUso;
     }
 
     public GestionarPersonaCasoUso getGestionarPersonaCasoUso() {

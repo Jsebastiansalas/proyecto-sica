@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.ReporteIncidentesControlador" fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+ <VBox alignment="TOP_CENTER" styleClass="dashboard-root"><padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+  <VBox styleClass="form-card"><HBox styleClass="screen-header"><Label text="Reporte de Incidentes" styleClass="screen-title" HBox.hgrow="ALWAYS"/><Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/></HBox>
+   <GridPane hgap="10" vgap="10"><Label text="Desde:" GridPane.rowIndex="0" GridPane.columnIndex="0"/><DatePicker fx:id="campoDesde" GridPane.rowIndex="0" GridPane.columnIndex="1"/><Label text="Hasta:" GridPane.rowIndex="0" GridPane.columnIndex="2"/><DatePicker fx:id="campoHasta" GridPane.rowIndex="0" GridPane.columnIndex="3"/><Label text="Empresa:" GridPane.rowIndex="1" GridPane.columnIndex="0"/><ComboBox fx:id="comboEmpresa" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="260"/><Label text="Gravedad:" GridPane.rowIndex="1" GridPane.columnIndex="2"/><ComboBox fx:id="comboGravedad" GridPane.rowIndex="1" GridPane.columnIndex="3" prefWidth="220"/><columnConstraints><ColumnConstraints minWidth="70"/><ColumnConstraints minWidth="220"/><ColumnConstraints minWidth="70"/><ColumnConstraints minWidth="220"/></columnConstraints></GridPane>
+   <HBox spacing="10"><Button text="Buscar" onAction="#buscar" styleClass="dashboard-button"/><Button text="Limpiar" onAction="#limpiar" styleClass="dashboard-button secondary"/></HBox><Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+   <TableView fx:id="tabla" prefHeight="480"><columns><TableColumn fx:id="columnaFecha" text="Fecha" prefWidth="170"/><TableColumn fx:id="columnaPersona" text="Persona" prefWidth="220"/><TableColumn fx:id="columnaGravedad" text="Gravedad" prefWidth="130"/><TableColumn fx:id="columnaDescripcion" text="Descripción" prefWidth="420"/><TableColumn fx:id="columnaUsuario" text="Registrado por" prefWidth="170"/></columns></TableView>
+  </VBox>
+ </VBox>
+</ScrollPane>

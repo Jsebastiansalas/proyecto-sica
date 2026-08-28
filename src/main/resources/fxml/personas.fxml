@@ -31,9 +31,6 @@
                 <Label text="Foto URL:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
                 <TextField fx:id="campoFotoUrl" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-                <Label text="Bloqueada:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                <CheckBox fx:id="checkBloqueada" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-
                 <columnConstraints>
                     <ColumnConstraints minWidth="100"/>
                     <ColumnConstraints minWidth="450"/>

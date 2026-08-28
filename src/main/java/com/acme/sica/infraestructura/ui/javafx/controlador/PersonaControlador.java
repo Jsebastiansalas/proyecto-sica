@@ -52,9 +52,6 @@ public class PersonaControlador {
     private ComboBox<TipoPersona> comboTipo;
 
     @FXML
-    private CheckBox checkBloqueada;
-
-    @FXML
     private Label etiquetaMensaje;
 
     @FXML
@@ -106,7 +103,6 @@ public class PersonaControlador {
                 campoNombre.setText(nuevo.getNombreCompleto());
                 campoFotoUrl.setText(nuevo.getFotoUrl());
                 comboTipo.setValue(nuevo.getTipo());
-                checkBloqueada.setSelected(nuevo.isBloqueada());
                 botonGuardar.setText("Actualizar");
             } else {
                 limpiarFormulario();
@@ -144,7 +140,7 @@ public class PersonaControlador {
                 etiquetaMensaje.setText("Persona creada correctamente");
             } else {
                 casoUso.editar(new EditarPersonaComando(personaSeleccionada.getId(), documento,
-                        nombre, fotoUrl, tipo, checkBloqueada.isSelected()));
+                        nombre, fotoUrl, tipo, personaSeleccionada.isBloqueada()));
                 etiquetaMensaje.setText("Persona actualizada correctamente");
             }
             limpiarFormulario();
@@ -190,7 +186,6 @@ public class PersonaControlador {
         campoNombre.clear();
         campoFotoUrl.clear();
         comboTipo.setValue(null);
-        checkBloqueada.setSelected(false);
         botonGuardar.setText("Guardar");
         etiquetaMensaje.setText("");
     }

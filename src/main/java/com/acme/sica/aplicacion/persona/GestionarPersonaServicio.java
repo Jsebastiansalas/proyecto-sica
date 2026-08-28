@@ -73,7 +73,6 @@ public class GestionarPersonaServicio implements GestionarPersonaCasoUso {
         persona.setNombreCompleto(comando.getNombreCompleto().trim());
         persona.setFotoUrl(comando.getFotoUrl());
         persona.setTipo(comando.getTipo());
-        persona.setBloqueada(comando.isBloqueada());
         return personaRepositorio.guardar(persona);
     }
 
