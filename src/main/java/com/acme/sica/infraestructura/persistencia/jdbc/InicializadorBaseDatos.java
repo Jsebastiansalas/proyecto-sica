@@ -58,7 +58,8 @@ public class InicializadorBaseDatos {
             if (!msg.contains("already exists") &&
                 !msg.contains("ya existe") &&
                 !msg.contains("duplicate entry") &&
-                !msg.contains("entrada duplicada")) {
+                !msg.contains("entrada duplicada") &&
+                !msg.contains("duplicate key name")) {
                 System.err.println("Advertencia al ejecutar SQL: " + e.getMessage());
             }
         }

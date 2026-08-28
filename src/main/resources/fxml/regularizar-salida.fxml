@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.RegularizarSalidaControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Regularizar Salidas Olvidadas" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Documento:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoDocumento" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Documento de la persona"/>
+
+                <Label text="Estrategia:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboTipo" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="450" promptText="Tipo de regularización"/>
+
+                <Label text="Motivo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextArea fx:id="campoMotivo" GridPane.rowIndex="2" GridPane.columnIndex="1" prefRowCount="3" wrapText="true"/>
+
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100"/>
+                    <ColumnConstraints minWidth="450"/>
+                </columnConstraints>
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Regularizar" onAction="#regularizar" styleClass="dashboard-button"/>
+                <Button text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Visitas abiertas (sin salida registrada)" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaOlvidadas" prefHeight="300">
+                <columns>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="200"/>
+                    <TableColumn fx:id="columnaNombre" text="Persona" prefWidth="350"/>
+                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="200"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

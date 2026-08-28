@@ -22,9 +22,17 @@ import com.acme.sica.aplicacion.visita.AuditoriaAprobarRechazarDecorador;
 import com.acme.sica.aplicacion.visita.AprobarRechazarVisitaServicio;
 import com.acme.sica.aplicacion.visita.AuditoriaRegistrarTrabajadorDecorador;
 import com.acme.sica.aplicacion.visita.RegistrarTrabajadorServicio;
+import com.acme.sica.aplicacion.visita.AuditoriaRegularizarDecorador;
+import com.acme.sica.aplicacion.visita.RegularizarSalidaServicio;
+import com.acme.sica.aplicacion.visita.EstrategiaCierreSistema;
+import com.acme.sica.aplicacion.visita.EstrategiaNuevoIngreso;
+import com.acme.sica.aplicacion.visita.TipoRegularizacion;
+import com.acme.sica.aplicacion.visita.AuditoriaCheckOutDecorador;
+import com.acme.sica.aplicacion.visita.CheckOutServicio;
 import com.acme.sica.dominio.puerto.entrada.ConsultarBitacoraCasoUso;
 import com.acme.sica.dominio.puerto.entrada.CheckInInvitadoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.AprobarRechazarVisitaCasoUso;
+import com.acme.sica.dominio.puerto.entrada.CheckOutCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarEmpresaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarFuncionarioCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPersonaCasoUso;
@@ -32,6 +40,7 @@ import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.entrada.PreRegistrarInvitadoCasoUso;
+import com.acme.sica.dominio.puerto.entrada.RegularizarSalidaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.RegistrarNoAnunciadoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.RegistrarTrabajadorCasoUso;
 import com.acme.sica.dominio.puerto.salida.*;
@@ -49,6 +58,9 @@ import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVisita;
 import com.acme.sica.infraestructura.seguridad.HasheadorContrasenas;
 import com.acme.sica.infraestructura.seguridad.autorizacion.FabricaCadenaAutorizacion;
 import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Contenedor manual de dependencias.
@@ -75,6 +87,8 @@ public class ContenedorDependencias {
     private final RegistrarNoAnunciadoCasoUso registrarNoAnunciadoCasoUso;
     private final AprobarRechazarVisitaCasoUso aprobarRechazarCasoUso;
     private final RegistrarTrabajadorCasoUso registrarTrabajadorCasoUso;
+    private final RegularizarSalidaCasoUso regularizarSalidaCasoUso;
+    private final CheckOutCasoUso checkOutCasoUso;
     private final ConsultarBitacoraCasoUso consultarBitacoraCasoUso;
 
     private final UsuarioRepositorioPuerto usuarioRepositorio;
@@ -162,6 +176,21 @@ public class ContenedorDependencias {
 
         this.registrarTrabajadorCasoUso = new AuditoriaRegistrarTrabajadorDecorador(
                 new RegistrarTrabajadorServicio(visitaRepositorio, personaRepositorio, cadenaAutorizacion),
+                bitacoraRepositorio
+        );
+
+        Map<TipoRegularizacion, com.acme.sica.aplicacion.visita.EstrategiaSalidaOlvidada> estrategias = new HashMap<>();
+        estrategias.put(TipoRegularizacion.CIERRE_SISTEMA, new EstrategiaCierreSistema(visitaRepositorio));
+        estrategias.put(TipoRegularizacion.NUEVO_INGRESO, new EstrategiaNuevoIngreso(visitaRepositorio));
+
+        this.regularizarSalidaCasoUso = new AuditoriaRegularizarDecorador(
+                new RegularizarSalidaServicio(visitaRepositorio, personaRepositorio,
+                        cadenaAutorizacion, estrategias),
+                bitacoraRepositorio
+        );
+
+        this.checkOutCasoUso = new AuditoriaCheckOutDecorador(
+                new CheckOutServicio(visitaRepositorio, personaRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
         );
 
@@ -265,6 +294,14 @@ public class ContenedorDependencias {
 
     public RegistrarTrabajadorCasoUso getRegistrarTrabajadorCasoUso() {
         return registrarTrabajadorCasoUso;
+    }
+
+    public RegularizarSalidaCasoUso getRegularizarSalidaCasoUso() {
+        return regularizarSalidaCasoUso;
+    }
+
+    public CheckOutCasoUso getCheckOutCasoUso() {
+        return checkOutCasoUso;
     }
 
     public HasheadorContrasenas getHasheadorContrasenas() {

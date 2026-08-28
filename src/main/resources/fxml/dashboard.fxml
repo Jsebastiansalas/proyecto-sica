@@ -109,7 +109,8 @@
                         <Button fx:id="botonRegistrarNoAnunciado" text="No Anunciado" onAction="#abrirRegistrarNoAnunciado" styleClass="dashboard-tile-button"/>
                         <Button fx:id="botonAprobarRechazar" text="Aprobar/Rechazar" onAction="#abrirAprobarRechazar" styleClass="dashboard-tile-button"/>
                         <Button fx:id="botonRegistrarTrabajador" text="Registrar Trabajador" onAction="#abrirRegistrarTrabajador" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                        <Button fx:id="botonRegularizarSalida" text="Salida Olvidada" onAction="#abrirRegularizarSalida" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonCheckOut" text="Check-out" onAction="#abrirCheckOut" styleClass="dashboard-tile-button"/>
                     </HBox>
                 </VBox>
             </GridPane>

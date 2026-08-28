@@ -103,10 +103,14 @@ ON DUPLICATE KEY UPDATE ubicacion = VALUES(ubicacion);
 -- =====================================================
 -- FUNCIONARIOS DE PRUEBA
 -- =====================================================
-INSERT IGNORE INTO funcionarios (usuario_id, empresa_id, nombre, cargo, activo) VALUES
-    ((SELECT id FROM usuarios WHERE username = 'funcionario1'),
-     (SELECT id FROM empresas WHERE nombre = 'Empresa A'),
-     'Juan Pérez', 'Recepcionista', TRUE);
+INSERT INTO funcionarios (usuario_id, empresa_id, nombre, cargo, activo)
+SELECT u.id, e.id, 'Juan Pérez', 'Recepcionista', TRUE
+FROM usuarios u
+JOIN empresas e ON e.nombre = 'Empresa A'
+WHERE u.username = 'funcionario1'
+  AND NOT EXISTS (
+      SELECT 1 FROM funcionarios f WHERE f.usuario_id = u.id
+  );
 
 -- =====================================================
 -- PERSONAS DE PRUEBA
@@ -122,7 +126,7 @@ ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
 -- =====================================================
 INSERT IGNORE INTO visitas (persona_id, funcionario_id, fecha_hora_programada, estado, observaciones) VALUES
     ((SELECT id FROM personas WHERE documento = '1234567890'),
-     (SELECT id FROM funcionarios WHERE nombre = 'Juan Pérez'),
+      (SELECT MIN(id) FROM funcionarios WHERE nombre = 'Juan Pérez'),
      DATE_ADD(NOW(), INTERVAL 1 HOUR),
      'APROBADO',
      'Visita pre-registrada de prueba');

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.CheckOutControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Check-out" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Documento:"/>
+                <TextField fx:id="campoDocumento" promptText="Documento de la persona" prefWidth="280"/>
+                <Button text="Confirmar Salida" onAction="#confirmarSalida" styleClass="dashboard-button"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <Label text="Personas dentro del recinto" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaDentro" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="180"/>
+                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="300"/>
+                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="200"/>
+                    <TableColumn fx:id="columnaTipo" text="Tipo" prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

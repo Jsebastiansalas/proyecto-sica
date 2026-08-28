@@ -57,6 +57,8 @@ public class DashboardControlador {
     @FXML private Button botonRegistrarNoAnunciado;
     @FXML private Button botonAprobarRechazar;
     @FXML private Button botonRegistrarTrabajador;
+    @FXML private Button botonRegularizarSalida;
+    @FXML private Button botonCheckOut;
     @FXML private Button botonCerrarSesion;
 
     @FXML
@@ -78,6 +80,8 @@ public class DashboardControlador {
         botonRegistrarNoAnunciado.setVisible(SesionContexto.tienePermiso("registrar_no_anunciado"));
         botonAprobarRechazar.setVisible(SesionContexto.tienePermiso("aprobar_rechazar"));
         botonRegistrarTrabajador.setVisible(SesionContexto.tienePermiso("registrar_trabajador"));
+        botonRegularizarSalida.setVisible(SesionContexto.tienePermiso("regularizar_salida"));
+        botonCheckOut.setVisible(SesionContexto.tienePermiso("check_out"));
 
         cargarEstadisticas();
         cargarActividadReciente();
@@ -172,6 +176,8 @@ public class DashboardControlador {
     @FXML private void abrirRegistrarNoAnunciado() { cargarVista("/fxml/registrar-no-anunciado.fxml", "SICA - Registrar No Anunciado"); }
     @FXML private void abrirAprobarRechazar() { cargarVista("/fxml/aprobar-rechazar.fxml", "SICA - Aprobar/Rechazar Visitas"); }
     @FXML private void abrirRegistrarTrabajador() { cargarVista("/fxml/registrar-trabajador.fxml", "SICA - Registrar Trabajador"); }
+    @FXML private void abrirRegularizarSalida() { cargarVista("/fxml/regularizar-salida.fxml", "SICA - Regularizar Salidas"); }
+    @FXML private void abrirCheckOut() { cargarVista("/fxml/check-out.fxml", "SICA - Check-out"); }
 
     @FXML
     private void cerrarSesion() {
