@@ -4,6 +4,7 @@ import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
 import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
+import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
 import com.acme.sica.dominio.puerto.entrada.PreRegistrarInvitadoCasoUso;
 import com.acme.sica.dominio.puerto.salida.FuncionarioRepositorioPuerto;
@@ -75,6 +76,7 @@ public class PreRegistrarInvitadoServicio implements PreRegistrarInvitadoCasoUso
 
         Visita visita = new Visita(persona, null, funcionario,
                 comando.getMotivo(), comando.getFechaHoraEsperada(), null);
+        visita.setEstado(EstadoVisita.APROBADO);
         return visitaRepositorio.guardar(visita);
     }
 

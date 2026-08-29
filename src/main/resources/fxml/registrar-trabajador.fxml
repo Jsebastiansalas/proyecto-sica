@@ -14,7 +14,7 @@
 
         <VBox styleClass="form-card">
             <HBox styleClass="screen-header">
-                <Label text="Registrar Trabajador" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Label text="Registrar Trabajador (Carnet Olvidado)" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
                 <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
             </HBox>
 
@@ -27,6 +27,9 @@
 
                 <Label text="Foto URL:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                 <TextField fx:id="campoFotoUrl" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="Opcional"/>
+
+                <Label text="Funcionario:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="comboFuncionarios" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="450" promptText="Funcionario responsable"/>
 
                 <columnConstraints>
                     <ColumnConstraints minWidth="100"/>
@@ -41,12 +44,12 @@
 
             <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
 
-            <Label text="Trabajadores dentro del recinto" styleClass="dashboard-subtitle"/>
+            <Label text="Trabajadores pendientes de aprobación" styleClass="dashboard-subtitle"/>
             <TableView fx:id="tablaTrabajadores" prefHeight="300">
                 <columns>
                     <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="200"/>
                     <TableColumn fx:id="columnaNombre" text="Trabajador" prefWidth="350"/>
-                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="200"/>
+                    <TableColumn fx:id="columnaIngreso" text="Fecha/Hora Solicitud" prefWidth="200"/>
                 </columns>
             </TableView>
         </VBox>

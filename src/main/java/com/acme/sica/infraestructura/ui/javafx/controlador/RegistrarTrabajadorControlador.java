@@ -3,9 +3,11 @@ package com.acme.sica.infraestructura.ui.javafx.controlador;
 import com.acme.sica.aplicacion.visita.RegistrarTrabajadorComando;
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
 import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
+import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 import com.acme.sica.dominio.puerto.entrada.RegistrarTrabajadorCasoUso;
+import com.acme.sica.dominio.puerto.salida.FuncionarioRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +32,7 @@ public class RegistrarTrabajadorControlador {
     @FXML private TextField campoDocumento;
     @FXML private TextField campoNombre;
     @FXML private TextField campoFotoUrl;
+    @FXML private ComboBox<Funcionario> comboFuncionarios;
     @FXML private Label etiquetaMensaje;
     @FXML private Button botonVolver;
 
@@ -38,23 +42,36 @@ public class RegistrarTrabajadorControlador {
     @FXML private TableColumn<Visita, String> columnaIngreso;
 
     private RegistrarTrabajadorCasoUso casoUso;
+    private FuncionarioRepositorioPuerto funcionarioRepositorio;
     private VisitaRepositorioPuerto visitaRepositorio;
     private ObservableList<Visita> trabajadores;
 
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getRegistrarTrabajadorCasoUso();
+        funcionarioRepositorio = AplicacionJavaFx.getContenedorDependencias().getFuncionarioRepositorio();
         visitaRepositorio = AplicacionJavaFx.getContenedorDependencias().getVisitaRepositorio();
         trabajadores = FXCollections.observableArrayList();
+
+        comboFuncionarios.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Funcionario f) {
+                return f == null ? "" : f.getNombreCompleto() + " (" + f.getEmpresa().getNombre() + ")";
+            }
+
+            @Override
+            public Funcionario fromString(String texto) { return null; }
+        });
 
         columnaDocumento.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getPersona() != null ? c.getValue().getPersona().getDocumentoIdentidad() : ""));
         columnaNombre.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getPersona() != null ? c.getValue().getPersona().getNombreCompleto() : ""));
         columnaIngreso.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().getFechaHoraIngreso() != null ? c.getValue().getFechaHoraIngreso().format(FORMATO) : ""));
+                c.getValue().getFechaHoraEsperada() != null ? c.getValue().getFechaHoraEsperada().format(FORMATO) : ""));
 
         tablaTrabajadores.setItems(trabajadores);
+        cargarFuncionarios();
         cargarTrabajadores();
     }
 
@@ -66,6 +83,7 @@ public class RegistrarTrabajadorControlador {
         String documento = campoDocumento.getText().trim();
         String nombre = campoNombre.getText().trim();
         String fotoUrl = campoFotoUrl.getText().trim();
+        Funcionario funcionario = comboFuncionarios.getValue();
 
         if (documento.isEmpty()) {
             etiquetaMensaje.setText("El documento es obligatorio");
@@ -75,11 +93,15 @@ public class RegistrarTrabajadorControlador {
             etiquetaMensaje.setText("El nombre es obligatorio");
             return;
         }
+        if (funcionario == null) {
+            etiquetaMensaje.setText("Seleccione un funcionario responsable");
+            return;
+        }
 
         try {
-            casoUso.registrar(new RegistrarTrabajadorComando(documento, nombre, fotoUrl));
+            casoUso.registrar(new RegistrarTrabajadorComando(documento, nombre, fotoUrl, funcionario.getId()));
             etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
-            etiquetaMensaje.setText("Trabajador registrado. Ingreso confirmado.");
+            etiquetaMensaje.setText("Trabajador registrado. Queda pendiente de aprobación.");
             limpiarFormulario();
             cargarTrabajadores();
         } catch (IllegalArgumentException | IllegalStateException
@@ -93,6 +115,7 @@ public class RegistrarTrabajadorControlador {
         campoDocumento.clear();
         campoNombre.clear();
         campoFotoUrl.clear();
+        comboFuncionarios.setValue(null);
         etiquetaMensaje.setText("");
     }
 
@@ -112,10 +135,21 @@ public class RegistrarTrabajadorControlador {
         }
     }
 
+    private void cargarFuncionarios() {
+        try {
+            List<Funcionario> funcionarios = funcionarioRepositorio.listarTodos().stream()
+                    .filter(Funcionario::isActivo)
+                    .toList();
+            comboFuncionarios.getItems().setAll(funcionarios);
+        } catch (PermisoDenegadoExcepcion e) {
+            etiquetaMensaje.setText(e.getMessage());
+        }
+    }
+
     private void cargarTrabajadores() {
         try {
             List<Visita> lista = visitaRepositorio.listarTodos().stream()
-                    .filter(v -> v.getEstado() == EstadoVisita.DENTRO)
+                    .filter(v -> v.getEstado() == EstadoVisita.PENDIENTE_APROBACION_OLVIDO)
                     .filter(v -> v.getPersona() != null
                             && v.getPersona().getTipo() == com.acme.sica.dominio.modelo.enumerados.TipoPersona.TRABAJADOR)
                     .toList();

@@ -49,9 +49,12 @@
 
             <TableView fx:id="tablaVisitas" prefHeight="320" prefWidth="900">
                 <columns>
-                    <TableColumn fx:id="columnaPersona" text="Invitado" prefWidth="240"/>
-                    <TableColumn fx:id="columnaFuncionario" text="Funcionario" prefWidth="240"/>
-                    <TableColumn fx:id="columnaFecha" text="Fecha/Hora" prefWidth="200"/>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="150"/>
+                    <TableColumn fx:id="columnaPersona" text="Invitado" prefWidth="200"/>
+                    <TableColumn fx:id="columnaFoto" text="Foto URL" prefWidth="240"/>
+                    <TableColumn fx:id="columnaFuncionario" text="Anfitrión" prefWidth="190"/>
+                    <TableColumn fx:id="columnaEmpresa" text="Empresa" prefWidth="170"/>
+                    <TableColumn fx:id="columnaFecha" text="Fecha/Hora" prefWidth="160"/>
                     <TableColumn fx:id="columnaEstado" text="Estado" prefWidth="150"/>
                 </columns>
             </TableView>

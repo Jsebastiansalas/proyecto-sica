@@ -10,6 +10,9 @@ import com.acme.sica.dominio.puerto.entrada.RegistrarNoAnunciadoCasoUso;
 import com.acme.sica.dominio.puerto.salida.FuncionarioRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -43,10 +47,13 @@ public class RegistrarNoAnunciadoControlador {
     @FXML private TableColumn<Visita, String> columnaFuncionario;
     @FXML private TableColumn<Visita, String> columnaFecha;
 
+    private static final int POLLING_INTERVAL_SECONDS = 5;
+
     private RegistrarNoAnunciadoCasoUso casoUso;
     private FuncionarioRepositorioPuerto funcionarioRepositorio;
     private VisitaRepositorioPuerto visitaRepositorio;
     private ObservableList<Visita> noAnunciados;
+    private Timeline pollingTimeline;
 
     @FXML
     public void initialize() {
@@ -75,8 +82,23 @@ public class RegistrarNoAnunciadoControlador {
                 c.getValue().getFechaHoraEsperada() != null ? c.getValue().getFechaHoraEsperada().format(FORMATO) : ""));
 
         tablaNoAnunciados.setItems(noAnunciados);
+
+        // Configurar polling para actualización automática
+        pollingTimeline = new Timeline(
+                new KeyFrame(Duration.seconds(POLLING_INTERVAL_SECONDS), e -> cargarNoAnunciados())
+        );
+        pollingTimeline.setCycleCount(Animation.INDEFINITE);
+        pollingTimeline.play();
+
         cargarFuncionarios();
         cargarNoAnunciados();
+    }
+
+    @Override
+    public void finalize() {
+        if (pollingTimeline != null) {
+            pollingTimeline.stop();
+        }
     }
 
     @FXML

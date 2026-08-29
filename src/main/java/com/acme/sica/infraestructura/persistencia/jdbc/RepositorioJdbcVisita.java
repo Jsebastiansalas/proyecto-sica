@@ -1,6 +1,7 @@
 package com.acme.sica.infraestructura.persistencia.jdbc;
 
 import com.acme.sica.dominio.modelo.Funcionario;
+import com.acme.sica.dominio.modelo.Empresa;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
@@ -244,10 +245,12 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
                "v.fecha_hora_checkin, v.fecha_hora_checkout, v.estado, v.observaciones, v.fecha_creacion, " +
                "p.documento AS persona_documento, p.nombre AS persona_nombre, p.foto_url AS persona_foto_url, " +
                "p.tipo AS persona_tipo, p.bloqueada AS persona_bloqueada, " +
-               "f.nombre AS funcionario_nombre, f.empresa_id AS funcionario_empresa_id " +
+               "f.nombre AS funcionario_nombre, f.empresa_id AS funcionario_empresa_id, " +
+               "e.nombre AS empresa_nombre, e.ubicacion AS empresa_ubicacion, e.activa AS empresa_activa " +
                "FROM visitas v " +
                "INNER JOIN personas p ON v.persona_id = p.id " +
-               "LEFT JOIN funcionarios f ON v.funcionario_id = f.id";
+               "LEFT JOIN funcionarios f ON v.funcionario_id = f.id " +
+               "LEFT JOIN empresas e ON f.empresa_id = e.id";
     }
 
     private Visita mapearFila(ResultSet rs) throws SQLException {
@@ -277,6 +280,15 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
             Funcionario funcionario = new Funcionario();
             funcionario.setId(funcionarioId);
             funcionario.setNombreCompleto(rs.getString("funcionario_nombre"));
+            Long empresaId = rs.getObject("funcionario_empresa_id", Long.class);
+            if (empresaId != null) {
+                Empresa empresa = new Empresa();
+                empresa.setId(empresaId);
+                empresa.setNombre(rs.getString("empresa_nombre"));
+                empresa.setUbicacion(rs.getString("empresa_ubicacion"));
+                empresa.setActiva(rs.getBoolean("empresa_activa"));
+                funcionario.setEmpresa(empresa);
+            }
             visita.setFuncionario(funcionario);
         }
 

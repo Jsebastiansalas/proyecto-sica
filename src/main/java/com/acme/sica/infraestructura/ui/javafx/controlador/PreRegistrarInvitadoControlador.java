@@ -41,7 +41,16 @@ public class PreRegistrarInvitadoControlador {
     private TableColumn<Visita, String> columnaPersona;
 
     @FXML
+    private TableColumn<Visita, String> columnaDocumento;
+
+    @FXML
+    private TableColumn<Visita, String> columnaFoto;
+
+    @FXML
     private TableColumn<Visita, String> columnaFuncionario;
+
+    @FXML
+    private TableColumn<Visita, String> columnaEmpresa;
 
     @FXML
     private TableColumn<Visita, String> columnaFecha;
@@ -121,10 +130,18 @@ public class PreRegistrarInvitadoControlador {
     }
 
     private void configurarColumnas() {
+        columnaDocumento.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getPersona() != null ? c.getValue().getPersona().getDocumentoIdentidad() : ""));
         columnaPersona.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getPersona() != null ? c.getValue().getPersona().getNombreCompleto() : ""));
+        columnaFoto.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getPersona() != null && c.getValue().getPersona().getFotoUrl() != null
+                        ? c.getValue().getPersona().getFotoUrl() : "Sin foto"));
         columnaFuncionario.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getFuncionario() != null ? c.getValue().getFuncionario().getNombreCompleto() : ""));
+        columnaEmpresa.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getFuncionario() != null && c.getValue().getFuncionario().getEmpresa() != null
+                        ? c.getValue().getFuncionario().getEmpresa().getNombre() : ""));
         columnaFecha.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getFechaHoraEsperada() != null
                         ? c.getValue().getFechaHoraEsperada().toLocalDate().toString() + " "

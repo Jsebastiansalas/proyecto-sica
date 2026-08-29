@@ -204,7 +204,8 @@ public class ContenedorDependencias {
         );
 
         this.registrarTrabajadorCasoUso = new AuditoriaRegistrarTrabajadorDecorador(
-                new RegistrarTrabajadorServicio(visitaRepositorio, personaRepositorio, cadenaAutorizacion),
+                new RegistrarTrabajadorServicio(visitaRepositorio, personaRepositorio,
+                        funcionarioRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
         );
 

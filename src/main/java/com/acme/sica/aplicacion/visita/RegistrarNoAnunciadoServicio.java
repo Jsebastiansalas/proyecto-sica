@@ -72,7 +72,7 @@ public class RegistrarNoAnunciadoServicio implements RegistrarNoAnunciadoCasoUso
 
         Visita visita = new Visita(persona, null, funcionario,
                 comando.getMotivo(), LocalDateTime.now(), null);
-        visita.setEstado(EstadoVisita.PENDIENTE_APROBACION_OLVIDO);
+        visita.setEstado(EstadoVisita.PENDIENTE_APROBACION);
         return visitaRepositorio.guardar(visita);
     }
 
