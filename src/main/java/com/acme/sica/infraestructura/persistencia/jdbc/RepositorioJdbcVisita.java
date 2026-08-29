@@ -228,6 +228,25 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     }
 
     @Override
+    public List<Visita> buscarVisitasDentroConAntiguedadMayorA(LocalDateTime fechaLimite) {
+        String sql = construirSelectBase() + " WHERE v.estado = 'DENTRO' AND v.fecha_hora_checkin < ? ORDER BY v.fecha_hora_checkin ASC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, Timestamp.valueOf(fechaLimite));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar visitas antiguas", e);
+        }
+    }
+
+    @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM visitas WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();

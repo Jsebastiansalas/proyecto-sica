@@ -36,7 +36,8 @@ INSERT INTO permisos (codigo, descripcion) VALUES
     ('registrar_incidente', 'Registrar incidentes de seguridad'),
     ('bloquear_persona', 'Bloquear o desbloquear personas'),
     ('generar_reporte_accesos', 'Generar reportes de accesos'),
-    ('generar_reporte_incidentes', 'Generar reportes de incidentes')
+    ('generar_reporte_incidentes', 'Generar reportes de incidentes'),
+    ('gestionar_usuarios', 'Crear, editar y eliminar usuarios')
 ON DUPLICATE KEY UPDATE descripcion = VALUES(descripcion);
 
 -- =====================================================

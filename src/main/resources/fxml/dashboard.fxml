@@ -74,11 +74,12 @@
 
                 <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="12">
                     <Label text=" Seguridad y Acceso" styleClass="section-title"/>
-                    <Label text="Gestión de roles y permisos del sistema" styleClass="section-desc"/>
+                    <Label text="Gestión de roles, permisos y usuarios del sistema" styleClass="section-desc"/>
                     <HBox spacing="10" alignment="CENTER_LEFT">
                         <Button fx:id="botonGestionarRoles" text="Roles" onAction="#abrirGestionRoles" styleClass="dashboard-tile-button"/>
                         <Button fx:id="botonGestionarPermisos" text="Permisos" onAction="#abrirGestionPermisos" styleClass="dashboard-tile-button"/>
                         <Button fx:id="botonAsignarRoles" text="Asignar Roles" onAction="#abrirAsignacionRoles" styleClass="dashboard-tile-button"/>
+                        <Button fx:id="botonGestionarUsuarios" text="Usuarios" onAction="#abrirGestionarUsuarios" styleClass="dashboard-tile-button"/>
                     </HBox>
                 </VBox>
 

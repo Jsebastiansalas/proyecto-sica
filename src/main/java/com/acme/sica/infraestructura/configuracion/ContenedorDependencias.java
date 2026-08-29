@@ -18,6 +18,8 @@ import com.acme.sica.aplicacion.persona.AuditoriaBloqueoPersonaDecorador;
 import com.acme.sica.aplicacion.persona.GestionarBloqueoPersonaServicio;
 import com.acme.sica.aplicacion.rol.AuditoriaRolDecorador;
 import com.acme.sica.aplicacion.rol.GestionarRolServicio;
+import com.acme.sica.aplicacion.usuario.AuditoriaUsuarioDecorador;
+import com.acme.sica.aplicacion.usuario.GestionarUsuarioServicio;
 import com.acme.sica.aplicacion.visita.AuditoriaPreRegistrarInvitadoDecorador;
 import com.acme.sica.aplicacion.visita.PreRegistrarInvitadoServicio;
 import com.acme.sica.aplicacion.visita.AuditoriaCheckInDecorador;
@@ -48,6 +50,7 @@ import com.acme.sica.dominio.puerto.entrada.ConsultarReporteIncidentesCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPersonaCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
+import com.acme.sica.dominio.puerto.entrada.GestionarUsuarioCasoUso;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.entrada.PreRegistrarInvitadoCasoUso;
 import com.acme.sica.dominio.puerto.entrada.RegularizarSalidaCasoUso;
@@ -88,6 +91,7 @@ public class ContenedorDependencias {
 
     private final IniciarSesionCasoUso iniciarSesionCasoUso;
     private final GestionarRolCasoUso gestionarRolCasoUso;
+    private final GestionarUsuarioCasoUso gestionarUsuarioCasoUso;
     private final GestionarPermisoCasoUso gestionarPermisoCasoUso;
     private final GestionarEmpresaCasoUso gestionarEmpresaCasoUso;
     private final GestionarFuncionarioCasoUso gestionarFuncionarioCasoUso;
@@ -145,6 +149,12 @@ public class ContenedorDependencias {
                 bitacoraRepositorio
         );
 
+        this.gestionarUsuarioCasoUso = new AuditoriaUsuarioDecorador(
+                new GestionarUsuarioServicio(usuarioRepositorio, rolRepositorio,
+                        cadenaAutorizacion, hasheadorContrasenas),
+                bitacoraRepositorio
+        );
+
         this.gestionarPermisoCasoUso = new AuditoriaPermisoDecorador(
                 new GestionarPermisoServicio(permisoRepositorio, cadenaAutorizacion),
                 bitacoraRepositorio
@@ -181,6 +191,8 @@ public class ContenedorDependencias {
                 bitacoraRepositorio
         );
 
+        EstrategiaCierreSistema estrategiaCierreSistema = new EstrategiaCierreSistema(visitaRepositorio);
+
         this.preRegistrarInvitadoCasoUso = new AuditoriaPreRegistrarInvitadoDecorador(
                 new PreRegistrarInvitadoServicio(visitaRepositorio, personaRepositorio,
                         funcionarioRepositorio, cadenaAutorizacion),
@@ -188,7 +200,8 @@ public class ContenedorDependencias {
         );
 
         this.checkInInvitadoCasoUso = new AuditoriaCheckInDecorador(
-                new CheckInInvitadoServicio(visitaRepositorio, personaRepositorio, cadenaAutorizacion),
+                new CheckInInvitadoServicio(visitaRepositorio, personaRepositorio,
+                        cadenaAutorizacion, estrategiaCierreSistema),
                 bitacoraRepositorio
         );
 
@@ -210,7 +223,7 @@ public class ContenedorDependencias {
         );
 
         Map<TipoRegularizacion, com.acme.sica.aplicacion.visita.EstrategiaSalidaOlvidada> estrategias = new HashMap<>();
-        estrategias.put(TipoRegularizacion.CIERRE_SISTEMA, new EstrategiaCierreSistema(visitaRepositorio));
+        estrategias.put(TipoRegularizacion.CIERRE_SISTEMA, estrategiaCierreSistema);
         estrategias.put(TipoRegularizacion.NUEVO_INGRESO, new EstrategiaNuevoIngreso(visitaRepositorio));
 
         this.regularizarSalidaCasoUso = new AuditoriaRegularizarDecorador(
@@ -284,6 +297,10 @@ public class ContenedorDependencias {
 
     public GestionarRolCasoUso getGestionarRolCasoUso() {
         return gestionarRolCasoUso;
+    }
+
+    public GestionarUsuarioCasoUso getGestionarUsuarioCasoUso() {
+        return gestionarUsuarioCasoUso;
     }
 
     public GestionarPermisoCasoUso getGestionarPermisoCasoUso() {

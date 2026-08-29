@@ -11,27 +11,32 @@ import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacio
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Servicio de aplicación para el check-in de invitados (HU-12).
  *
- * Valida que la persona exista, no esté bloqueada y tenga una visita
- * aprobada pendiente de ingreso. Marca el ingreso (estado DENTRO).
+ * Si la persona tiene una visita abierta (DENTRO), la cierra
+ * automáticamente como CERRADA_POR_SISTEMA antes de crear la nueva visita.
  */
 public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
 
     private static final String PERMISO_REQUERIDO = "check_in_invitado";
+    private static final String MOTIVO_CIERRE_AUTOMATICO = "Cierre automático: persona realiza nuevo check-in";
 
     private final VisitaRepositorioPuerto visitaRepositorio;
     private final PersonaRepositorioPuerto personaRepositorio;
     private final ManejadorAutorizacion cadenaAutorizacion;
+    private final EstrategiaCierreSistema estrategiaCierreSistema;
 
     public CheckInInvitadoServicio(VisitaRepositorioPuerto visitaRepositorio,
                                    PersonaRepositorioPuerto personaRepositorio,
-                                   ManejadorAutorizacion cadenaAutorizacion) {
+                                   ManejadorAutorizacion cadenaAutorizacion,
+                                   EstrategiaCierreSistema estrategiaCierreSistema) {
         this.visitaRepositorio = visitaRepositorio;
         this.personaRepositorio = personaRepositorio;
         this.cadenaAutorizacion = cadenaAutorizacion;
+        this.estrategiaCierreSistema = estrategiaCierreSistema;
     }
 
     @Override
@@ -49,6 +54,11 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
         if (persona.isBloqueada()) {
             throw new IllegalArgumentException("La persona '" + persona.getNombreCompleto()
                     + "' está bloqueada y no puede ingresar");
+        }
+
+        Optional<Visita> visitaAbierta = visitaRepositorio.buscarVisitaAbiertaPorPersona(persona.getId());
+        if (visitaAbierta.isPresent()) {
+            estrategiaCierreSistema.regularizar(visitaAbierta.get(), MOTIVO_CIERRE_AUTOMATICO);
         }
 
         List<Visita> aprobadas = visitaRepositorio.buscarPorPersonaYEstado(
