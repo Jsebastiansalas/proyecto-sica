@@ -28,7 +28,7 @@ public class ConfiguracionBaseDatos {
     private void cargarPredeterminados() {
         propiedades.setProperty("db.url", "jdbc:mysql://localhost:3306/sica_db");
         propiedades.setProperty("db.username", "root");
-        propiedades.setProperty("db.password", "root");
+        propiedades.setProperty("db.password", "");
         propiedades.setProperty("db.driver", "com.mysql.cj.jdbc.Driver");
     }
 

@@ -122,6 +122,14 @@ public class DashboardControlador {
 
     private void cargarActividadReciente() {
         contenedorActividadReciente.getChildren().clear();
+
+        if (!SesionContexto.tienePermiso("consultar_bitacora")) {
+            Label sinPermiso = new Label("Sin permiso para ver actividad");
+            sinPermiso.getStyleClass().add("activity-empty");
+            contenedorActividadReciente.getChildren().add(sinPermiso);
+            return;
+        }
+
         try {
             BitacoraRepositorioPuerto bitacoraRepo =
                     AplicacionJavaFx.getContenedorDependencias().getBitacoraRepositorio();
