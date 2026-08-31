@@ -31,4 +31,9 @@ public class AuditoriaIncidenteDecorador implements GestionarIncidenteCasoUso {
     public List<Incidente> listarTodos() {
         return decorado.listarTodos();
     }
+
+    @Override
+    public List<com.acme.sica.dominio.modelo.Persona> listarPersonas() {
+        return decorado.listarPersonas();
+    }
 }

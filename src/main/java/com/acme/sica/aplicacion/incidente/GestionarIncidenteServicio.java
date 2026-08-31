@@ -63,6 +63,12 @@ public class GestionarIncidenteServicio implements GestionarIncidenteCasoUso {
         return incidenteRepositorio.listarTodos();
     }
 
+    @Override
+    public List<Persona> listarPersonas() {
+        autorizar("registrar incidente");
+        return personaRepositorio.listarTodos();
+    }
+
     private void autorizar(String accion) {
         cadenaAutorizacion.verificar(PERMISO_REQUERIDO, accion);
     }

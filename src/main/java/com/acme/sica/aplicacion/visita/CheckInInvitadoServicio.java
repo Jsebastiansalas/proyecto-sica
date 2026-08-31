@@ -1,6 +1,7 @@
 package com.acme.sica.aplicacion.visita;
 
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
+import com.acme.sica.dominio.excepciones.PersonaBloqueadaExcepcion;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
@@ -52,7 +53,7 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
                         "No existe una persona con el documento '" + comando.getDocumento().trim() + "'"));
 
         if (persona.isBloqueada()) {
-            throw new IllegalArgumentException("La persona '" + persona.getNombreCompleto()
+            throw new PersonaBloqueadaExcepcion("La persona '" + persona.getNombreCompleto()
                     + "' está bloqueada y no puede ingresar");
         }
 

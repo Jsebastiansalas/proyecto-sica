@@ -1,6 +1,7 @@
 package com.acme.sica.aplicacion.visita;
 
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
+import com.acme.sica.dominio.excepciones.PersonaBloqueadaExcepcion;
 import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
@@ -59,7 +60,7 @@ public class RegistrarNoAnunciadoServicio implements RegistrarNoAnunciadoCasoUso
                 .orElseGet(() -> crearPersona(documento, comando));
 
         if (persona.isBloqueada()) {
-            throw new IllegalArgumentException("La persona '" + persona.getNombreCompleto()
+            throw new PersonaBloqueadaExcepcion("La persona '" + persona.getNombreCompleto()
                     + "' está bloqueada y no puede ser registrada");
         }
 

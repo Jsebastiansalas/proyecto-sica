@@ -124,7 +124,7 @@ public class ContenedorDependencias {
         this.fabricaConexiones = new FabricaConexiones(configuracionBaseDatos);
         this.inicializadorBaseDatos = new InicializadorBaseDatos(fabricaConexiones);
 
-        this.hasheadorContrasenas = new HasheadorContrasenas();
+        this.hasheadorContrasenas = new HasheadorContrasenas(configuracionBaseDatos.getPropiedades());
 
         this.usuarioRepositorio = new RepositorioJdbcUsuario(fabricaConexiones);
         this.rolRepositorio = new RepositorioJdbcRol(fabricaConexiones);

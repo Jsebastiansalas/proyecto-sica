@@ -27,12 +27,13 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
     }
 
     private Rol insertar(Rol rol) {
-        String sql = "INSERT INTO roles (nombre, descripcion) VALUES (?, ?)";
+        String sql = "INSERT INTO roles (nombre, descripcion, activo) VALUES (?, ?, ?)";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, rol.getNombre());
             stmt.setString(2, rol.getDescripcion());
+            stmt.setBoolean(3, rol.isActivo());
             stmt.executeUpdate();
 
             try (ResultSet claves = stmt.getGeneratedKeys()) {
@@ -47,13 +48,14 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
     }
 
     private Rol actualizar(Rol rol) {
-        String sql = "UPDATE roles SET nombre = ?, descripcion = ? WHERE id = ?";
+        String sql = "UPDATE roles SET nombre = ?, descripcion = ?, activo = ? WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, rol.getNombre());
             stmt.setString(2, rol.getDescripcion());
-            stmt.setLong(3, rol.getId());
+            stmt.setBoolean(3, rol.isActivo());
+            stmt.setLong(4, rol.getId());
             stmt.executeUpdate();
             return rol;
         } catch (SQLException e) {
@@ -218,6 +220,7 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         rol.setId(rs.getLong("id"));
         rol.setNombre(rs.getString("nombre"));
         rol.setDescripcion(rs.getString("descripcion"));
+        rol.setActivo(rs.getBoolean("activo"));
         return rol;
     }
 }

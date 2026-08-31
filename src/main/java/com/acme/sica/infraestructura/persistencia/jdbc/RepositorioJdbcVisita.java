@@ -31,19 +31,21 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     }
 
     private Visita insertar(Visita visita) {
-        String sql = "INSERT INTO visitas (persona_id, funcionario_id, fecha_hora_programada, " +
-                     "fecha_hora_checkin, fecha_hora_checkout, estado, observaciones) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO visitas (persona_id, funcionario_id, empresa_id, registrado_por_id, " +
+                     "fecha_hora_programada, fecha_hora_checkin, fecha_hora_checkout, estado, motivo) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setLong(1, visita.getPersona().getId());
             stmt.setObject(2, visita.getFuncionario() != null ? visita.getFuncionario().getId() : null, Types.BIGINT);
-            stmt.setTimestamp(3, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
-            stmt.setTimestamp(4, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
-            stmt.setTimestamp(5, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
-            stmt.setString(6, visita.getEstado().name());
-            stmt.setString(7, visita.getMotivo());
+            stmt.setObject(3, visita.getEmpresa() != null ? visita.getEmpresa().getId() : null, Types.BIGINT);
+            stmt.setObject(4, visita.getRegistradaPor() != null ? visita.getRegistradaPor().getId() : null, Types.BIGINT);
+            stmt.setTimestamp(5, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
+            stmt.setTimestamp(6, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
+            stmt.setTimestamp(7, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
+            stmt.setString(8, visita.getEstado().name());
+            stmt.setString(9, visita.getMotivo());
             stmt.executeUpdate();
 
             try (ResultSet claves = stmt.getGeneratedKeys()) {
@@ -58,19 +60,22 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     }
 
     private Visita actualizar(Visita visita) {
-        String sql = "UPDATE visitas SET persona_id = ?, funcionario_id = ?, fecha_hora_programada = ?, " +
-                     "fecha_hora_checkin = ?, fecha_hora_checkout = ?, estado = ?, observaciones = ? WHERE id = ?";
+        String sql = "UPDATE visitas SET persona_id = ?, funcionario_id = ?, empresa_id = ?, " +
+                     "registrado_por_id = ?, fecha_hora_programada = ?, " +
+                     "fecha_hora_checkin = ?, fecha_hora_checkout = ?, estado = ?, motivo = ? WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, visita.getPersona().getId());
             stmt.setObject(2, visita.getFuncionario() != null ? visita.getFuncionario().getId() : null, Types.BIGINT);
-            stmt.setTimestamp(3, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
-            stmt.setTimestamp(4, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
-            stmt.setTimestamp(5, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
-            stmt.setString(6, visita.getEstado().name());
-            stmt.setString(7, visita.getMotivo());
-            stmt.setLong(8, visita.getId());
+            stmt.setObject(3, visita.getEmpresa() != null ? visita.getEmpresa().getId() : null, Types.BIGINT);
+            stmt.setObject(4, visita.getRegistradaPor() != null ? visita.getRegistradaPor().getId() : null, Types.BIGINT);
+            stmt.setTimestamp(5, visita.getFechaHoraEsperada() != null ? Timestamp.valueOf(visita.getFechaHoraEsperada()) : null);
+            stmt.setTimestamp(6, visita.getFechaHoraIngreso() != null ? Timestamp.valueOf(visita.getFechaHoraIngreso()) : null);
+            stmt.setTimestamp(7, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
+            stmt.setString(8, visita.getEstado().name());
+            stmt.setString(9, visita.getMotivo());
+            stmt.setLong(10, visita.getId());
             stmt.executeUpdate();
             return visita;
         } catch (SQLException e) {
@@ -260,16 +265,19 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     }
 
     private String construirSelectBase() {
-        return "SELECT v.id, v.persona_id, v.funcionario_id, v.fecha_hora_programada, " +
-               "v.fecha_hora_checkin, v.fecha_hora_checkout, v.estado, v.observaciones, v.fecha_creacion, " +
+        return "SELECT v.id, v.persona_id, v.funcionario_id, v.empresa_id, v.registrado_por_id, " +
+               "v.fecha_hora_programada, v.fecha_hora_checkin, v.fecha_hora_checkout, " +
+               "v.estado, v.motivo, v.fecha_creacion, " +
                "p.documento AS persona_documento, p.nombre AS persona_nombre, p.foto_url AS persona_foto_url, " +
                "p.tipo AS persona_tipo, p.bloqueada AS persona_bloqueada, " +
                "f.nombre AS funcionario_nombre, f.empresa_id AS funcionario_empresa_id, " +
-               "e.nombre AS empresa_nombre, e.ubicacion AS empresa_ubicacion, e.activa AS empresa_activa " +
+               "e.nombre AS empresa_nombre, e.ubicacion AS empresa_ubicacion, e.activa AS empresa_activa, " +
+               "u.username AS registrado_por_username, u.nombre_completo AS registrado_por_nombre " +
                "FROM visitas v " +
                "INNER JOIN personas p ON v.persona_id = p.id " +
                "LEFT JOIN funcionarios f ON v.funcionario_id = f.id " +
-               "LEFT JOIN empresas e ON f.empresa_id = e.id";
+               "LEFT JOIN empresas e ON f.empresa_id = e.id " +
+               "LEFT JOIN usuarios u ON v.registrado_por_id = u.id";
     }
 
     private Visita mapearFila(ResultSet rs) throws SQLException {
@@ -282,7 +290,7 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         visita.setFechaHoraSalida(rs.getTimestamp("fecha_hora_checkout") != null ?
                 rs.getTimestamp("fecha_hora_checkout").toLocalDateTime() : null);
         visita.setEstado(EstadoVisita.valueOf(rs.getString("estado")));
-        visita.setMotivo(rs.getString("observaciones"));
+        visita.setMotivo(rs.getString("motivo"));
         visita.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
 
         Persona persona = new Persona();
@@ -309,6 +317,25 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
                 funcionario.setEmpresa(empresa);
             }
             visita.setFuncionario(funcionario);
+        }
+
+        Long empresaVisitaId = rs.getObject("empresa_id", Long.class);
+        if (empresaVisitaId != null) {
+            Empresa empresaVisita = new Empresa();
+            empresaVisita.setId(empresaVisitaId);
+            empresaVisita.setNombre(rs.getString("empresa_nombre"));
+            empresaVisita.setUbicacion(rs.getString("empresa_ubicacion"));
+            empresaVisita.setActiva(rs.getBoolean("empresa_activa"));
+            visita.setEmpresa(empresaVisita);
+        }
+
+        Long registradoPorId = rs.getObject("registrado_por_id", Long.class);
+        if (registradoPorId != null) {
+            com.acme.sica.dominio.modelo.Usuario registradoPor = new com.acme.sica.dominio.modelo.Usuario();
+            registradoPor.setId(registradoPorId);
+            registradoPor.setUsername(rs.getString("registrado_por_username"));
+            registradoPor.setNombreCompleto(rs.getString("registrado_por_nombre"));
+            visita.setRegistradaPor(registradoPor);
         }
 
         return visita;

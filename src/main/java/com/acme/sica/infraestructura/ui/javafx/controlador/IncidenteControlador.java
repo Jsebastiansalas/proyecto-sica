@@ -7,7 +7,6 @@ import com.acme.sica.dominio.modelo.Incidente;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 import com.acme.sica.dominio.puerto.entrada.GestionarIncidenteCasoUso;
-import com.acme.sica.dominio.puerto.salida.PersonaRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -38,13 +37,11 @@ public class IncidenteControlador {
     @FXML private TableColumn<Incidente, String> columnaUsuario;
 
     private GestionarIncidenteCasoUso casoUso;
-    private PersonaRepositorioPuerto personaRepositorio;
     private final ObservableList<Incidente> incidentes = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarIncidenteCasoUso();
-        personaRepositorio = AplicacionJavaFx.getContenedorDependencias().getPersonaRepositorio();
         comboGravedad.getItems().setAll(GravedadIncidente.values());
         comboGravedad.setConverter(new StringConverter<>() {
             public String toString(GravedadIncidente value) { return value == null ? "" : value.name(); }
@@ -91,7 +88,7 @@ public class IncidenteControlador {
     }
 
     private void cargarPersonas() {
-        comboPersonas.getItems().setAll(personaRepositorio.listarTodos());
+        comboPersonas.getItems().setAll(casoUso.listarPersonas());
     }
 
     private void cargarIncidentes() {

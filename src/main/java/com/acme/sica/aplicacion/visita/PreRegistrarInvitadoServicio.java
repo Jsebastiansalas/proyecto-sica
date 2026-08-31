@@ -1,6 +1,7 @@
 package com.acme.sica.aplicacion.visita;
 
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
+import com.acme.sica.dominio.excepciones.PersonaBloqueadaExcepcion;
 import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
@@ -64,7 +65,7 @@ public class PreRegistrarInvitadoServicio implements PreRegistrarInvitadoCasoUso
             throw new IllegalArgumentException("Solo se pueden pre-registrar invitados");
         }
         if (persona.isBloqueada()) {
-            throw new IllegalArgumentException("La persona está bloqueada y no puede ser registrada");
+            throw new PersonaBloqueadaExcepcion("La persona está bloqueada y no puede ser registrada");
         }
 
         Funcionario funcionario = funcionarioRepositorio.buscarPorId(comando.getFuncionarioId())

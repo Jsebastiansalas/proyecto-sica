@@ -10,4 +10,6 @@ public interface GestionarIncidenteCasoUso {
     Incidente crear(CrearIncidenteComando comando);
 
     List<Incidente> listarTodos();
+
+    List<com.acme.sica.dominio.modelo.Persona> listarPersonas();
 }

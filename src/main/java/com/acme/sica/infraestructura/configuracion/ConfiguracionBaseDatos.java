@@ -48,4 +48,7 @@ public class ConfiguracionBaseDatos {
         return propiedades.getProperty("db.driver");
     }
 
+    public Properties getPropiedades() {
+        return propiedades;
+    }
 }

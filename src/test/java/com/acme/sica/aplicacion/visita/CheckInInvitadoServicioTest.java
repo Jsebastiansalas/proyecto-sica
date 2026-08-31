@@ -1,6 +1,7 @@
 package com.acme.sica.aplicacion.visita;
 
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
+import com.acme.sica.dominio.excepciones.PersonaBloqueadaExcepcion;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
@@ -80,7 +81,7 @@ class CheckInInvitadoServicioTest {
         when(personaRepositorio.buscarPorDocumento("1234567890")).thenReturn(Optional.of(persona));
 
         // When & Then
-        assertThrows(IllegalArgumentException.class, () -> servicio.checkIn(comando));
+        assertThrows(PersonaBloqueadaExcepcion.class, () -> servicio.checkIn(comando));
     }
 
     @Test

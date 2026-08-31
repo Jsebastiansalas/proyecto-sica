@@ -73,4 +73,17 @@ public class Rol {
         return permisos.stream()
                 .anyMatch(p -> p.getNombre().equals(nombrePermiso));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rol rol = (Rol) o;
+        return id != null && id.equals(rol.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

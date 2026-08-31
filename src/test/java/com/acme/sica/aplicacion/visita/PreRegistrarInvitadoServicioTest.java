@@ -1,6 +1,7 @@
 package com.acme.sica.aplicacion.visita;
 
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
+import com.acme.sica.dominio.excepciones.PersonaBloqueadaExcepcion;
 import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
@@ -122,7 +123,7 @@ class PreRegistrarInvitadoServicioTest {
         when(personaRepositorio.buscarPorId(1L)).thenReturn(Optional.of(persona));
 
         // When & Then
-        assertThrows(IllegalArgumentException.class, () -> servicio.preRegistrar(comando));
+        assertThrows(PersonaBloqueadaExcepcion.class, () -> servicio.preRegistrar(comando));
     }
 
     @Test

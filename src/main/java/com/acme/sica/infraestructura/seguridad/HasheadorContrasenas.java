@@ -6,17 +6,32 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+import java.util.Properties;
 
 /**
  * Utilidad para hashing seguro de contraseñas usando PBKDF2.
- * No depende de frameworks ni librerías externas.
+ * Lee parámetros de configuración desde application.properties.
  */
 public class HasheadorContrasenas {
 
-    private static final String ALGORITMO = "PBKDF2WithHmacSHA256";
-    private static final int ITERACIONES = 65536;
-    private static final int LONGITUD_CLAVE = 256;
+    private static final String ALGORITMO_DEFAULT = "PBKDF2WithHmacSHA256";
+    private static final int ITERACIONES_DEFAULT = 65536;
+    private static final int LONGITUD_CLAVE_DEFAULT = 256;
     private static final int LONGITUD_SALT = 16;
+
+    private final String algoritmo;
+    private final int iteraciones;
+    private final int longitudClave;
+
+    public HasheadorContrasenas() {
+        this(new Properties());
+    }
+
+    public HasheadorContrasenas(Properties propiedades) {
+        this.algoritmo = propiedades.getProperty("password.hash.algorithm", ALGORITMO_DEFAULT);
+        this.iteraciones = Integer.parseInt(propiedades.getProperty("password.hash.iterations", String.valueOf(ITERACIONES_DEFAULT)));
+        this.longitudClave = Integer.parseInt(propiedades.getProperty("password.hash.key.length", String.valueOf(LONGITUD_CLAVE_DEFAULT)));
+    }
 
     public String hashear(String contrasena) {
         try {
@@ -52,8 +67,8 @@ public class HasheadorContrasenas {
 
     private byte[] derivar(String contrasena, byte[] salt)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
-        PBEKeySpec spec = new PBEKeySpec(contrasena.toCharArray(), salt, ITERACIONES, LONGITUD_CLAVE);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance(ALGORITMO);
+        PBEKeySpec spec = new PBEKeySpec(contrasena.toCharArray(), salt, iteraciones, longitudClave);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance(algoritmo);
         return factory.generateSecret(spec).getEncoded();
     }
 

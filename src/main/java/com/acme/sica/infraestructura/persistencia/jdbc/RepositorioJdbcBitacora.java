@@ -18,8 +18,8 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
 
     @Override
     public BitacoraAuditoria guardar(BitacoraAuditoria bitacora) {
-        String sql = "INSERT INTO bitacora_auditoria (usuario_id, usuario_username, accion, entidad, entidad_id, detalle, fecha) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO bitacora_auditoria (usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -29,7 +29,8 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
             stmt.setString(4, bitacora.getEntidad());
             stmt.setObject(5, bitacora.getEntidadId(), Types.BIGINT);
             stmt.setString(6, bitacora.getDetalles());
-            stmt.setTimestamp(7, Timestamp.valueOf(bitacora.getFechaHora()));
+            stmt.setString(7, bitacora.getIpAddress());
+            stmt.setTimestamp(8, Timestamp.valueOf(bitacora.getFechaHora()));
             stmt.executeUpdate();
 
             try (ResultSet claves = stmt.getGeneratedKeys()) {
@@ -45,7 +46,7 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
 
     @Override
     public List<BitacoraAuditoria> listarTodos() {
-        String sql = "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, fecha " +
+        String sql = "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha " +
                      "FROM bitacora_auditoria ORDER BY fecha DESC";
         List<BitacoraAuditoria> registros = new ArrayList<>();
         try (Connection conn = fabricaConexiones.crearConexion();
@@ -65,7 +66,7 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
     public List<BitacoraAuditoria> buscarPorFiltros(Long usuarioId, String entidad,
                                                     LocalDateTime fechaDesde, LocalDateTime fechaHasta) {
         StringBuilder sql = new StringBuilder(
-                "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, fecha " +
+                "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha " +
                 "FROM bitacora_auditoria WHERE 1=1 "
         );
         List<Object> parametros = new ArrayList<>();
@@ -110,7 +111,7 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
     public List<BitacoraAuditoria> buscarPorFiltrosAvanzado(String username, String accion, String entidad,
                                                             LocalDateTime fechaDesde, LocalDateTime fechaHasta) {
         StringBuilder sql = new StringBuilder(
-                "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, fecha " +
+                "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha " +
                 "FROM bitacora_auditoria WHERE 1=1 "
         );
         List<Object> parametros = new ArrayList<>();
@@ -164,6 +165,7 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
         bitacora.setEntidad(rs.getString("entidad"));
         bitacora.setEntidadId(rs.getObject("entidad_id", Long.class));
         bitacora.setDetalles(rs.getString("detalle"));
+        bitacora.setIpAddress(rs.getString("ip_address"));
         bitacora.setFechaHora(rs.getTimestamp("fecha").toLocalDateTime());
         return bitacora;
     }

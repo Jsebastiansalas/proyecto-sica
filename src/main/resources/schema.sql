@@ -16,7 +16,8 @@ USE sica_db;
 CREATE TABLE IF NOT EXISTS roles (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE,
-    descripcion VARCHAR(255)
+    descripcion VARCHAR(255),
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS permisos (
@@ -79,15 +80,16 @@ CREATE TABLE IF NOT EXISTS personas (
     foto_url VARCHAR(500),
     tipo ENUM('INVITADO', 'TRABAJADOR') NOT NULL,
     bloqueada BOOLEAN NOT NULL DEFAULT FALSE,
+    motivo_bloqueo VARCHAR(500),
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE personas ADD COLUMN motivo_bloqueo VARCHAR(500);
 
 CREATE TABLE IF NOT EXISTS visitas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     persona_id BIGINT NOT NULL,
     funcionario_id BIGINT,
+    empresa_id BIGINT,
+    registrado_por_id BIGINT,
     fecha_hora_programada TIMESTAMP,
     fecha_hora_checkin TIMESTAMP,
     fecha_hora_checkout TIMESTAMP,
@@ -100,10 +102,12 @@ CREATE TABLE IF NOT EXISTS visitas (
         'CERRADA_POR_SISTEMA',
         'RECHAZADO'
     ) NOT NULL DEFAULT 'PENDIENTE_APROBACION',
-    observaciones TEXT,
+    motivo TEXT,
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_visita_persona FOREIGN KEY (persona_id) REFERENCES personas(id),
-    CONSTRAINT fk_visita_funcionario FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    CONSTRAINT fk_visita_funcionario FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id),
+    CONSTRAINT fk_visita_empresa FOREIGN KEY (empresa_id) REFERENCES empresas(id),
+    CONSTRAINT fk_visita_registrado_por FOREIGN KEY (registrado_por_id) REFERENCES usuarios(id)
 );
 
 CREATE TABLE IF NOT EXISTS incidentes (
@@ -125,6 +129,7 @@ CREATE TABLE IF NOT EXISTS bitacora_auditoria (
     entidad VARCHAR(100),
     entidad_id BIGINT,
     detalle TEXT,
+    ip_address VARCHAR(45),
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_bitacora_usuario (usuario_id),
     INDEX idx_bitacora_entidad (entidad),
@@ -135,7 +140,11 @@ CREATE TABLE IF NOT EXISTS bitacora_auditoria (
 CREATE INDEX idx_visita_persona_estado ON visitas(persona_id, estado);
 CREATE INDEX idx_visita_estado ON visitas(estado);
 CREATE INDEX idx_visita_fechas ON visitas(fecha_hora_checkin, fecha_hora_checkout);
+CREATE INDEX idx_visita_empresa ON visitas(empresa_id);
+CREATE INDEX idx_visita_registrado_por ON visitas(registrado_por_id);
 CREATE INDEX idx_persona_documento ON personas(documento);
 CREATE INDEX idx_persona_bloqueada ON personas(bloqueada);
 CREATE INDEX idx_funcionario_empresa ON funcionarios(empresa_id);
 CREATE INDEX idx_incidente_fecha ON incidentes(fecha);
+CREATE INDEX idx_roles_activo ON roles(activo);
+CREATE INDEX idx_bitacora_ip ON bitacora_auditoria(ip_address);
