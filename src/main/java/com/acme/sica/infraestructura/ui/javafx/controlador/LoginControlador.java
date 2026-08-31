@@ -5,17 +5,12 @@ import com.acme.sica.aplicacion.autenticacion.LoginResultado;
 import com.acme.sica.dominio.excepciones.CredencialesInvalidasExcepcion;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class LoginControlador {
 
@@ -88,19 +83,7 @@ public class LoginControlador {
     }
 
     private void navegarAlDashboard() {
-        try {
-            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
-            Scene escena = new Scene(raiz);
-            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-
-            Stage stage = (Stage) etiquetaMensaje.getScene().getWindow();
-            stage.setTitle("SICA - Dashboard");
-            stage.setScene(escena);
-            stage.setResizable(true);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException("Error al cargar el dashboard", e);
-        }
+        NavegacionHelper.volverAlDashboard(etiquetaMensaje);
     }
 
 }

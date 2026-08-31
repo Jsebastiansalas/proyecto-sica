@@ -6,16 +6,12 @@ import com.acme.sica.dominio.modelo.Incidente;
 import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 import com.acme.sica.dominio.puerto.entrada.ConsultarReporteIncidentesCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -38,5 +34,8 @@ public class ReporteIncidentesControlador {
     }
     @FXML private void buscar(){ LocalDateTime d=campoDesde.getValue()==null?null:campoDesde.getValue().atStartOfDay(), h=campoHasta.getValue()==null?null:campoHasta.getValue().atTime(23,59,59); try{tabla.setItems(FXCollections.observableArrayList(casoUso.consultar(new ConsultarReporteIncidentesComando(d,h,comboEmpresa.getValue()==null?null:comboEmpresa.getValue().getId(),comboGravedad.getValue())))); etiquetaMensaje.setText("Reporte actualizado");}catch(RuntimeException e){etiquetaMensaje.setText(e.getMessage());} }
     @FXML private void limpiar(){campoDesde.setValue(null);campoHasta.setValue(null);comboEmpresa.setValue(null);comboGravedad.setValue(null);buscar();}
-    @FXML private void volverAlDashboard(){try{Parent p=FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));Scene s=new Scene(p);s.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());Stage st=(Stage)botonVolver.getScene().getWindow();st.setScene(s);st.setTitle("SICA - Dashboard");st.show();}catch(IOException e){throw new RuntimeException("Error al volver al dashboard",e);}}
+    @FXML
+    private void volverAlDashboard() {
+        NavegacionHelper.volverAlDashboard(botonVolver);
+    }
 }

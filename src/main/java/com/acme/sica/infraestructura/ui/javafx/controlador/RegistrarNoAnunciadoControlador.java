@@ -10,6 +10,7 @@ import com.acme.sica.dominio.puerto.entrada.RegistrarNoAnunciadoCasoUso;
 import com.acme.sica.dominio.puerto.salida.FuncionarioRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -17,15 +18,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
-
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -150,18 +145,7 @@ public class RegistrarNoAnunciadoControlador {
 
     @FXML
     private void volverAlDashboard() {
-        try {
-            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
-            Scene escena = new Scene(raiz);
-            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-            Stage stage = (Stage) botonVolver.getScene().getWindow();
-            stage.setTitle("SICA - Dashboard");
-            stage.setScene(escena);
-            stage.setResizable(true);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException("Error al volver al dashboard", e);
-        }
+        NavegacionHelper.volverAlDashboard(botonVolver);
     }
 
     private void cargarFuncionarios() {

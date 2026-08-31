@@ -114,4 +114,15 @@ public class Persona {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        return "Persona{" +
+                "id=" + id +
+                ", tipo=" + tipo +
+                ", documentoIdentidad='" + documentoIdentidad + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", bloqueada=" + bloqueada +
+                '}';
+    }
 }

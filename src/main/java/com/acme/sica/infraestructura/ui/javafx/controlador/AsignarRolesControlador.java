@@ -8,15 +8,10 @@ import com.acme.sica.dominio.modelo.Usuario;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,18 +81,7 @@ public class AsignarRolesControlador {
 
     @FXML
     private void volverAlDashboard() {
-        try {
-            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
-            Scene escena = new Scene(raiz);
-            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-            Stage stage = (Stage) etiquetaMensaje.getScene().getWindow();
-            stage.setTitle("SICA - Dashboard");
-            stage.setScene(escena);
-            stage.setResizable(true);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException("Error al volver al dashboard", e);
-        }
+        NavegacionHelper.volverAlDashboard(etiquetaMensaje);
     }
 
     private void cargarUsuarios() {

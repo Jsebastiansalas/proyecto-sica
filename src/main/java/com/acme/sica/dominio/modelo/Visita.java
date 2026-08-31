@@ -133,4 +133,15 @@ public class Visita {
     public boolean puedeHacerCheckIn() {
         return this.estado == EstadoVisita.APROBADO;
     }
+
+    @Override
+    public String toString() {
+        return "Visita{" +
+                "id=" + id +
+                ", persona=" + (persona != null ? persona.getDocumentoIdentidad() + " - " + persona.getNombreCompleto() : null) +
+                ", empresa=" + (empresa != null ? empresa.getNombre() : null) +
+                ", estado=" + estado +
+                ", fechaHoraIngreso=" + fechaHoraIngreso +
+                '}';
+    }
 }

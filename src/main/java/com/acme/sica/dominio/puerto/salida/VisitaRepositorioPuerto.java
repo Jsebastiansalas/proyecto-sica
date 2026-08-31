@@ -25,8 +25,6 @@ public interface VisitaRepositorioPuerto {
 
     List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId);
 
-    List<Visita> buscarVisitasDentroConAntiguedadMayorA(LocalDateTime fechaLimite);
-
     long contarPendientes();
 
     void eliminarPorId(Long id);

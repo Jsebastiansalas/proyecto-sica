@@ -151,24 +151,6 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
     }
 
     @Override
-    public long contarUsuariosPorRol(Long rolId) {
-        String sql = "SELECT COUNT(*) FROM usuario_roles WHERE rol_id = ?";
-        try (Connection conn = fabricaConexiones.crearConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setLong(1, rolId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getLong(1);
-                }
-            }
-            return 0;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al contar usuarios por rol", e);
-        }
-    }
-
-    @Override
     public long contar() {
         String sql = "SELECT COUNT(*) FROM usuarios";
         try (Connection conn = fabricaConexiones.crearConexion();

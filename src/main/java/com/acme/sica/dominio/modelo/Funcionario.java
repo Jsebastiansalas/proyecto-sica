@@ -68,4 +68,14 @@ public class Funcionario {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    @Override
+    public String toString() {
+        return "Funcionario{" +
+                "id=" + id +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", cargo='" + cargo + '\'' +
+                ", activo=" + activo +
+                '}';
+    }
 }

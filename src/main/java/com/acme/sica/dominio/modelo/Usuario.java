@@ -113,4 +113,14 @@ public class Usuario {
         return roles.stream()
                 .anyMatch(r -> r.getNombre().equals(nombreRol));
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", nombreCompleto='" + nombreCompleto + '\'' +
+                ", activo=" + activo +
+                '}';
+    }
 }

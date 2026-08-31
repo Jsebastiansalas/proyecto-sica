@@ -11,9 +11,6 @@ public interface BitacoraRepositorioPuerto {
 
     List<BitacoraAuditoria> listarTodos();
 
-    List<BitacoraAuditoria> buscarPorFiltros(Long usuarioId, String entidad,
-                                             LocalDateTime fechaDesde, LocalDateTime fechaHasta);
-
     /**
      * Consulta avanzada por username, accion, entidad y rango de fechas.
      * Cualquier filtro null o vacío se ignora.

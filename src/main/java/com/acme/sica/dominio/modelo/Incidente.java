@@ -83,4 +83,15 @@ public class Incidente {
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+
+    @Override
+    public String toString() {
+        return "Incidente{" +
+                "id=" + id +
+                ", persona=" + (persona != null ? persona.getNombreCompleto() : null) +
+                ", empresa=" + (empresa != null ? empresa.getNombre() : null) +
+                ", gravedad=" + gravedad +
+                ", fechaCreacion=" + fechaCreacion +
+                '}';
+    }
 }

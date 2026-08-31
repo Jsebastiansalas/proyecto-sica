@@ -22,8 +22,6 @@ public interface UsuarioRepositorioPuerto {
 
     long contar();
 
-    long contarUsuariosPorRol(Long rolId);
-
     void asignarRoles(Long usuarioId, Set<Long> rolIds);
 
     void eliminarRoles(Long usuarioId);

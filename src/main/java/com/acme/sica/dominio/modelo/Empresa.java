@@ -48,4 +48,14 @@ public class Empresa {
     public void setActiva(boolean activa) {
         this.activa = activa;
     }
+
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", activa=" + activa +
+                '}';
+    }
 }

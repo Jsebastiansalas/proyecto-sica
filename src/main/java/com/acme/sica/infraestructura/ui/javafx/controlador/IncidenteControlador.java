@@ -8,18 +8,13 @@ import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 import com.acme.sica.dominio.puerto.entrada.GestionarIncidenteCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
-
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
 public class IncidenteControlador {
@@ -98,12 +93,6 @@ public class IncidenteControlador {
 
     @FXML
     private void volverAlDashboard() {
-        try {
-            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
-            Scene escena = new Scene(raiz);
-            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-            Stage stage = (Stage) botonVolver.getScene().getWindow();
-            stage.setScene(escena); stage.setTitle("SICA - Dashboard"); stage.setResizable(true); stage.show();
-        } catch (IOException e) { throw new RuntimeException("Error al volver al dashboard", e); }
+        NavegacionHelper.volverAlDashboard(botonVolver);
     }
 }

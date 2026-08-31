@@ -101,4 +101,16 @@ public class BitacoraAuditoria {
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
     }
+
+    @Override
+    public String toString() {
+        return "BitacoraAuditoria{" +
+                "id=" + id +
+                ", usuarioNombre='" + usuarioNombre + '\'' +
+                ", accion='" + accion + '\'' +
+                ", entidad='" + entidad + '\'' +
+                ", entidadId=" + entidadId +
+                ", fechaHora=" + fechaHora +
+                '}';
+    }
 }
