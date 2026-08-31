@@ -163,6 +163,21 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
     }
 
     @Override
+    public long contar() {
+        String sql = "SELECT COUNT(*) FROM roles";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar roles", e);
+        }
+    }
+
+    @Override
     public Set<Long> buscarIdsPermisosPorRol(Long rolId) {
         String sql = "SELECT permiso_id FROM rol_permisos WHERE rol_id = ?";
         Set<Long> ids = new HashSet<>();

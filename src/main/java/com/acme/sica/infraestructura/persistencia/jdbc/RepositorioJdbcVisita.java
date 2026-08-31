@@ -252,6 +252,21 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     }
 
     @Override
+    public long contarPendientes() {
+        String sql = "SELECT COUNT(*) FROM visitas WHERE estado IN ('PENDIENTE_APROBACION', 'PENDIENTE_APROBACION_OLVIDO')";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar visitas pendientes", e);
+        }
+    }
+
+    @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM visitas WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();

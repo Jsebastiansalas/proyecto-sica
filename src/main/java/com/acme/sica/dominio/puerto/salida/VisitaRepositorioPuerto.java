@@ -27,5 +27,7 @@ public interface VisitaRepositorioPuerto {
 
     List<Visita> buscarVisitasDentroConAntiguedadMayorA(LocalDateTime fechaLimite);
 
+    long contarPendientes();
+
     void eliminarPorId(Long id);
 }

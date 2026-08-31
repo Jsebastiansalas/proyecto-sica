@@ -16,13 +16,19 @@ public class Sesion {
     private final String nombreCompleto;
     private final Set<String> permisos;
     private final LocalDateTime inicio;
+    private final int duracionMinutos;
 
     public Sesion(Long usuarioId, String username, String nombreCompleto, Set<String> permisos) {
+        this(usuarioId, username, nombreCompleto, permisos, 30);
+    }
+
+    public Sesion(Long usuarioId, String username, String nombreCompleto, Set<String> permisos, int duracionMinutos) {
         this.usuarioId = usuarioId;
         this.username = username;
         this.nombreCompleto = nombreCompleto;
         this.permisos = new HashSet<>(permisos != null ? permisos : Collections.emptySet());
         this.inicio = LocalDateTime.now();
+        this.duracionMinutos = duracionMinutos > 0 ? duracionMinutos : 30;
     }
 
     public Long getUsuarioId() {
@@ -43,6 +49,14 @@ public class Sesion {
 
     public LocalDateTime getInicio() {
         return inicio;
+    }
+
+    public int getDuracionMinutos() {
+        return duracionMinutos;
+    }
+
+    public boolean estaExpirada() {
+        return LocalDateTime.now().isAfter(inicio.plusMinutes(duracionMinutos));
     }
 
     public boolean tienePermiso(String permiso) {

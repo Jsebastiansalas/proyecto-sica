@@ -124,6 +124,21 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    @Override
+    public long contar() {
+        String sql = "SELECT COUNT(*) FROM empresas";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar empresas", e);
+        }
+    }
+
     private Empresa mapearFila(ResultSet rs) throws SQLException {
         Empresa empresa = new Empresa();
         empresa.setId(rs.getLong("id"));

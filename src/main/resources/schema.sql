@@ -1,13 +1,8 @@
--- =====================================================
 -- SICA - Sistema Integrado de Control de Acceso
 -- Esquema de base de datos MySQL
 -- =====================================================
-
-CREATE DATABASE IF NOT EXISTS sica_db
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
-
-USE sica_db;
+-- Ejecutar contra la base de datos configurada en application.properties
+-- (por defecto: sica_db)
 
 -- =====================================================
 -- TABLAS DE SEGURIDAD (RBAC)

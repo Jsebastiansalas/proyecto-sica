@@ -2,7 +2,6 @@ package com.acme.sica.infraestructura.ui.javafx.controlador;
 
 import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
-import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 import javafx.animation.Animation;
@@ -101,16 +100,11 @@ public class DashboardControlador {
     private void cargarEstadisticas() {
         try {
             var contenedor = AplicacionJavaFx.getContenedorDependencias();
-            statUsuarios.setText(String.valueOf(contenedor.getUsuarioRepositorio().listarTodos().size()));
-            statRoles.setText(String.valueOf(contenedor.getRolRepositorio().listarTodos().size()));
-            statEmpresas.setText(String.valueOf(contenedor.getEmpresaRepositorio().listarTodos().size()));
-            statPersonas.setText(String.valueOf(contenedor.getPersonaRepositorio().listarTodos().size()));
-
-            long pendientes = contenedor.getVisitaRepositorio().listarTodos().stream()
-                    .filter(v -> v.getEstado() == EstadoVisita.PENDIENTE_APROBACION
-                            || v.getEstado() == EstadoVisita.PENDIENTE_APROBACION_OLVIDO)
-                    .count();
-            statVisitasPendientes.setText(String.valueOf(pendientes));
+            statUsuarios.setText(String.valueOf(contenedor.getUsuarioRepositorio().contar()));
+            statRoles.setText(String.valueOf(contenedor.getRolRepositorio().contar()));
+            statEmpresas.setText(String.valueOf(contenedor.getEmpresaRepositorio().contar()));
+            statPersonas.setText(String.valueOf(contenedor.getPersonaRepositorio().contar()));
+            statVisitasPendientes.setText(String.valueOf(contenedor.getVisitaRepositorio().contarPendientes()));
         } catch (Exception e) {
             statUsuarios.setText("—");
             statRoles.setText("—");

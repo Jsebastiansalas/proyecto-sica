@@ -10,8 +10,11 @@ import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 import com.acme.sica.infraestructura.seguridad.HasheadorContrasenas;
 
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -20,9 +23,13 @@ import java.util.stream.Collectors;
  */
 public class IniciarSesionServicio implements IniciarSesionCasoUso {
 
+    private static final int MAX_INTENTOS_FALLIDOS = 5;
+    private static final int MINUTOS_BLOQUEO = 15;
+
     private final UsuarioRepositorioPuerto usuarioRepositorio;
     private final HasheadorContrasenas hasheadorContrasenas;
     private final BitacoraRepositorioPuerto bitacoraRepositorio;
+    private final Map<String, IntentosLogin> intentosPorUsuario = new ConcurrentHashMap<>();
 
     public IniciarSesionServicio(UsuarioRepositorioPuerto usuarioRepositorio,
                                  HasheadorContrasenas hasheadorContrasenas,
@@ -34,15 +41,20 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
 
     @Override
     public LoginResultado ejecutar(IniciarSesionComando comando) {
-        Optional<Usuario> usuarioOpt = usuarioRepositorio.buscarPorUsername(comando.getUsername());
+        String username = comando.getUsername();
+        verificarBloqueo(username);
+
+        Optional<Usuario> usuarioOpt = usuarioRepositorio.buscarPorUsername(username);
 
         if (usuarioOpt.isEmpty()
                 || !usuarioOpt.get().isActivo()
                 || !hasheadorContrasenas.verificar(comando.getPassword(), usuarioOpt.get().getPassword())) {
 
-            registrarLoginFallido(comando.getUsername());
+            registrarIntentoFallido(username);
             throw new CredencialesInvalidasExcepcion("Credenciales inválidas");
         }
+
+        intentosPorUsuario.remove(username);
 
         Usuario usuario = usuarioOpt.get();
         Set<String> permisos = extraerPermisos(usuario);
@@ -85,6 +97,60 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
                 null
         );
         bitacoraRepositorio.guardar(registro);
+    }
+
+    private void verificarBloqueo(String username) {
+        IntentosLogin intentos = intentosPorUsuario.get(username);
+        if (intentos == null) {
+            return;
+        }
+        if (intentos.estaBloqueado()) {
+            throw new CredencialesInvalidasExcepcion(
+                    "Cuenta temporalmente bloqueada. Intente nuevamente en " + intentos.minutosRestantes() + " minutos.");
+        }
+        if (intentos.estaExpirado()) {
+            intentosPorUsuario.remove(username);
+        }
+    }
+
+    private void registrarIntentoFallido(String username) {
+        IntentosLogin intentos = intentosPorUsuario.computeIfAbsent(username, k -> new IntentosLogin());
+        intentos.registrarFallido();
+        registrarLoginFallido(username);
+    }
+
+    private static class IntentosLogin {
+        private int contador;
+        private LocalDateTime ultimoIntento;
+        private LocalDateTime horaBloqueo;
+
+        void registrarFallido() {
+            if (estaExpirado()) {
+                contador = 0;
+                horaBloqueo = null;
+            }
+            contador++;
+            ultimoIntento = LocalDateTime.now();
+            if (contador >= MAX_INTENTOS_FALLIDOS) {
+                horaBloqueo = LocalDateTime.now();
+            }
+        }
+
+        boolean estaBloqueado() {
+            return horaBloqueo != null && LocalDateTime.now().isBefore(horaBloqueo.plusMinutes(MINUTOS_BLOQUEO));
+        }
+
+        boolean estaExpirado() {
+            return ultimoIntento != null && LocalDateTime.now().isAfter(ultimoIntento.plusMinutes(MINUTOS_BLOQUEO));
+        }
+
+        long minutosRestantes() {
+            if (horaBloqueo == null) {
+                return 0;
+            }
+            long restantes = MINUTOS_BLOQUEO - java.time.Duration.between(horaBloqueo, LocalDateTime.now()).toMinutes();
+            return Math.max(0, restantes);
+        }
     }
 
 }

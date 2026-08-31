@@ -168,6 +168,21 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    @Override
+    public long contar() {
+        String sql = "SELECT COUNT(*) FROM usuarios";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar usuarios", e);
+        }
+    }
+
     public void asignarRoles(Long usuarioId, Set<Long> rolIds) {
         eliminarRoles(usuarioId);
         if (rolIds == null || rolIds.isEmpty()) {

@@ -20,6 +20,8 @@ public interface UsuarioRepositorioPuerto {
 
     boolean existePorUsername(String username);
 
+    long contar();
+
     long contarUsuariosPorRol(Long rolId);
 
     void asignarRoles(Long usuarioId, Set<Long> rolIds);

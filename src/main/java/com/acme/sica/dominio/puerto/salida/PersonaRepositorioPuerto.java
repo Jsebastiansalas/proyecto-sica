@@ -20,4 +20,6 @@ public interface PersonaRepositorioPuerto {
     void eliminarPorId(Long id);
 
     boolean existePorDocumento(String documento);
+
+    long contar();
 }

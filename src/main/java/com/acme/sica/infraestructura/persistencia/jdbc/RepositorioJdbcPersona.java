@@ -166,6 +166,21 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    @Override
+    public long contar() {
+        String sql = "SELECT COUNT(*) FROM personas";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar personas", e);
+        }
+    }
+
     private Persona mapearFila(ResultSet rs) throws SQLException {
         Persona persona = new Persona();
         persona.setId(rs.getLong("id"));

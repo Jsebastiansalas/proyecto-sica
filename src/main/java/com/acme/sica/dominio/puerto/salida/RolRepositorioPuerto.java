@@ -20,6 +20,8 @@ public interface RolRepositorioPuerto {
 
     boolean existePorNombre(String nombre);
 
+    long contar();
+
     long contarUsuariosConRol(Long rolId);
 
     Set<Long> buscarIdsPermisosPorRol(Long rolId);

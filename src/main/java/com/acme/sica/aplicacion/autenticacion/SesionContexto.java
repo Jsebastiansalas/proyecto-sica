@@ -23,14 +23,25 @@ public class SesionContexto {
     }
 
     public static Optional<Sesion> obtener() {
+        if (sesionActual != null && sesionActual.estaExpirada()) {
+            cerrar();
+        }
         return Optional.ofNullable(sesionActual);
     }
 
     public static boolean haySesionActiva() {
+        if (sesionActual != null && sesionActual.estaExpirada()) {
+            cerrar();
+            return false;
+        }
         return sesionActual != null;
     }
 
     public static boolean tienePermiso(String permiso) {
+        if (sesionActual != null && sesionActual.estaExpirada()) {
+            cerrar();
+            return false;
+        }
         return sesionActual != null && sesionActual.tienePermiso(permiso);
     }
 

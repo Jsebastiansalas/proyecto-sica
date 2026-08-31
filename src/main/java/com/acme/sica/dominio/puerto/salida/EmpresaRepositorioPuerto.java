@@ -16,4 +16,6 @@ public interface EmpresaRepositorioPuerto {
     void eliminarPorId(Long id);
 
     boolean existePorNombre(String nombre);
+
+    long contar();
 }
