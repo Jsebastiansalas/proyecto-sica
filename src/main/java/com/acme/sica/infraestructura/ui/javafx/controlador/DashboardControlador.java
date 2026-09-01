@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -160,10 +161,14 @@ public class DashboardControlador {
         Label usuario = new Label(registro.getUsuarioNombre() != null
                 ? registro.getUsuarioNombre() : "sistema");
         usuario.getStyleClass().add("activity-user");
+        usuario.setWrapText(true);
+        usuario.setMaxWidth(110);
 
         Label accion = new Label(registro.getAccion() != null ? registro.getAccion() : "");
         accion.getStyleClass().add("activity-action");
         accion.setWrapText(true);
+        accion.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(accion, Priority.ALWAYS);
 
         fila.getChildren().addAll(hora, usuario, accion);
         return fila;
@@ -208,14 +213,14 @@ public class DashboardControlador {
     private void cargarVista(String rutaFxml, String titulo) {
         try {
             Parent raiz = FXMLLoader.load(getClass().getResource(rutaFxml));
-            Scene escena = new Scene(raiz);
-            escena.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
-
-            Stage stage = (Stage) etiquetaBienvenida.getScene().getWindow();
+            Scene escena = etiquetaBienvenida.getScene();
+            String css = getClass().getResource("/css/application.css").toExternalForm();
+            if (!escena.getStylesheets().contains(css)) {
+                escena.getStylesheets().add(css);
+            }
+            Stage stage = (Stage) escena.getWindow();
             stage.setTitle(titulo);
-            stage.setScene(escena);
-            stage.setResizable(true);
-            stage.show();
+            escena.setRoot(raiz);
         } catch (IOException e) {
             throw new RuntimeException("Error al cargar la vista: " + rutaFxml, e);
         }

@@ -79,6 +79,8 @@ public class LoginControlador {
             navegarAlDashboard();
         } catch (CredencialesInvalidasExcepcion e) {
             etiquetaMensaje.setText(e.getMessage());
+        } catch (Exception e) {
+            etiquetaMensaje.setText("Error al abrir el dashboard: " + e.getMessage());
         }
     }
 

@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS visita_estados (
 
 CREATE TABLE IF NOT EXISTS empresas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(200) NOT NULL,
+    nombre VARCHAR(200) NOT NULL UNIQUE,
     ubicacion VARCHAR(255),
     contacto_principal VARCHAR(100),
     activa BOOLEAN NOT NULL DEFAULT TRUE

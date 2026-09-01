@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -29,11 +30,12 @@
         <HBox styleClass="dashboard-header" alignment="CENTER_LEFT">
             <VBox alignment="CENTER_LEFT" spacing="2" HBox.hgrow="ALWAYS">
                 <Label text="SICA" styleClass="dashboard-title"/>
-                <Label text="Panel de Control — Zona Acme" styleClass="dashboard-subtitle"/>
+                <Label text="Centro de control de accesos · Zona Acme" styleClass="dashboard-subtitle"/>
             </VBox>
             <VBox alignment="CENTER_RIGHT" spacing="2">
                 <Label fx:id="etiquetaBienvenida" styleClass="dashboard-welcome"/>
                 <Label fx:id="etiquetaRol" styleClass="dashboard-user-tag"/>
+                <Label text="● SISTEMA OPERATIVO" styleClass="system-status"/>
             </VBox>
         </HBox>
 
@@ -62,83 +64,73 @@
             </VBox>
         </HBox>
 
-        <!-- Main content: modules + activity -->
-        <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Main content: command navigation + live activity -->
+        <HBox spacing="22" VBox.vgrow="ALWAYS" styleClass="command-layout">
+            <VBox styleClass="command-sidebar" spacing="14" HBox.hgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="MÓDULOS" styleClass="section-title" HBox.hgrow="ALWAYS"/>
+                    <Label text="20 ACCIONES" styleClass="module-count"/>
+                </HBox>
+                <Label text="Selecciona una operación para continuar" styleClass="section-desc"/>
 
-            <!-- Left: Module grid -->
-            <GridPane hgap="16" vgap="16" HBox.hgrow="ALWAYS">
-                <columnConstraints>
-                    <ColumnConstraints percentWidth="50"/>
-                    <ColumnConstraints percentWidth="50"/>
-                </columnConstraints>
-
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="12">
-                    <Label text=" Seguridad y Acceso" styleClass="section-title"/>
-                    <Label text="Gestión de roles, permisos y usuarios del sistema" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonGestionarRoles" text="Roles" onAction="#abrirGestionRoles" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonGestionarPermisos" text="Permisos" onAction="#abrirGestionPermisos" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonAsignarRoles" text="Asignar Roles" onAction="#abrirAsignacionRoles" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonGestionarUsuarios" text="Usuarios" onAction="#abrirGestionarUsuarios" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                <VBox styleClass="command-group access-group" spacing="8">
+                    <Label text="01  SEGURIDAD Y ACCESO" styleClass="command-group-title"/>
+                    <FlowPane hgap="8" vgap="8">
+                        <Button fx:id="botonGestionarRoles" text="◈  Roles" onAction="#abrirGestionRoles" styleClass="command-button"/>
+                        <Button fx:id="botonGestionarPermisos" text="◇  Permisos" onAction="#abrirGestionPermisos" styleClass="command-button"/>
+                        <Button fx:id="botonAsignarRoles" text="⇄  Asignar roles" onAction="#abrirAsignacionRoles" styleClass="command-button"/>
+                        <Button fx:id="botonGestionarUsuarios" text="◎  Usuarios" onAction="#abrirGestionarUsuarios" styleClass="command-button"/>
+                    </FlowPane>
                 </VBox>
 
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="12">
-                    <Label text=" Auditoría" styleClass="section-title"/>
-                    <Label text="Consulta del historial de acciones" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonConsultarBitacora" text="Consultar Bitácora" onAction="#abrirConsultarBitacora" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                <VBox styleClass="command-group organization-group" spacing="8">
+                    <Label text="02  ORGANIZACIÓN" styleClass="command-group-title"/>
+                    <FlowPane hgap="8" vgap="8">
+                        <Button fx:id="botonGestionarEmpresas" text="▣  Empresas" onAction="#abrirGestionEmpresas" styleClass="command-button"/>
+                        <Button fx:id="botonGestionarFuncionarios" text="♙  Funcionarios" onAction="#abrirGestionFuncionarios" styleClass="command-button"/>
+                        <Button fx:id="botonGestionarPersonas" text="♧  Personas" onAction="#abrirGestionPersonas" styleClass="command-button"/>
+                    </FlowPane>
                 </VBox>
 
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="12">
-                    <Label text=" Gestión Organizacional" styleClass="section-title"/>
-                    <Label text="Empresas, funcionarios y personas" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonGestionarEmpresas" text="Empresas" onAction="#abrirGestionEmpresas" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonGestionarFuncionarios" text="Funcionarios" onAction="#abrirGestionFuncionarios" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonGestionarPersonas" text="Personas" onAction="#abrirGestionPersonas" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                <VBox styleClass="command-group operations-group" spacing="8">
+                    <Label text="03  OPERACIONES DE ACCESO" styleClass="command-group-title"/>
+                    <FlowPane hgap="8" vgap="8">
+                        <Button fx:id="botonPreRegistrarInvitado" text="＋  Pre-registrar" onAction="#abrirPreRegistrarInvitado" styleClass="command-button"/>
+                        <Button fx:id="botonCheckIn" text="↳  Check-in" onAction="#abrirCheckIn" styleClass="command-button"/>
+                        <Button fx:id="botonRegistrarNoAnunciado" text="◇  No anunciado" onAction="#abrirRegistrarNoAnunciado" styleClass="command-button"/>
+                        <Button fx:id="botonAprobarRechazar" text="✓  Aprobar / rechazar" onAction="#abrirAprobarRechazar" styleClass="command-button"/>
+                        <Button fx:id="botonRegistrarTrabajador" text="♙  Trabajador" onAction="#abrirRegistrarTrabajador" styleClass="command-button"/>
+                        <Button fx:id="botonRegularizarSalida" text="↗  Salida olvidada" onAction="#abrirRegularizarSalida" styleClass="command-button"/>
+                        <Button fx:id="botonCheckOut" text="↰  Check-out" onAction="#abrirCheckOut" styleClass="command-button"/>
+                    </FlowPane>
                 </VBox>
 
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="12">
-                    <Label text=" Operaciones de Acceso" styleClass="section-title"/>
-                    <Label text="Registro y control de visitas" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonPreRegistrarInvitado" text="Pre-registrar Invitado" onAction="#abrirPreRegistrarInvitado" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonCheckIn" text="Check-in" onAction="#abrirCheckIn" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonRegistrarNoAnunciado" text="No Anunciado" onAction="#abrirRegistrarNoAnunciado" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonAprobarRechazar" text="Aprobar/Rechazar" onAction="#abrirAprobarRechazar" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonRegistrarTrabajador" text="Registrar Trabajador" onAction="#abrirRegistrarTrabajador" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonRegularizarSalida" text="Salida Olvidada" onAction="#abrirRegularizarSalida" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonCheckOut" text="Check-out" onAction="#abrirCheckOut" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                <VBox styleClass="command-group security-group" spacing="8">
+                        <Label text="04  SEGURIDAD" styleClass="command-group-title"/>
+                        <FlowPane hgap="8" vgap="8">
+                            <Button fx:id="botonGestionarIncidentes" text="⚠  Incidentes" onAction="#abrirGestionIncidentes" styleClass="command-button"/>
+                            <Button fx:id="botonBloquearPersonas" text="⊘  Bloqueos" onAction="#abrirBloqueoPersonas" styleClass="command-button"/>
+                        </FlowPane>
                 </VBox>
 
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="0" GridPane.rowIndex="2" spacing="12">
-                    <Label text=" Incidentes y Seguridad" styleClass="section-title"/>
-                    <Label text="Registro y control de personas" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonGestionarIncidentes" text="Registrar Incidente" onAction="#abrirGestionIncidentes" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonBloquearPersonas" text="Bloquear Personas" onAction="#abrirBloqueoPersonas" styleClass="dashboard-tile-button"/>
-                    </HBox>
+                <VBox styleClass="command-group report-group" spacing="8">
+                        <Label text="05  REPORTES" styleClass="command-group-title"/>
+                        <Label text="Consultas operativas y trazabilidad del sistema" styleClass="command-desc"/>
+                        <FlowPane hgap="8" vgap="8">
+                            <Button fx:id="botonReporteAccesos" text="▤  Accesos" onAction="#abrirReporteAccesos" styleClass="command-button"/>
+                            <Button fx:id="botonReporteIncidentes" text="▤  Incidentes" onAction="#abrirReporteIncidentes" styleClass="command-button"/>
+                            <Button fx:id="botonConsultarBitacora" text="◷  Bitácora" onAction="#abrirConsultarBitacora" styleClass="command-button"/>
+                        </FlowPane>
                 </VBox>
+            </VBox>
 
-                <VBox styleClass="dashboard-section" GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="12">
-                    <Label text=" Reportes" styleClass="section-title"/>
-                    <Label text="Consultas operativas del sistema" styleClass="section-desc"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button fx:id="botonReporteAccesos" text="Reporte de Accesos" onAction="#abrirReporteAccesos" styleClass="dashboard-tile-button"/>
-                        <Button fx:id="botonReporteIncidentes" text="Reporte de Incidentes" onAction="#abrirReporteIncidentes" styleClass="dashboard-tile-button"/>
-                    </HBox>
-                </VBox>
-            </GridPane>
-
-            <!-- Right: Activity panel -->
-            <VBox styleClass="dashboard-section activity-section" spacing="10">
-                <Label text=" Actividad Reciente" styleClass="section-title"/>
-                <Label text="Últimos movimientos en el sistema" styleClass="section-desc"/>
-                <VBox fx:id="contenedorActividadReciente" styleClass="activity-list" spacing="8"/>
+            <VBox styleClass="activity-section" spacing="14">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="ACTIVIDAD RECIENTE" styleClass="section-title" HBox.hgrow="ALWAYS"/>
+                    <Label text="EN VIVO" styleClass="activity-live-badge"/>
+                </HBox>
+                <Label text="Últimos movimientos registrados en el sistema" styleClass="section-desc"/>
+                <VBox fx:id="contenedorActividadReciente" styleClass="activity-list" spacing="8" VBox.vgrow="ALWAYS"/>
             </VBox>
         </HBox>
 

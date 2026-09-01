@@ -17,12 +17,35 @@ public class ConfiguracionBaseDatos {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             if (input != null) {
                 propiedades.load(input);
+                resolverVariablesEntorno();
             } else {
                 cargarPredeterminados();
             }
         } catch (IOException e) {
             cargarPredeterminados();
         }
+    }
+
+    /**
+     * Reemplaza los placeholders ${VARIABLE:valorPorDefecto} por el valor
+     * de la variable de entorno correspondiente (o el default si no existe).
+     */
+    private void resolverVariablesEntorno() {
+        for (String clave : propiedades.stringPropertyNames()) {
+            propiedades.setProperty(clave, resolverValor(propiedades.getProperty(clave)));
+        }
+    }
+
+    private String resolverValor(String valor) {
+        if (valor == null || !valor.startsWith("${") || !valor.endsWith("}")) {
+            return valor;
+        }
+        String contenido = valor.substring(2, valor.length() - 1);
+        int separador = contenido.indexOf(':');
+        String nombre = separador >= 0 ? contenido.substring(0, separador) : contenido;
+        String porDefecto = separador >= 0 ? contenido.substring(separador + 1) : "";
+        String entorno = System.getenv(nombre);
+        return entorno != null ? entorno : porDefecto;
     }
 
     private void cargarPredeterminados() {

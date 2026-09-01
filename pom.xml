@@ -20,6 +20,7 @@
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <mysql.connector.version>8.0.33</mysql.connector.version>
         <hikari.version>5.1.0</hikari.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <junit.version>5.10.0</junit.version>
     </properties>
 
@@ -48,6 +49,14 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
+        </dependency>
+
+        <!-- SLF4J binding: evita el warning de StaticLoggerBinder -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- JUnit 5 para pruebas -->
@@ -102,8 +111,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>fat</shadedClassifierName>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.acme.sica.Main</mainClass>

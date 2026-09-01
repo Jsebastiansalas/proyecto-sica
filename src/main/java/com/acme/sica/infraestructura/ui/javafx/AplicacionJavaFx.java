@@ -33,6 +33,7 @@ public class AplicacionJavaFx extends Application {
         primaryStage.setScene(escena);
         primaryStage.setMaximized(true);
         primaryStage.setResizable(true);
+        NavegacionHelper.pantallaCompleta(primaryStage);
         primaryStage.show();
     }
 
