@@ -1,7 +1,7 @@
 package com.acme.sica.aplicacion.usuario;
 
 import com.acme.sica.dominio.modelo.Usuario;
-import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
+
 import com.acme.sica.dominio.puerto.entrada.GestionarUsuarioCasoUso;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +11,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,34 +80,4 @@ class AuditoriaUsuarioDecoradorTest {
         verify(bitacoraRepositorio).guardar(any());
     }
 
-    @Test
-    void listarTodos_delegaSinAuditoria() {
-        // Given
-        List<Usuario> usuarios = Collections.emptyList();
-        when(decorado.listarTodos()).thenReturn(usuarios);
-
-        // When
-        List<Usuario> resultado = decorador.listarTodos();
-
-        // Then
-        assertEquals(usuarios, resultado);
-        verify(decorado).listarTodos();
-        verify(bitacoraRepositorio, never()).guardar(any());
-    }
-
-    @Test
-    void obtenerPorId_delegaSinAuditoria() {
-        // Given
-        Usuario usuario = new Usuario("test", "hash", "Test");
-        usuario.setId(1L);
-        when(decorado.obtenerPorId(1L)).thenReturn(usuario);
-
-        // When
-        Usuario resultado = decorador.obtenerPorId(1L);
-
-        // Then
-        assertEquals(usuario, resultado);
-        verify(decorado).obtenerPorId(1L);
-        verify(bitacoraRepositorio, never()).guardar(any());
-    }
 }

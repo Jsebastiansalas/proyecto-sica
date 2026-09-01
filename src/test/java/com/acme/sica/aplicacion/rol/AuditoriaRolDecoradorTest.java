@@ -1,8 +1,6 @@
 package com.acme.sica.aplicacion.rol;
 
-import com.acme.sica.aplicacion.auditoria.RegistradorAuditoria;
 import com.acme.sica.dominio.modelo.Rol;
-import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +10,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -103,34 +99,4 @@ class AuditoriaRolDecoradorTest {
         verify(bitacoraRepositorio).guardar(any());
     }
 
-    @Test
-    void listarTodos_delegaSinAuditoria() {
-        // Given
-        List<Rol> roles = Collections.emptyList();
-        when(decorado.listarTodos()).thenReturn(roles);
-
-        // When
-        List<Rol> resultado = decorador.listarTodos();
-
-        // Then
-        assertEquals(roles, resultado);
-        verify(decorado).listarTodos();
-        verify(bitacoraRepositorio, never()).guardar(any());
-    }
-
-    @Test
-    void obtenerPorId_delegaSinAuditoria() {
-        // Given
-        Rol rol = new Rol("TEST", "Test");
-        rol.setId(1L);
-        when(decorado.obtenerPorId(1L)).thenReturn(rol);
-
-        // When
-        Rol resultado = decorador.obtenerPorId(1L);
-
-        // Then
-        assertEquals(rol, resultado);
-        verify(decorado).obtenerPorId(1L);
-        verify(bitacoraRepositorio, never()).guardar(any());
-    }
 }

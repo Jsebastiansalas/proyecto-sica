@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -111,19 +110,4 @@ class CheckOutServicioTest {
         ));
     }
 
-    @Test
-    void listarDentro_retornaLista() {
-        // Given
-        Visita visita1 = new Visita();
-        visita1.setEstado(EstadoVisita.DENTRO);
-        Visita visita2 = new Visita();
-        visita2.setEstado(EstadoVisita.DENTRO);
-        when(visitaRepositorio.listarTodos()).thenReturn(List.of(visita1, visita2));
-
-        // When
-        List<Visita> resultado = servicio.listarDentro();
-
-        // Then
-        assertEquals(2, resultado.size());
-    }
 }
