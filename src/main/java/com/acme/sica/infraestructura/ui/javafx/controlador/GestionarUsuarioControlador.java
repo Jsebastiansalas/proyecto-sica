@@ -9,6 +9,7 @@ import com.acme.sica.dominio.modelo.Usuario;
 import com.acme.sica.dominio.puerto.entrada.GestionarUsuarioCasoUso;
 import com.acme.sica.dominio.puerto.salida.RolRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -141,23 +142,16 @@ public class GestionarUsuarioControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar el usuario '" + usuarioSeleccionado.getUsername() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(usuarioSeleccionado.getId());
-                    etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
-                    etiquetaMensaje.setText("Usuario eliminado correctamente");
-                    limpiarFormulario();
-                    cargarUsuarios();
-                } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion
-                         | IllegalArgumentException e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("el usuario '" + usuarioSeleccionado.getUsername() + "'", () -> {
+            try {
+                casoUso.eliminar(usuarioSeleccionado.getId());
+                etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
+                etiquetaMensaje.setText("Usuario eliminado correctamente");
+                limpiarFormulario();
+                cargarUsuarios();
+            } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion
+                     | IllegalArgumentException e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }

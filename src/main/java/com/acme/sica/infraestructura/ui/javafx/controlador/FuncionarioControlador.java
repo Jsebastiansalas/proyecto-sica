@@ -11,6 +11,7 @@ import com.acme.sica.dominio.puerto.entrada.GestionarFuncionarioCasoUso;
 import com.acme.sica.dominio.puerto.salida.EmpresaRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -192,21 +193,14 @@ public class FuncionarioControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar el funcionario '" + funcionarioSeleccionado.getNombreCompleto() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(funcionarioSeleccionado.getId());
-                    etiquetaMensaje.setText("Funcionario eliminado correctamente");
-                    limpiarFormulario();
-                    cargarFuncionarios();
-                } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("el funcionario '" + funcionarioSeleccionado.getNombreCompleto() + "'", () -> {
+            try {
+                casoUso.eliminar(funcionarioSeleccionado.getId());
+                etiquetaMensaje.setText("Funcionario eliminado correctamente");
+                limpiarFormulario();
+                cargarFuncionarios();
+            } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }

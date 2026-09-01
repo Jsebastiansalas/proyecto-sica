@@ -8,6 +8,7 @@ import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
 import com.acme.sica.dominio.puerto.entrada.GestionarPersonaCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -154,21 +155,14 @@ public class PersonaControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar a '" + personaSeleccionada.getNombreCompleto() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(personaSeleccionada.getId());
-                    etiquetaMensaje.setText("Persona eliminada correctamente");
-                    limpiarFormulario();
-                    cargarPersonas();
-                } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("a '" + personaSeleccionada.getNombreCompleto() + "'", () -> {
+            try {
+                casoUso.eliminar(personaSeleccionada.getId());
+                etiquetaMensaje.setText("Persona eliminada correctamente");
+                limpiarFormulario();
+                cargarPersonas();
+            } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }

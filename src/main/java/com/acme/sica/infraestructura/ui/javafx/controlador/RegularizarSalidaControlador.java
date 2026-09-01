@@ -7,6 +7,8 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.puerto.entrada.RegularizarSalidaCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
+import com.acme.sica.infraestructura.ui.javafx.Mensajes;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -81,6 +83,15 @@ public class RegularizarSalidaControlador {
             return;
         }
 
+        String tipoTexto = tipo == TipoRegularizacion.CIERRE_SISTEMA ? "Cierre por Sistema" : "Nuevo Ingreso";
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.regularizacion.titulo"),
+                "¿Regularizar salida de " + documento + " como '" + tipoTexto + "'?",
+                () -> ejecutarRegularizacion(documento, tipo, motivo)
+        );
+    }
+
+    private void ejecutarRegularizacion(String documento, TipoRegularizacion tipo, String motivo) {
         try {
             casoUso.regularizar(new RegularizarSalidaComando(documento, tipo, motivo));
             etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");

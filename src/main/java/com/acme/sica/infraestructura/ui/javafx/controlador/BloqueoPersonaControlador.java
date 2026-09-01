@@ -6,6 +6,8 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.puerto.entrada.GestionarBloqueoPersonaCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
+import com.acme.sica.infraestructura.ui.javafx.Mensajes;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -47,8 +49,21 @@ public class BloqueoPersonaControlador {
     @FXML
     private void bloquear() {
         Persona persona = comboPersonas.getValue();
+        if (persona == null) { mensaje("Seleccione una persona", false); return; }
+
+        String nombre = persona.getNombreCompleto();
+        String motivo = campoMotivo.getText();
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.bloqueo.titulo"),
+                "¿Bloquear a '" + nombre + "'?",
+                Mensajes.get("dialogo.confirmar.bloqueo.contenido"),
+                () -> ejecutarBloqueo(persona.getId(), motivo)
+        );
+    }
+
+    private void ejecutarBloqueo(Long personaId, String motivo) {
         try {
-            casoUso.bloquear(new BloquearPersonaComando(persona == null ? null : persona.getId(), campoMotivo.getText()));
+            casoUso.bloquear(new BloquearPersonaComando(personaId, motivo));
             mensaje("Persona bloqueada correctamente", true);
             limpiar(); cargarPersonas(); cargarBloqueadas();
         } catch (IllegalArgumentException | IllegalStateException | PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) { mensaje(e.getMessage(), false); }
@@ -58,8 +73,18 @@ public class BloqueoPersonaControlador {
     private void desbloquear() {
         Persona persona = tablaBloqueadas.getSelectionModel().getSelectedItem();
         if (persona == null) { mensaje("Seleccione una persona bloqueada", false); return; }
+
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.desbloqueo.titulo"),
+                "¿Desbloquear a '" + persona.getNombreCompleto() + "'?",
+                Mensajes.get("dialogo.confirmar.desbloqueo.contenido"),
+                () -> ejecutarDesbloqueo(persona.getId())
+        );
+    }
+
+    private void ejecutarDesbloqueo(Long personaId) {
         try {
-            casoUso.desbloquear(persona.getId());
+            casoUso.desbloquear(personaId);
             mensaje("Persona desbloqueada correctamente", true);
             cargarPersonas(); cargarBloqueadas();
         } catch (IllegalStateException | PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) { mensaje(e.getMessage(), false); }

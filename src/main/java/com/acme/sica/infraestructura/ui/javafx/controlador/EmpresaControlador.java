@@ -8,6 +8,7 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Empresa;
 import com.acme.sica.dominio.puerto.entrada.GestionarEmpresaCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -122,22 +123,15 @@ public class EmpresaControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar la empresa '" + empresaSeleccionada.getNombre() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(empresaSeleccionada.getId());
-                    etiquetaMensaje.setText("Empresa eliminada correctamente");
-                    limpiarFormulario();
-                    cargarEmpresas();
-                } catch (PermisoDenegadoExcepcion | EmpresaEnUsoExcepcion
-                         | EntidadNoEncontradaExcepcion e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("la empresa '" + empresaSeleccionada.getNombre() + "'", () -> {
+            try {
+                casoUso.eliminar(empresaSeleccionada.getId());
+                etiquetaMensaje.setText("Empresa eliminada correctamente");
+                limpiarFormulario();
+                cargarEmpresas();
+            } catch (PermisoDenegadoExcepcion | EmpresaEnUsoExcepcion
+                     | EntidadNoEncontradaExcepcion e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }

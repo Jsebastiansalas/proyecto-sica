@@ -6,6 +6,8 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.puerto.entrada.CheckOutCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
+import com.acme.sica.infraestructura.ui.javafx.Mensajes;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -61,6 +63,14 @@ public class CheckOutControlador {
             return;
         }
 
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.salida.titulo"),
+                "¿Registrar la salida del documento " + documento + "?",
+                () -> ejecutarCheckOut(documento)
+        );
+    }
+
+    private void ejecutarCheckOut(String documento) {
         try {
             Visita visita = casoUso.checkOut(new CheckOutComando(documento));
             etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");

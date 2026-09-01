@@ -8,6 +8,7 @@ import com.acme.sica.dominio.excepciones.RolEnUsoExcepcion;
 import com.acme.sica.dominio.modelo.Rol;
 import com.acme.sica.dominio.puerto.entrada.GestionarRolCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -113,21 +114,14 @@ public class RolControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar el rol '" + rolSeleccionado.getNombre() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(rolSeleccionado.getId());
-                    etiquetaMensaje.setText("Rol eliminado correctamente");
-                    limpiarFormulario();
-                    cargarRoles();
-                } catch (PermisoDenegadoExcepcion | RolEnUsoExcepcion | EntidadNoEncontradaExcepcion e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("el rol '" + rolSeleccionado.getNombre() + "'", () -> {
+            try {
+                casoUso.eliminar(rolSeleccionado.getId());
+                etiquetaMensaje.setText("Rol eliminado correctamente");
+                limpiarFormulario();
+                cargarRoles();
+            } catch (PermisoDenegadoExcepcion | RolEnUsoExcepcion | EntidadNoEncontradaExcepcion e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }

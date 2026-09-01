@@ -4,6 +4,7 @@ import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -198,8 +199,10 @@ public class DashboardControlador {
 
     @FXML
     private void cerrarSesion() {
-        SesionContexto.cerrar();
-        cargarVista("/fxml/login.fxml", "SICA - Zona Acme");
+        DialogoConfirmacion.confirmarCerrarSesion(() -> {
+            SesionContexto.cerrar();
+            cargarVista("/fxml/login.fxml", "SICA - Zona Acme");
+        });
     }
 
     private void cargarVista(String rutaFxml, String titulo) {

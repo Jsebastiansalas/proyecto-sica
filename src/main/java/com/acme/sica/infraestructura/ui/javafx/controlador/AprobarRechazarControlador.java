@@ -6,6 +6,8 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.puerto.entrada.AprobarRechazarVisitaCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
+import com.acme.sica.infraestructura.ui.javafx.Mensajes;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -62,8 +64,17 @@ public class AprobarRechazarControlador {
             return;
         }
 
+        String persona = seleccionada.getPersona() != null ? seleccionada.getPersona().getNombreCompleto() : "la visita";
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.aprobacion.titulo"),
+                "¿Aprobar la visita de " + persona + "?",
+                () -> ejecutarAprobacion(seleccionada.getId())
+        );
+    }
+
+    private void ejecutarAprobacion(Long visitaId) {
         try {
-            casoUso.aprobar(seleccionada.getId());
+            casoUso.aprobar(visitaId);
             etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
             etiquetaMensaje.setText("Visita aprobada correctamente");
             cargarPendientes();
@@ -83,22 +94,33 @@ public class AprobarRechazarControlador {
             return;
         }
 
+        String persona = seleccionada.getPersona() != null ? seleccionada.getPersona().getNombreCompleto() : "la visita";
+        DialogoConfirmacion.confirmar(
+                Mensajes.get("dialogo.confirmar.rechazo.titulo"),
+                "¿Rechazar la visita de " + persona + "?",
+                () -> solicitarMotivoRechazo(seleccionada)
+        );
+    }
+
+    private void solicitarMotivoRechazo(Visita seleccionada) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Rechazar visita");
         dialog.setHeaderText("Rechazar visita de " + seleccionada.getPersona().getNombreCompleto());
         dialog.setContentText("Motivo del rechazo:");
         Optional<String> resultado = dialog.showAndWait();
 
-        if (resultado.isPresent()) {
-            try {
-                casoUso.rechazar(new RechazarVisitaComando(seleccionada.getId(), resultado.get()));
-                etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
-                etiquetaMensaje.setText("Visita rechazada");
-                cargarPendientes();
-            } catch (IllegalStateException | PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
-                etiquetaMensaje.setStyle("-fx-text-fill: #f43f5e;");
-                etiquetaMensaje.setText(e.getMessage());
-            }
+        resultado.ifPresent(motivo -> ejecutarRechazo(seleccionada.getId(), motivo));
+    }
+
+    private void ejecutarRechazo(Long visitaId, String motivo) {
+        try {
+            casoUso.rechazar(new RechazarVisitaComando(visitaId, motivo));
+            etiquetaMensaje.setStyle("-fx-text-fill: #34d399;");
+            etiquetaMensaje.setText("Visita rechazada");
+            cargarPendientes();
+        } catch (IllegalStateException | PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
+            etiquetaMensaje.setStyle("-fx-text-fill: #f43f5e;");
+            etiquetaMensaje.setText(e.getMessage());
         }
     }
 

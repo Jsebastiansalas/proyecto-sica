@@ -7,6 +7,7 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.Permiso;
 import com.acme.sica.dominio.puerto.entrada.GestionarPermisoCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
+import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
 import com.acme.sica.infraestructura.ui.javafx.NavegacionHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -112,21 +113,14 @@ public class PermisoControlador {
             return;
         }
 
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Confirmar eliminación");
-        confirmacion.setHeaderText("¿Eliminar el permiso '" + permisoSeleccionado.getNombre() + "'?");
-        confirmacion.setContentText("Esta acción no se puede deshacer.");
-
-        confirmacion.showAndWait().ifPresent(respuesta -> {
-            if (respuesta == ButtonType.OK) {
-                try {
-                    casoUso.eliminar(permisoSeleccionado.getId());
-                    etiquetaMensaje.setText("Permiso eliminado correctamente");
-                    limpiarFormulario();
-                    cargarPermisos();
-                } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
-                    etiquetaMensaje.setText(e.getMessage());
-                }
+        DialogoConfirmacion.confirmarEliminacion("el permiso '" + permisoSeleccionado.getNombre() + "'", () -> {
+            try {
+                casoUso.eliminar(permisoSeleccionado.getId());
+                etiquetaMensaje.setText("Permiso eliminado correctamente");
+                limpiarFormulario();
+                cargarPermisos();
+            } catch (PermisoDenegadoExcepcion | EntidadNoEncontradaExcepcion e) {
+                etiquetaMensaje.setText(e.getMessage());
             }
         });
     }
