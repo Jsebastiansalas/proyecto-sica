@@ -65,7 +65,7 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
 
     @Override
     public Optional<Rol> buscarPorId(Long id) {
-        String sql = "SELECT id, nombre, descripcion FROM roles WHERE id = ?";
+        String sql = "SELECT id, nombre, descripcion, activo FROM roles WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -83,7 +83,7 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
 
     @Override
     public Optional<Rol> buscarPorNombre(String nombre) {
-        String sql = "SELECT id, nombre, descripcion FROM roles WHERE nombre = ?";
+        String sql = "SELECT id, nombre, descripcion, activo FROM roles WHERE nombre = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -101,7 +101,7 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
 
     @Override
     public List<Rol> listarTodos() {
-        String sql = "SELECT id, nombre, descripcion FROM roles ORDER BY nombre";
+        String sql = "SELECT id, nombre, descripcion, activo FROM roles ORDER BY nombre";
         List<Rol> roles = new ArrayList<>();
         try (Connection conn = fabricaConexiones.crearConexion();
              Statement stmt = conn.createStatement();

@@ -41,6 +41,27 @@ INSERT INTO permisos (codigo, descripcion) VALUES
 ON DUPLICATE KEY UPDATE descripcion = VALUES(descripcion);
 
 -- =====================================================
+-- CATÁLOGO DE ESTADOS DE ACCESO DE PERSONAS
+-- =====================================================
+INSERT IGNORE INTO persona_estados_acceso (nombre_estado) VALUES
+    ('Activo'),
+    ('Con Prohibicion de Ingreso');
+
+-- =====================================================
+-- CATÁLOGO DE ESTADOS DE VISITA
+-- =====================================================
+INSERT IGNORE INTO visita_estados (nombre_estado) VALUES
+    ('Dentro'),
+    ('Fuera'),
+    ('Pendiente de Aprobacion'),
+    ('Pendiente de Aprobacion por Olvido'),
+    ('Aprobado'),
+    ('Rechazado'),
+    ('Cerrada'),
+    ('Cerrada por Sistema'),
+    ('Expirado');
+
+-- =====================================================
 -- ASIGNACIÓN DE PERMISOS A ROLES
 -- =====================================================
 -- ADMINISTRADOR: todos los permisos
@@ -75,13 +96,14 @@ WHERE r.nombre = 'SISTEMA'
 -- USUARIOS DE PRUEBA
 -- Contraseñas hasheadas con PBKDF2 (PasswordHasher)
 -- =====================================================
-INSERT INTO usuarios (username, password_hash, nombre_completo, activo) VALUES
-    ('admin', 'xoWeOEDC0i+oC89VUV9K5Q==$aUCB33OP4Rv6U2L5a99k0xxz0fPB1YYxy8ZKj8LV5fs=', 'Administrador Principal', TRUE),
-    ('guarda1', 'wEEezEgLqd+t5OIKhFHjvg==$lIdFlb1VOmKhIJG4Dvg4l11bJjV39xGkEkPCaT2iE5w=', 'Guarda de Seguridad 1', TRUE),
-    ('funcionario1', 'OKaauufh8swmU+YinrrhOA==$Rknj3C3t/MtqXtJzCa4T+sBWVavHPH8nB7l6axJUlug=', 'Funcionario Empresa A', TRUE)
+INSERT INTO usuarios (username, password_hash, nombre_completo, correo_electronico, activo) VALUES
+    ('admin', 'xoWeOEDC0i+oC89VUV9K5Q==$aUCB33OP4Rv6U2L5a99k0xxz0fPB1YYxy8ZKj8LV5fs=', 'Administrador Principal', 'admin@acme.com', TRUE),
+    ('guarda1', 'wEEezEgLqd+t5OIKhFHjvg==$lIdFlb1VOmKhIJG4Dvg4l11bJjV39xGkEkPCaT2iE5w=', 'Guarda de Seguridad 1', 'guarda1@acme.com', TRUE),
+    ('funcionario1', 'OKaauufh8swmU+YinrrhOA==$Rknj3C3t/MtqXtJzCa4T+sBWVavHPH8nB7l6axJUlug=', 'Funcionario Empresa A', 'funcionario1@acme.com', TRUE)
 ON DUPLICATE KEY UPDATE
     password_hash = VALUES(password_hash),
     nombre_completo = VALUES(nombre_completo),
+    correo_electronico = VALUES(correo_electronico),
     activo = VALUES(activo);
 
 -- =====================================================
@@ -95,11 +117,11 @@ INSERT IGNORE INTO usuario_roles (usuario_id, rol_id) VALUES
 -- =====================================================
 -- EMPRESAS DE PRUEBA
 -- =====================================================
-INSERT INTO empresas (nombre, ubicacion, activa) VALUES
-    ('Empresa A', 'Edificio Norte, Piso 3', TRUE),
-    ('Empresa B', 'Edificio Sur, Piso 2', TRUE),
-    ('Empresa C', 'Edificio Central, Piso 1', TRUE)
-ON DUPLICATE KEY UPDATE ubicacion = VALUES(ubicacion);
+INSERT INTO empresas (nombre, ubicacion, contacto_principal, activa) VALUES
+    ('Empresa A', 'Edificio Norte, Piso 3', 'contacto.a@empresaa.com', TRUE),
+    ('Empresa B', 'Edificio Sur, Piso 2', 'contacto.b@empresab.com', TRUE),
+    ('Empresa C', 'Edificio Central, Piso 1', 'contacto.c@empresac.com', TRUE)
+ON DUPLICATE KEY UPDATE ubicacion = VALUES(ubicacion), contacto_principal = VALUES(contacto_principal);
 
 -- =====================================================
 -- FUNCIONARIOS DE PRUEBA
@@ -125,12 +147,14 @@ ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
 -- =====================================================
 -- VISITAS DE PRUEBA
 -- =====================================================
-INSERT IGNORE INTO visitas (persona_id, funcionario_id, fecha_hora_programada, estado, observaciones) VALUES
-    ((SELECT id FROM personas WHERE documento = '1234567890'),
-      (SELECT MIN(id) FROM funcionarios WHERE nombre = 'Juan Pérez'),
-     DATE_ADD(NOW(), INTERVAL 1 HOUR),
-     'APROBADO',
-     'Visita pre-registrada de prueba');
+INSERT INTO visitas (persona_id, funcionario_id, fecha_hora_programada, estado, motivo)
+SELECT p.id, f.id, DATE_ADD(NOW(), INTERVAL 1 HOUR), 'APROBADO', 'Visita pre-registrada de prueba'
+FROM personas p
+JOIN funcionarios f ON f.nombre = 'Juan Pérez'
+WHERE p.documento = '1234567890'
+  AND NOT EXISTS (
+      SELECT 1 FROM visitas v WHERE v.motivo = 'Visita pre-registrada de prueba'
+  );
 
 -- =====================================================
 -- BITÁCORA INICIAL

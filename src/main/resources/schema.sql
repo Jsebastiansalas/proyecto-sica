@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     username VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     nombre_completo VARCHAR(200) NOT NULL,
+    correo_electronico VARCHAR(100) UNIQUE,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -52,6 +53,22 @@ CREATE TABLE IF NOT EXISTS usuario_roles (
 );
 
 -- =====================================================
+-- TABLAS DE CONSULTA PARA ESTADOS (CATÁLOGOS)
+-- =====================================================
+
+-- Posibles estados de acceso de una persona
+CREATE TABLE IF NOT EXISTS persona_estados_acceso (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_estado VARCHAR(50) NOT NULL UNIQUE -- 'Activo', 'Con Prohibicion de Ingreso'
+);
+
+-- Posibles estados de una visita
+CREATE TABLE IF NOT EXISTS visita_estados (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_estado VARCHAR(50) NOT NULL UNIQUE -- 'Dentro', 'Fuera', 'Pendiente de Aprobacion', etc.
+);
+
+-- =====================================================
 -- TABLAS DE NEGOCIO
 -- =====================================================
 
@@ -59,6 +76,7 @@ CREATE TABLE IF NOT EXISTS empresas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
     ubicacion VARCHAR(255),
+    contacto_principal VARCHAR(100),
     activa BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -78,10 +96,12 @@ CREATE TABLE IF NOT EXISTS personas (
     documento VARCHAR(30) NOT NULL UNIQUE,
     nombre VARCHAR(200) NOT NULL,
     foto_url VARCHAR(500),
+    empresa_id BIGINT,
     tipo ENUM('INVITADO', 'TRABAJADOR') NOT NULL,
     bloqueada BOOLEAN NOT NULL DEFAULT FALSE,
     motivo_bloqueo VARCHAR(500),
-    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_persona_empresa FOREIGN KEY (empresa_id) REFERENCES empresas(id)
 );
 
 CREATE TABLE IF NOT EXISTS visitas (
@@ -102,6 +122,7 @@ CREATE TABLE IF NOT EXISTS visitas (
         'CERRADA_POR_SISTEMA',
         'RECHAZADO'
     ) NOT NULL DEFAULT 'PENDIENTE_APROBACION',
+    placa_vehicular VARCHAR(10),
     motivo TEXT,
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_visita_persona FOREIGN KEY (persona_id) REFERENCES personas(id),
@@ -112,11 +133,13 @@ CREATE TABLE IF NOT EXISTS visitas (
 
 CREATE TABLE IF NOT EXISTS incidentes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    visita_id BIGINT,
     persona_id BIGINT NOT NULL,
     usuario_id BIGINT NOT NULL,
     descripcion TEXT NOT NULL,
     gravedad ENUM('BAJA', 'MEDIA', 'ALTA', 'CRITICA') NOT NULL,
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_inc_visita FOREIGN KEY (visita_id) REFERENCES visitas(id),
     CONSTRAINT fk_inc_persona FOREIGN KEY (persona_id) REFERENCES personas(id),
     CONSTRAINT fk_inc_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
