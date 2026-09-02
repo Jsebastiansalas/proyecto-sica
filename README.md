@@ -236,7 +236,110 @@ El dashboard muestra las métricas del sistema, la actividad reciente y el panel
 
 ## Base de datos
 
-El esquema contiene 13 tablas principales agrupadas así:
+El esquema contiene 13 tablas principales.
+
+### Diagrama Entidad-Relación
+
+```mermaid
+erDiagram
+    usuarios ||--o{ usuario_roles : tiene
+    roles ||--o{ usuario_roles : agrupa
+    roles ||--o{ rol_permisos : concede
+    permisos ||--o{ rol_permisos : compone
+    usuarios ||--o| funcionarios : representa
+    empresas ||--o{ funcionarios : emplea
+    empresas ||--o{ personas : vincula
+    personas ||--o{ visitas : visita
+    funcionarios ||--o{ visitas : autoriza
+    empresas ||--o{ visitas : recibe
+    usuarios ||--o{ visitas : registra
+    personas ||--o{ incidentes : involucra
+    visitas ||--o| incidentes : genera
+    usuarios ||--o{ incidentes : reporta
+    usuarios ||--o{ bitacora_auditoria : audita
+
+    usuarios {
+        bigint id PK
+        varchar username UK
+        varchar password_hash
+        varchar nombre_completo
+        varchar correo_electronico UK
+        boolean activo
+    }
+    roles {
+        bigint id PK
+        varchar nombre UK
+        varchar descripcion
+        boolean activo
+    }
+    permisos {
+        bigint id PK
+        varchar codigo UK
+        varchar descripcion
+    }
+    empresas {
+        bigint id PK
+        varchar nombre UK
+        varchar ubicacion
+        varchar contacto_principal
+        boolean activa
+    }
+    funcionarios {
+        bigint id PK
+        bigint usuario_id FK
+        bigint empresa_id FK
+        varchar nombre
+        varchar cargo
+        boolean activo
+    }
+    personas {
+        bigint id PK
+        varchar documento UK
+        varchar nombre
+        varchar foto_url
+        bigint empresa_id FK
+        enum tipo
+        boolean bloqueada
+        varchar motivo_bloqueo
+    }
+    visitas {
+        bigint id PK
+        bigint persona_id FK
+        bigint funcionario_id FK
+        bigint empresa_id FK
+        bigint registrado_por_id FK
+        timestamp fecha_hora_programada
+        timestamp fecha_hora_checkin
+        timestamp fecha_hora_checkout
+        enum estado
+        varchar placa_vehicular
+        text motivo
+    }
+    incidentes {
+        bigint id PK
+        bigint visita_id FK
+        bigint persona_id FK
+        bigint usuario_id FK
+        text descripcion
+        enum gravedad
+        timestamp fecha
+    }
+    bitacora_auditoria {
+        bigint id PK
+        bigint usuario_id FK
+        varchar usuario_username
+        varchar accion
+        varchar entidad
+        bigint entidad_id
+        text detalle
+        varchar ip_address
+        timestamp fecha
+    }
+```
+
+Los catálogos `persona_estados_acceso` y `visita_estados` mantienen los valores válidos de estado para personas y visitas.
+
+### Agrupación de tablas
 
 ### Seguridad y RBAC
 
@@ -320,12 +423,42 @@ Repositorio JDBC
 MySQL
 ```
 
-## Patrones de diseño
+## Decisiones de diseño
 
-- **Chain of Responsibility**: valida la sesión y el permiso requerido antes de ejecutar una operación.
-- **Decorator**: agrega auditoría a los casos de uso sin mezclar el registro de bitácora con la lógica principal.
-- **Strategy**: encapsula las estrategias de regularización de salidas, como salida olvidada, cierre del sistema o nuevo ingreso.
-- **Dependency Injection manual**: `ContenedorDependencias` configura repositorios, servicios, decoradores y controladores sin un contenedor externo.
+### Relación con MVC
+
+El proyecto estructura sus paquetes en capas con las responsabilidades de MVC: **Modelo** (`dominio` y `aplicacion`: entidades y lógica de negocio), **Vista** (`resources/fxml` y `resources/css`) y **Controlador** (`infraestructura/ui/javafx/controlador`). Sobre esa base se aplica Arquitectura Hexagonal con puertos de entrada y salida, de modo que el dominio no depende de la base de datos ni de la interfaz.
+
+### Principios SOLID
+
+| Principio | Dónde se aplica | Por qué |
+|---|---|---|
+| **S** — Responsabilidad única | `GestionarEmpresaServicio` solo valida negocio; `AuditoriaEmpresaDecorador` solo audita; `RepositorioJdbcEmpresa` solo persiste; controladores solo presentan | Cada cambio (nueva regla, nuevo registro de auditoría, nueva consulta) afecta una sola clase |
+| **O** — Abierto/cerrado | Decoradores de auditoría y cadena de autorización: se agrega comportamiento registrando nuevas clases sin modificar servicios existentes | Extender la auditoría a un caso de uso nuevo no toca el código del servicio decorado |
+| **L** — Sustitución de Liskov | Cada `Auditoria*Decorador` implementa la misma interfaz del servicio decorado (`GestionarEmpresaCasoUso`, etc.) y es intercambiable por él | Los controladores y el contenedor no distinguen entre servicio puro y decorado |
+| **I** — Segregación de interfaz | 17 interfaces de caso de uso pequeñas en `dominio/puerto/entrada` (`CheckInInvitadoCasoUso`, `ConsultarBitacoraCasoUso`, ...) en lugar de una interfaz gigante | Cada consumidor depende solo de las operaciones que usa |
+| **D** — Inversión de dependencias | Los servicios dependen de `dominio/puerto/salida` (abstracciones); `infraestructura/persistencia/jdbc` las implementa; el dominio no importa infraestructura | Permite cambiar MySQL u organizar pruebas con mocks sin tocar el dominio |
+
+### Patrones de diseño aplicados
+
+1. **Chain of Responsibility** — `infraestructura/seguridad/autorizacion`: `ManejadorSesionActiva` → `ManejadorPermiso` (construido por `FabricaCadenaAutorizacion`). Cada operación de servicio llama a `cadenaAutorizacion.verificar(permiso, accion)`. *Por qué*: separa la validación de sesión de la de permiso, permite agregar nuevos eslabones (por ejemplo auditoría de contexto) sin modificar los servicios, y centraliza el rechazo con `PermisoDenegadoExcepcion`.
+2. **Decorator** — 13 decoradores `Auditoria*Decorador` en `aplicacion/*`: envuelven cada caso de uso y registran en `bitacora_auditoria` mediante `RegistradorAuditoria`. *Por qué*: la auditoría es un requisito transversal; con decoradores la lógica de negocio queda limpia y la bitácora se alimenta desde la capa de servicio de Java sin duplicar código.
+3. **Strategy** — `aplicacion/visita`: `EstrategiaSalidaOlvidada` con implementaciones `EstrategiaNuevoIngreso` y `EstrategiaCierreSistema`, seleccionadas por `RegularizarSalidaServicio` mediante un `Map<TipoRegularizacion, EstrategiaSalidaOlvidada>`. *Por qué*: cada tipo de regularización tiene reglas distintas; el algoritmo varía sin cambiar el servicio que lo usa.
+4. **Factory Method** — `FabricaCadenaAutorizacion` (compone la cadena de autorización) y `FabricaConexiones` (crea conexiones JDBC sobre HikariCP). *Por qué*: centraliza la construcción de objetos complejos y esconde los detalles de creación a quienes los usan.
+5. **Repository** — interfaces `*RepositorioPuerto` en `dominio/puerto/salida` e implementaciones `RepositorioJdbc*` en `infraestructura/persistencia/jdbc`. *Por qué*: el dominio habla de colecciones de entidades, no de SQL; persistencia y negocio evolucionan por separado.
+6. **Dependency Injection (manual)** — `ContenedorDependencias` compone toda la aplicación: repositorios → servicios → decoradores → casos de uso. *Por qué*: sin framework de contenedor, las dependencias se declaran en un único punto y las clases se prueban con sus colaboradores inyectados (mocks en tests).
+
+### Lambdas y API Stream
+
+- **168 expresiones lambda** y **82 usos de `Optional`** en el código principal.
+- **25 usos de `.stream()`**, 29 de `.map()`/`.filter()` y 3 de `.collect()`.
+- Ejemplos: `IniciarSesionServicio` arma los permisos de la sesión con streams; los controladores JavaFX usan `cell -> new SimpleStringProperty(...)` como `CellValueFactory` de las tablas; `ManejadorPermiso` y `RegistradorAuditoria` extraen el usuario de la sesión con `Optional.map(...).orElse(...)`; los servicios usan `orElseThrow(() -> new EntidadNoEncontradaExcepcion(...))`.
+- *Por qué*: código más declarativo y compacto para transformaciones y búsquedas, y `Optional` obliga a tratar conscientemente los valores ausentes.
+
+### Flujo de trabajo Git
+
+- El repositorio sigue **Git Flow**: rama persistente `main` (estable) y rama de integración `Develop`, con `origin` en GitHub.
+- Los mensajes siguen **Conventional Commits** con gitmoji (`feat:`, `fix:`, `refactor:`, `style:`, `docs:`, `test:`), por ejemplo `feat: :sparkles: auditoria automatica y consulta de bitacora`.
 
 ## Tecnologías y dependencias principales
 
