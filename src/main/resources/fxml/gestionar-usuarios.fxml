@@ -33,7 +33,7 @@
 
                 <Label text="Roles:" GridPane.rowIndex="4" GridPane.columnIndex="0" VBox.vgrow="ALWAYS"/>
                 <ListView fx:id="listaRoles" GridPane.rowIndex="4" GridPane.columnIndex="1"
-                          prefHeight="120" selectionMode="MULTIPLE"/>
+                          prefHeight="120"/>
 
                 <columnConstraints>
                     <ColumnConstraints minWidth="100"/>
