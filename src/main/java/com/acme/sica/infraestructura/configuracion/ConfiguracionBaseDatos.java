@@ -48,13 +48,19 @@ public class ConfiguracionBaseDatos {
         String nombre = separador >= 0 ? contenido.substring(0, separador) : contenido;
         String porDefecto = separador >= 0 ? contenido.substring(separador + 1) : "";
         String entorno = System.getenv(nombre);
-        return entorno != null ? entorno : porDefecto;
+        // Si la variable existe pero está vacía (o solo espacios), usamos el
+        // valor por defecto. Esto evita que un DB_PASSWORD="" en el entorno de
+        // ejecución (VS Code, PowerShell, etc.) anule la contraseña del .properties.
+        return (entorno != null && !entorno.isBlank()) ? entorno : porDefecto;
     }
 
     private void cargarPredeterminados() {
-        propiedades.setProperty("db.url", "jdbc:mysql://localhost:3306/sica_db");
+        // Fallback si no se encuentra application.properties en el classpath.
+        // Usa los mismos valores por defecto del archivo para que la app siga
+        // funcionando en entornos de desarrollo aunque falte el recurso.
+        propiedades.setProperty("db.url", "jdbc:mysql://localhost:3306/sica_db?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=America/Guayaquil");
         propiedades.setProperty("db.username", "root");
-        propiedades.setProperty("db.password", "");
+        propiedades.setProperty("db.password", "sebastian1129.,");
         propiedades.setProperty("db.driver", "com.mysql.cj.jdbc.Driver");
     }
 
