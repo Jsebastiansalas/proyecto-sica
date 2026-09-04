@@ -4,6 +4,10 @@ import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad de dominio que representa un incidente.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Incidente {
 
     private Long id;

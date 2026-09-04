@@ -16,6 +16,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Controlador de la interfaz JavaFX para asignar roles.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class AsignarRolesControlador {
 
     @FXML
@@ -30,6 +34,9 @@ public class AsignarRolesControlador {
     private GestionarRolCasoUso gestionarRolCasoUso;
     private UsuarioRepositorioPuerto usuarioRepositorio;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         gestionarRolCasoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarRolCasoUso();

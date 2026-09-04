@@ -17,6 +17,10 @@ import javafx.scene.control.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para registrar el check-out de una visita.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class CheckOutControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -34,6 +38,9 @@ public class CheckOutControlador {
     private CheckOutCasoUso casoUso;
     private ObservableList<Visita> dentro;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getCheckOutCasoUso();

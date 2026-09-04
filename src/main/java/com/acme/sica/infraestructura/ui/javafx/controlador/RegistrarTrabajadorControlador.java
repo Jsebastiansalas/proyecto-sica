@@ -20,6 +20,10 @@ import javafx.util.StringConverter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para registrar el ingreso de un trabajador.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class RegistrarTrabajadorControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -41,6 +45,9 @@ public class RegistrarTrabajadorControlador {
     private VisitaRepositorioPuerto visitaRepositorio;
     private ObservableList<Visita> trabajadores;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getRegistrarTrabajadorCasoUso();

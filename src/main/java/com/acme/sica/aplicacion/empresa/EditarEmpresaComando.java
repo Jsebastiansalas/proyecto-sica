@@ -1,5 +1,8 @@
 package com.acme.sica.aplicacion.empresa;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para editar una empresa.
+ */
 public class EditarEmpresaComando {
 
     private final Long id;

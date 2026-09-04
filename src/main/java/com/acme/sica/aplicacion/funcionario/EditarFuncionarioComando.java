@@ -1,5 +1,8 @@
 package com.acme.sica.aplicacion.funcionario;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para editar un funcionario.
+ */
 public class EditarFuncionarioComando {
 
     private final Long id;

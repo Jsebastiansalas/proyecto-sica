@@ -2,6 +2,9 @@ package com.acme.sica.aplicacion.usuario;
 
 import java.util.Set;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para editar un usuario.
+ */
 public class EditarUsuarioComando {
 
     private final Long id;

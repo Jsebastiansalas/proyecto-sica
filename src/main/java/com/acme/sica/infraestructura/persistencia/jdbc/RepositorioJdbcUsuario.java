@@ -8,6 +8,10 @@ import com.acme.sica.dominio.puerto.salida.UsuarioRepositorioPuerto;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Usuario.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -16,6 +20,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Usuario guardar(Usuario usuario) {
         if (usuario.getId() == null) {
@@ -63,6 +70,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Usuario> buscarPorId(Long id) {
         String sql = "SELECT id, username, password_hash, nombre_completo, activo, fecha_creacion FROM usuarios WHERE id = ?";
@@ -83,6 +93,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su nombre de usuario.
+     */
     @Override
     public Optional<Usuario> buscarPorUsername(String username) {
         String sql = "SELECT id, username, password_hash, nombre_completo, activo, fecha_creacion FROM usuarios WHERE username = ?";
@@ -103,6 +116,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Usuario> listarTodos() {
         String sql = "SELECT id, username, password_hash, nombre_completo, activo, fecha_creacion FROM usuarios ORDER BY username";
@@ -122,6 +138,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM usuarios WHERE id = ?";
@@ -135,6 +154,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Verifica si ya existe una entidad con el nombre de usuario indicado.
+     */
     @Override
     public boolean existePorUsername(String username) {
         String sql = "SELECT 1 FROM usuarios WHERE username = ?";
@@ -150,6 +172,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna la cantidad total de entidades registradas.
+     */
     @Override
     public long contar() {
         String sql = "SELECT COUNT(*) FROM usuarios";
@@ -165,6 +190,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Asigna los roles indicados al usuario.
+     */
     public void asignarRoles(Long usuarioId, Set<Long> rolIds) {
         eliminarRoles(usuarioId);
         if (rolIds == null || rolIds.isEmpty()) {
@@ -185,6 +213,9 @@ public class RepositorioJdbcUsuario implements UsuarioRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina los roles asignados a un usuario.
+     */
     public void eliminarRoles(Long usuarioId) {
         String sql = "DELETE FROM usuario_roles WHERE usuario_id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();

@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Clase de configuración de la conexión y propiedades de la base de datos.
+ */
 public class ConfiguracionBaseDatos {
 
     private final Properties propiedades;

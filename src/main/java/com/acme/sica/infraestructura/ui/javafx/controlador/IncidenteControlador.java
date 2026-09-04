@@ -17,6 +17,10 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Controlador de la interfaz JavaFX para un incidente.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class IncidenteControlador {
 
     @FXML private ComboBox<Persona> comboPersonas;
@@ -34,6 +38,9 @@ public class IncidenteControlador {
     private GestionarIncidenteCasoUso casoUso;
     private final ObservableList<Incidente> incidentes = FXCollections.observableArrayList();
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarIncidenteCasoUso();

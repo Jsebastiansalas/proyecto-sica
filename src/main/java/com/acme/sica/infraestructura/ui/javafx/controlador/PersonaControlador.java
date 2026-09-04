@@ -18,6 +18,10 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para una persona.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class PersonaControlador {
 
     @FXML
@@ -66,6 +70,9 @@ public class PersonaControlador {
     private ObservableList<Persona> personas;
     private Persona personaSeleccionada;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarPersonaCasoUso();

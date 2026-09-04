@@ -16,6 +16,10 @@ import javafx.util.StringConverter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Controlador de la interfaz JavaFX para reporte accesos.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class ReporteAccesosControlador {
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     @FXML private DatePicker campoDesde;

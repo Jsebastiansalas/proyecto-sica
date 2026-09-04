@@ -36,6 +36,9 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Rol crear(CrearRolComando comando) {
         autorizar("crear roles");
@@ -45,6 +48,9 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         return rolRepositorio.guardar(rol);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Rol editar(EditarRolComando comando) {
         autorizar("editar roles");
@@ -61,6 +67,9 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         return rolRepositorio.guardar(rol);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long rolId) {
         autorizar("eliminar roles");
@@ -77,12 +86,18 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
         rolRepositorio.eliminarPorId(rolId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Rol> listarTodos() {
         autorizar("listar roles");
         return rolRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Rol obtenerPorId(Long rolId) {
         autorizar("obtener roles");
@@ -90,6 +105,9 @@ public class GestionarRolServicio implements GestionarRolCasoUso {
                 .orElseThrow(() -> new EntidadNoEncontradaExcepcion("Rol no encontrado con id " + rolId));
     }
 
+    /**
+     * Asigna los roles indicados al usuario.
+     */
     @Override
     public void asignarRoles(AsignarRolesUsuarioComando comando) {
         autorizar("asignar roles");

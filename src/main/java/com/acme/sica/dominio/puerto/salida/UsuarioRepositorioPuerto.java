@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Puerto de salida hexagonal que define las operaciones de persistencia
+ * para la entidad Usuario. Es implementado por los adaptadores de infraestructura.
+ */
 public interface UsuarioRepositorioPuerto {
 
     Usuario guardar(Usuario usuario);

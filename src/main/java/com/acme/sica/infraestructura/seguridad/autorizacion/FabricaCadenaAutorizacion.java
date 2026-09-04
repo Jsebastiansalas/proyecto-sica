@@ -17,6 +17,9 @@ public final class FabricaCadenaAutorizacion {
     private FabricaCadenaAutorizacion() {
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     public static ManejadorAutorizacion crear(BitacoraRepositorioPuerto bitacoraRepositorio) {
         ManejadorSesionActiva sesion = new ManejadorSesionActiva();
         ManejadorPermiso permiso = new ManejadorPermiso(bitacoraRepositorio);

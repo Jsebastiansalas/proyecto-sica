@@ -8,6 +8,10 @@ import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 
 import java.util.List;
 
+/**
+ * Decorador de auditoría que envuelve el caso de uso de bloqueo persona
+ * y registra las acciones realizadas en la bitácora de auditoría.
+ */
 public class AuditoriaBloqueoPersonaDecorador implements GestionarBloqueoPersonaCasoUso {
 
     private final GestionarBloqueoPersonaCasoUso decorado;
@@ -19,6 +23,9 @@ public class AuditoriaBloqueoPersonaDecorador implements GestionarBloqueoPersona
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Bloquea una persona en el sistema.
+     */
     @Override
     public Persona bloquear(BloquearPersonaComando comando) {
         Persona persona = decorado.bloquear(comando);
@@ -28,6 +35,9 @@ public class AuditoriaBloqueoPersonaDecorador implements GestionarBloqueoPersona
         return persona;
     }
 
+    /**
+     * Desbloquea una persona previamente bloqueada.
+     */
     @Override
     public Persona desbloquear(Long personaId) {
         Persona persona = decorado.desbloquear(personaId);
@@ -41,6 +51,9 @@ public class AuditoriaBloqueoPersonaDecorador implements GestionarBloqueoPersona
         return decorado.listarTodas();
     }
 
+    /**
+     * Obtiene el listado de entidades bloqueadas.
+     */
     @Override
     public List<Persona> listarBloqueadas() {
         return decorado.listarBloqueadas();

@@ -40,6 +40,9 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
         this.estrategiaCierreSistema = estrategiaCierreSistema;
     }
 
+    /**
+     * Registra el ingreso de un invitado.
+     */
     @Override
     public Visita checkIn(CheckInInvitadoComando comando) {
         autorizar("check-in invitado");

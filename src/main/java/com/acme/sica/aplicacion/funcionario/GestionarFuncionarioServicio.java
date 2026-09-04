@@ -37,6 +37,9 @@ public class GestionarFuncionarioServicio implements GestionarFuncionarioCasoUso
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Funcionario crear(CrearFuncionarioComando comando) {
         autorizar("crear funcionarios");
@@ -68,6 +71,9 @@ public class GestionarFuncionarioServicio implements GestionarFuncionarioCasoUso
         return funcionarioRepositorio.guardar(funcionario);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Funcionario editar(EditarFuncionarioComando comando) {
         autorizar("editar funcionarios");
@@ -105,6 +111,9 @@ public class GestionarFuncionarioServicio implements GestionarFuncionarioCasoUso
         return funcionarioRepositorio.guardar(funcionario);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long funcionarioId) {
         autorizar("eliminar funcionarios");
@@ -116,12 +125,18 @@ public class GestionarFuncionarioServicio implements GestionarFuncionarioCasoUso
         funcionarioRepositorio.eliminarPorId(funcionarioId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Funcionario> listarTodos() {
         autorizar("listar funcionarios");
         return funcionarioRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Funcionario obtenerPorId(Long funcionarioId) {
         autorizar("obtener funcionarios");

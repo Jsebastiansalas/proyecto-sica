@@ -7,6 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Puerto de salida hexagonal que define las operaciones de persistencia
+ * para la entidad Visita. Es implementado por los adaptadores de infraestructura.
+ */
 public interface VisitaRepositorioPuerto {
 
     Visita guardar(Visita visita);

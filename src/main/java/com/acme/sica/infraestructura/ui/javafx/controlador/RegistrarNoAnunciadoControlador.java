@@ -24,6 +24,10 @@ import javafx.util.StringConverter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para registrar una visita no anunciada.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class RegistrarNoAnunciadoControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -50,6 +54,9 @@ public class RegistrarNoAnunciadoControlador {
     private ObservableList<Visita> noAnunciados;
     private Timeline pollingTimeline;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getRegistrarNoAnunciadoCasoUso();

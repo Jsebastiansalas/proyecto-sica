@@ -3,6 +3,10 @@ package com.acme.sica.dominio.modelo;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entidad de dominio que representa un rol.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Rol {
 
     private Long id;

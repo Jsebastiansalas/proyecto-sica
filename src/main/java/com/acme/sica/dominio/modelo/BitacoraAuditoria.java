@@ -2,6 +2,10 @@ package com.acme.sica.dominio.modelo;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad de dominio que representa un registro de bitácora de auditoría.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class BitacoraAuditoria {
 
     private Long id;

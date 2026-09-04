@@ -1,5 +1,8 @@
 package com.acme.sica.dominio.modelo.enumerados;
 
+/**
+ * Enumerado que representa los posibles valores correspondientes al tipo de acción auditada en el dominio.
+ */
 public enum TipoAccionAuditoria {
     LOGIN_EXITOSO,
     LOGIN_FALLIDO,

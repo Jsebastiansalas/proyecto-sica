@@ -11,10 +11,16 @@ public final class Mensajes {
 
     private Mensajes() {}
 
+    /**
+     * Obtiene un mensaje internacionalizado por su clave.
+     */
     public static String get(String clave) {
         return BUNDLE.getString(clave);
     }
 
+    /**
+     * Obtiene un mensaje internacionalizado por su clave.
+     */
     public static String get(String clave, Object... args) {
         return String.format(BUNDLE.getString(clave), args);
     }

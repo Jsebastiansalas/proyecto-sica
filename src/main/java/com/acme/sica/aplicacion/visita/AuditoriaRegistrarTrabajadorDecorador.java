@@ -23,6 +23,9 @@ public class AuditoriaRegistrarTrabajadorDecorador implements RegistrarTrabajado
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Registra la información recibida en el sistema.
+     */
     @Override
     public Visita registrar(RegistrarTrabajadorComando comando) {
         Visita visita = decorado.registrar(comando);

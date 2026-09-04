@@ -24,6 +24,9 @@ public class AuditoriaAprobarRechazarDecorador implements AprobarRechazarVisitaC
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Aprueba la visita identificada.
+     */
     @Override
     public Visita aprobar(Long visitaId) {
         Visita visita = decorado.aprobar(visitaId);
@@ -32,6 +35,9 @@ public class AuditoriaAprobarRechazarDecorador implements AprobarRechazarVisitaC
         return visita;
     }
 
+    /**
+     * Rechaza la visita identificada.
+     */
     @Override
     public Visita rechazar(RechazarVisitaComando comando) {
         Visita visita = decorado.rechazar(comando);
@@ -40,6 +46,9 @@ public class AuditoriaAprobarRechazarDecorador implements AprobarRechazarVisitaC
         return visita;
     }
 
+    /**
+     * Obtiene el listado de entidades pendientes.
+     */
     @Override
     public List<Visita> listarPendientes() {
         return decorado.listarPendientes();

@@ -27,6 +27,9 @@ public class GestionarPersonaServicio implements GestionarPersonaCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Persona crear(CrearPersonaComando comando) {
         autorizar("crear persona");
@@ -47,6 +50,9 @@ public class GestionarPersonaServicio implements GestionarPersonaCasoUso {
         return personaRepositorio.guardar(persona);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Persona editar(EditarPersonaComando comando) {
         autorizar("editar persona");
@@ -76,6 +82,9 @@ public class GestionarPersonaServicio implements GestionarPersonaCasoUso {
         return personaRepositorio.guardar(persona);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long personaId) {
         autorizar("eliminar persona");
@@ -87,12 +96,18 @@ public class GestionarPersonaServicio implements GestionarPersonaCasoUso {
         personaRepositorio.eliminarPorId(personaId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Persona> listarTodos() {
         autorizar("listar personas");
         return personaRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Persona obtenerPorId(Long personaId) {
         autorizar("obtener persona");

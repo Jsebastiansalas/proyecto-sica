@@ -15,6 +15,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+/**
+ * Controlador de la interfaz JavaFX para bloqueo persona.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class BloqueoPersonaControlador {
 
     @FXML private ComboBox<Persona> comboPersonas;
@@ -30,6 +34,9 @@ public class BloqueoPersonaControlador {
     private GestionarBloqueoPersonaCasoUso casoUso;
     private final ObservableList<Persona> bloqueadas = FXCollections.observableArrayList();
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarBloqueoPersonaCasoUso();

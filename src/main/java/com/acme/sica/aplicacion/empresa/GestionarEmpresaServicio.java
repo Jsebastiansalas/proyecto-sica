@@ -33,6 +33,9 @@ public class GestionarEmpresaServicio implements GestionarEmpresaCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Empresa crear(CrearEmpresaComando comando) {
         autorizar("crear empresas");
@@ -42,6 +45,9 @@ public class GestionarEmpresaServicio implements GestionarEmpresaCasoUso {
         return empresaRepositorio.guardar(empresa);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Empresa editar(EditarEmpresaComando comando) {
         autorizar("editar empresas");
@@ -60,6 +66,9 @@ public class GestionarEmpresaServicio implements GestionarEmpresaCasoUso {
         return empresaRepositorio.guardar(empresa);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long empresaId) {
         autorizar("eliminar empresas");
@@ -77,12 +86,18 @@ public class GestionarEmpresaServicio implements GestionarEmpresaCasoUso {
         empresaRepositorio.eliminarPorId(empresaId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Empresa> listarTodos() {
         autorizar("listar empresas");
         return empresaRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Empresa obtenerPorId(Long empresaId) {
         autorizar("obtener empresas");

@@ -26,12 +26,18 @@ public class ConsultarBitacoraServicio implements ConsultarBitacoraCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<BitacoraAuditoria> listarTodos() {
         autorizar("consultar bitácora");
         return bitacoraRepositorio.listarTodos();
     }
 
+    /**
+     * Ejecuta la consulta correspondiente y retorna los resultados.
+     */
     @Override
     public List<BitacoraAuditoria> consultar(ConsultarBitacoraComando filtros) {
         autorizar("consultar bitácora");

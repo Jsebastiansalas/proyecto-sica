@@ -1,5 +1,9 @@
 package com.acme.sica.dominio.modelo;
 
+/**
+ * Entidad de dominio que representa una empresa.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Empresa {
 
     private Long id;

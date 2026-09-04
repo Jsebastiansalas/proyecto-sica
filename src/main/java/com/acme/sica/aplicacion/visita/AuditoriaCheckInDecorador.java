@@ -25,6 +25,9 @@ public class AuditoriaCheckInDecorador implements CheckInInvitadoCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Registra el ingreso de un invitado.
+     */
     @Override
     public Visita checkIn(CheckInInvitadoComando comando) {
         Visita visita = decorado.checkIn(comando);

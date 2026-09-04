@@ -31,6 +31,9 @@ public class AuditoriaRolDecorador implements GestionarRolCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Rol crear(CrearRolComando comando) {
         Rol rol = decorado.crear(comando);
@@ -39,6 +42,9 @@ public class AuditoriaRolDecorador implements GestionarRolCasoUso {
         return rol;
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Rol editar(EditarRolComando comando) {
         Rol rol = decorado.editar(comando);
@@ -47,6 +53,9 @@ public class AuditoriaRolDecorador implements GestionarRolCasoUso {
         return rol;
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long rolId) {
         decorado.eliminar(rolId);
@@ -54,16 +63,25 @@ public class AuditoriaRolDecorador implements GestionarRolCasoUso {
                 ENTIDAD, rolId, "Rol eliminado: id=" + rolId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Rol> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Rol obtenerPorId(Long rolId) {
         return decorado.obtenerPorId(rolId);
     }
 
+    /**
+     * Asigna los roles indicados al usuario.
+     */
     @Override
     public void asignarRoles(AsignarRolesUsuarioComando comando) {
         decorado.asignarRoles(comando);

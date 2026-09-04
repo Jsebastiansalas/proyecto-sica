@@ -3,6 +3,9 @@ package com.acme.sica.aplicacion.reporte;
 import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 import java.time.LocalDateTime;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para consultar el reporte de incidentes.
+ */
 public class ConsultarReporteIncidentesComando {
     private final LocalDateTime fechaDesde;
     private final LocalDateTime fechaHasta;

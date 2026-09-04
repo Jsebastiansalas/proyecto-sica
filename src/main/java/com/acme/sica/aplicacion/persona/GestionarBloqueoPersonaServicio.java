@@ -8,6 +8,10 @@ import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacio
 
 import java.util.List;
 
+/**
+ * Servicio de aplicación encargado de gestionar el bloqueo de personas.
+ * Contiene la lógica de negocio y coordina los puertos de entrada y salida.
+ */
 public class GestionarBloqueoPersonaServicio implements GestionarBloqueoPersonaCasoUso {
 
     private static final String PERMISO_REQUERIDO = "bloquear_persona";
@@ -21,6 +25,9 @@ public class GestionarBloqueoPersonaServicio implements GestionarBloqueoPersonaC
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Bloquea una persona en el sistema.
+     */
     @Override
     public Persona bloquear(BloquearPersonaComando comando) {
         autorizar("bloquear persona");
@@ -39,6 +46,9 @@ public class GestionarBloqueoPersonaServicio implements GestionarBloqueoPersonaC
         return personaRepositorio.guardar(persona);
     }
 
+    /**
+     * Desbloquea una persona previamente bloqueada.
+     */
     @Override
     public Persona desbloquear(Long personaId) {
         autorizar("desbloquear persona");
@@ -56,6 +66,9 @@ public class GestionarBloqueoPersonaServicio implements GestionarBloqueoPersonaC
         return personaRepositorio.listarTodos();
     }
 
+    /**
+     * Obtiene el listado de entidades bloqueadas.
+     */
     @Override
     public List<Persona> listarBloqueadas() {
         autorizar("listar personas bloqueadas");

@@ -25,6 +25,9 @@ public class AuditoriaFuncionarioDecorador implements GestionarFuncionarioCasoUs
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Funcionario crear(CrearFuncionarioComando comando) {
         Funcionario funcionario = decorado.crear(comando);
@@ -33,6 +36,9 @@ public class AuditoriaFuncionarioDecorador implements GestionarFuncionarioCasoUs
         return funcionario;
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Funcionario editar(EditarFuncionarioComando comando) {
         Funcionario funcionario = decorado.editar(comando);
@@ -41,6 +47,9 @@ public class AuditoriaFuncionarioDecorador implements GestionarFuncionarioCasoUs
         return funcionario;
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long funcionarioId) {
         decorado.eliminar(funcionarioId);
@@ -48,11 +57,17 @@ public class AuditoriaFuncionarioDecorador implements GestionarFuncionarioCasoUs
                 ENTIDAD, funcionarioId, "Funcionario eliminado: id=" + funcionarioId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Funcionario> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Funcionario obtenerPorId(Long funcionarioId) {
         return decorado.obtenerPorId(funcionarioId);

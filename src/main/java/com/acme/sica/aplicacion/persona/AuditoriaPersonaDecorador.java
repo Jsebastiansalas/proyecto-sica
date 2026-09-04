@@ -25,6 +25,9 @@ public class AuditoriaPersonaDecorador implements GestionarPersonaCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Persona crear(CrearPersonaComando comando) {
         Persona persona = decorado.crear(comando);
@@ -33,6 +36,9 @@ public class AuditoriaPersonaDecorador implements GestionarPersonaCasoUso {
         return persona;
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Persona editar(EditarPersonaComando comando) {
         Persona persona = decorado.editar(comando);
@@ -41,6 +47,9 @@ public class AuditoriaPersonaDecorador implements GestionarPersonaCasoUso {
         return persona;
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long personaId) {
         decorado.eliminar(personaId);
@@ -48,11 +57,17 @@ public class AuditoriaPersonaDecorador implements GestionarPersonaCasoUso {
                 ENTIDAD, personaId, "Persona eliminada: id=" + personaId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Persona> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Persona obtenerPorId(Long personaId) {
         return decorado.obtenerPorId(personaId);

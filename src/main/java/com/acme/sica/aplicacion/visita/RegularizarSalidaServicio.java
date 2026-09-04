@@ -37,6 +37,9 @@ public class RegularizarSalidaServicio implements RegularizarSalidaCasoUso {
         this.estrategias = estrategias;
     }
 
+    /**
+     * Regulariza la salida de una visita según el tipo indicado.
+     */
     @Override
     public Visita regularizar(RegularizarSalidaComando comando) {
         autorizar("regularizar salida olvidada");

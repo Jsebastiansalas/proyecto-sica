@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Persona.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -17,6 +21,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Persona guardar(Persona persona) {
         if (persona.getId() == null) {
@@ -68,6 +75,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Persona> buscarPorId(Long id) {
         String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE id = ?";
@@ -86,6 +96,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su documento de identidad.
+     */
     @Override
     public Optional<Persona> buscarPorDocumento(String documento) {
         String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE documento = ?";
@@ -104,6 +117,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Persona> listarTodos() {
         String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas ORDER BY nombre";
@@ -121,6 +137,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado de entidades bloqueadas.
+     */
     @Override
     public List<Persona> listarBloqueadas() {
         String sql = "SELECT id, documento, nombre, foto_url, tipo, bloqueada, motivo_bloqueo, fecha_creacion FROM personas WHERE bloqueada = TRUE ORDER BY nombre";
@@ -138,6 +157,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM personas WHERE id = ?";
@@ -151,6 +173,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Verifica si ya existe una entidad con el documento indicado.
+     */
     @Override
     public boolean existePorDocumento(String documento) {
         String sql = "SELECT 1 FROM personas WHERE documento = ?";
@@ -166,6 +191,9 @@ public class RepositorioJdbcPersona implements PersonaRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna la cantidad total de entidades registradas.
+     */
     @Override
     public long contar() {
         String sql = "SELECT COUNT(*) FROM personas";

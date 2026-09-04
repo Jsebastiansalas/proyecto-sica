@@ -19,6 +19,9 @@ public class ManejadorPermiso extends ManejadorAutorizacion {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Verifica que se cumplan las condiciones de autorización requeridas.
+     */
     @Override
     public void verificar(String permiso, String accion) {
         if (!SesionContexto.tienePermiso(permiso)) {

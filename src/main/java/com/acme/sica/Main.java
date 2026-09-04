@@ -6,6 +6,9 @@ import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 
 import javafx.application.Application;
 
+/**
+ * Clase pública que proporciona el punto de entrada de la aplicación.
+ */
 public class Main {
 
     public static void main(String[] args) {

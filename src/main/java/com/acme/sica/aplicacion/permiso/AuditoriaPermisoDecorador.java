@@ -31,6 +31,9 @@ public class AuditoriaPermisoDecorador implements GestionarPermisoCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Permiso crear(CrearPermisoComando comando) {
         Permiso permiso = decorado.crear(comando);
@@ -39,6 +42,9 @@ public class AuditoriaPermisoDecorador implements GestionarPermisoCasoUso {
         return permiso;
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Permiso editar(EditarPermisoComando comando) {
         Permiso permiso = decorado.editar(comando);
@@ -47,6 +53,9 @@ public class AuditoriaPermisoDecorador implements GestionarPermisoCasoUso {
         return permiso;
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long permisoId) {
         decorado.eliminar(permisoId);
@@ -54,11 +63,17 @@ public class AuditoriaPermisoDecorador implements GestionarPermisoCasoUso {
                 ENTIDAD, permisoId, "Permiso eliminado: id=" + permisoId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Permiso> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Permiso obtenerPorId(Long permisoId) {
         return decorado.obtenerPorId(permisoId);

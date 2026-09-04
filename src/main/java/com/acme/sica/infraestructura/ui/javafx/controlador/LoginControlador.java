@@ -12,6 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * Controlador de la interfaz JavaFX para login.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class LoginControlador {
 
     @FXML
@@ -32,6 +36,9 @@ public class LoginControlador {
     private IniciarSesionCasoUso casoUso;
     private boolean contrasenaVisible = false;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getIniciarSesionCasoUso();

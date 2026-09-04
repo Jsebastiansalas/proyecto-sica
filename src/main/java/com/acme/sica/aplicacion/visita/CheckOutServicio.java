@@ -34,6 +34,9 @@ public class CheckOutServicio implements CheckOutCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Registra la salida de una visita.
+     */
     @Override
     public Visita checkOut(CheckOutComando comando) {
         autorizar("check-out");

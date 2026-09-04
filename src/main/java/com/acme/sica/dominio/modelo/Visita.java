@@ -4,6 +4,10 @@ import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad de dominio que representa una visita.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Visita {
 
     private Long id;

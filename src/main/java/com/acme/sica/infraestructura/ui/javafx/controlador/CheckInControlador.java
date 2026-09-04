@@ -15,6 +15,10 @@ import javafx.scene.control.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para check in.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class CheckInControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -37,6 +41,9 @@ public class CheckInControlador {
     private ObservableList<Visita> aprobadas;
     private ObservableList<Visita> dentro;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getCheckInInvitadoCasoUso();

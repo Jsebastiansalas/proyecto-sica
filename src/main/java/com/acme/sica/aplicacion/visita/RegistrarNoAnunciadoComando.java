@@ -1,5 +1,8 @@
 package com.acme.sica.aplicacion.visita;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para registrar una visita no anunciada.
+ */
 public class RegistrarNoAnunciadoComando {
 
     private final String documento;

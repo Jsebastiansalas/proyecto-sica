@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Incidente.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -21,6 +25,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Incidente guardar(Incidente incidente) {
         if (incidente.getId() == null) {
@@ -70,6 +77,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Incidente> buscarPorId(Long id) {
         String sql = construirSelectBase() + " WHERE i.id = ?";
@@ -88,6 +98,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Incidente> listarTodos() {
         String sql = construirSelectBase() + " ORDER BY i.fecha DESC";
@@ -105,6 +118,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades asociadas a una persona.
+     */
     @Override
     public List<Incidente> buscarPorPersona(Long personaId) {
         String sql = construirSelectBase() + " WHERE i.persona_id = ? ORDER BY i.fecha DESC";
@@ -124,6 +140,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades que coincidan con los filtros indicados.
+     */
     @Override
     public List<Incidente> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta,
                                             Long empresaId, GravedadIncidente gravedad) {
@@ -167,6 +186,9 @@ public class RepositorioJdbcIncidente implements IncidenteRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM incidentes WHERE id = ?";

@@ -20,6 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Controlador de la interfaz JavaFX para gestionar usuarios.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class GestionarUsuarioControlador {
 
     @FXML private TableView<Usuario> tablaUsuarios;
@@ -46,6 +50,9 @@ public class GestionarUsuarioControlador {
     private ObservableList<Rol> rolesDisponibles;
     private Usuario usuarioSeleccionado;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarUsuarioCasoUso();

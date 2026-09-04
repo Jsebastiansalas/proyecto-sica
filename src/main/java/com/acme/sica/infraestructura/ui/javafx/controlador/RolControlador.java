@@ -17,6 +17,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para un rol.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class RolControlador {
 
     @FXML
@@ -53,6 +57,9 @@ public class RolControlador {
     private ObservableList<Rol> roles;
     private Rol rolSeleccionado;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarRolCasoUso();

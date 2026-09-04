@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Rol.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcRol implements RolRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -18,6 +22,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Rol guardar(Rol rol) {
         if (rol.getId() == null) {
@@ -63,6 +70,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Rol> buscarPorId(Long id) {
         String sql = "SELECT id, nombre, descripcion, activo FROM roles WHERE id = ?";
@@ -81,6 +91,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su nombre.
+     */
     @Override
     public Optional<Rol> buscarPorNombre(String nombre) {
         String sql = "SELECT id, nombre, descripcion, activo FROM roles WHERE nombre = ?";
@@ -99,6 +112,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Rol> listarTodos() {
         String sql = "SELECT id, nombre, descripcion, activo FROM roles ORDER BY nombre";
@@ -116,6 +132,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM roles WHERE id = ?";
@@ -129,6 +148,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Verifica si ya existe una entidad con el nombre indicado.
+     */
     @Override
     public boolean existePorNombre(String nombre) {
         String sql = "SELECT 1 FROM roles WHERE nombre = ?";
@@ -144,6 +166,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Cuenta cuántos usuarios tienen asignado el rol indicado.
+     */
     @Override
     public long contarUsuariosConRol(Long rolId) {
         String sql = "SELECT COUNT(*) FROM usuario_roles WHERE rol_id = ?";
@@ -162,6 +187,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna la cantidad total de entidades registradas.
+     */
     @Override
     public long contar() {
         String sql = "SELECT COUNT(*) FROM roles";
@@ -177,6 +205,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene los identificadores de permisos asociados a un rol.
+     */
     @Override
     public Set<Long> buscarIdsPermisosPorRol(Long rolId) {
         String sql = "SELECT permiso_id FROM rol_permisos WHERE rol_id = ?";
@@ -196,6 +227,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Asigna los permisos indicados a un rol.
+     */
     @Override
     public void asignarPermisos(Long rolId, Set<Long> permisoIds) {
         eliminarPermisos(rolId);
@@ -217,6 +251,9 @@ public class RepositorioJdbcRol implements RolRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina los permisos asignados a un rol.
+     */
     @Override
     public void eliminarPermisos(Long rolId) {
         String sql = "DELETE FROM rol_permisos WHERE rol_id = ?";

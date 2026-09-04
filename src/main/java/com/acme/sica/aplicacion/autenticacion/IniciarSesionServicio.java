@@ -39,6 +39,9 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Ejecuta la operación principal del caso de uso.
+     */
     @Override
     public LoginResultado ejecutar(IniciarSesionComando comando) {
         String username = comando.getUsername();

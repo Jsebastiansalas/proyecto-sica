@@ -25,6 +25,9 @@ public class AuditoriaRegularizarDecorador implements RegularizarSalidaCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Regulariza la salida de una visita según el tipo indicado.
+     */
     @Override
     public Visita regularizar(RegularizarSalidaComando comando) {
         Visita visita = decorado.regularizar(comando);

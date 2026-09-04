@@ -41,6 +41,9 @@ public class RegistrarTrabajadorServicio implements RegistrarTrabajadorCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Registra la información recibida en el sistema.
+     */
     @Override
     public Visita registrar(RegistrarTrabajadorComando comando) {
         autorizar("registrar trabajador");

@@ -29,6 +29,9 @@ public class AprobarRechazarVisitaServicio implements AprobarRechazarVisitaCasoU
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Aprueba la visita identificada.
+     */
     @Override
     public Visita aprobar(Long visitaId) {
         autorizar("aprobar visita");
@@ -40,6 +43,9 @@ public class AprobarRechazarVisitaServicio implements AprobarRechazarVisitaCasoU
         return visitaRepositorio.guardar(visita);
     }
 
+    /**
+     * Rechaza la visita identificada.
+     */
     @Override
     public Visita rechazar(RechazarVisitaComando comando) {
         autorizar("rechazar visita");
@@ -55,6 +61,9 @@ public class AprobarRechazarVisitaServicio implements AprobarRechazarVisitaCasoU
         return visitaRepositorio.guardar(visita);
     }
 
+    /**
+     * Obtiene el listado de entidades pendientes.
+     */
     @Override
     public List<Visita> listarPendientes() {
         autorizar("listar visitas pendientes");

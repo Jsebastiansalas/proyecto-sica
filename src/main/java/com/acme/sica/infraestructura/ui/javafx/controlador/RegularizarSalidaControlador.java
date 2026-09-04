@@ -18,6 +18,10 @@ import javafx.scene.control.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para regularizar una salida.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class RegularizarSalidaControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -36,6 +40,9 @@ public class RegularizarSalidaControlador {
     private RegularizarSalidaCasoUso casoUso;
     private ObservableList<Visita> olvidadas;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getRegularizarSalidaCasoUso();

@@ -9,6 +9,9 @@ import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
  */
 public class ManejadorSesionActiva extends ManejadorAutorizacion {
 
+    /**
+     * Verifica que se cumplan las condiciones de autorización requeridas.
+     */
     @Override
     public void verificar(String permiso, String accion) {
         if (!SesionContexto.haySesionActiva()) {

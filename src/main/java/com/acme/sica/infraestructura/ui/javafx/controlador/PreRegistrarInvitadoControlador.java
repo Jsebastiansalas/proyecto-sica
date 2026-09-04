@@ -25,6 +25,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para pre-registrar un invitado.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class PreRegistrarInvitadoControlador {
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");
@@ -79,6 +83,9 @@ public class PreRegistrarInvitadoControlador {
     private FuncionarioRepositorioPuerto funcionarioRepositorio;
     private ObservableList<Visita> visitas;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getPreRegistrarInvitadoCasoUso();

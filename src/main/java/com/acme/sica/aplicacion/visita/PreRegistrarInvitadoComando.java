@@ -2,6 +2,9 @@ package com.acme.sica.aplicacion.visita;
 
 import java.time.LocalDateTime;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para pre-registrar un invitado.
+ */
 public class PreRegistrarInvitadoComando {
 
     private final Long personaId;

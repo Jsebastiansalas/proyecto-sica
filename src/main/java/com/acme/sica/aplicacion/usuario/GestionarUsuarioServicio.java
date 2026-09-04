@@ -38,6 +38,9 @@ public class GestionarUsuarioServicio implements GestionarUsuarioCasoUso {
         this.hasheadorContrasenas = hasheadorContrasenas;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Usuario crear(CrearUsuarioComando comando) {
         autorizar("crear usuarios");
@@ -55,6 +58,9 @@ public class GestionarUsuarioServicio implements GestionarUsuarioCasoUso {
         return usuarioRepositorio.buscarPorId(guardado.getId()).orElse(guardado);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Usuario editar(EditarUsuarioComando comando) {
         autorizar("editar usuarios");
@@ -85,6 +91,9 @@ public class GestionarUsuarioServicio implements GestionarUsuarioCasoUso {
         return usuarioRepositorio.buscarPorId(usuario.getId()).orElse(usuario);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long usuarioId) {
         autorizar("eliminar usuarios");
@@ -100,12 +109,18 @@ public class GestionarUsuarioServicio implements GestionarUsuarioCasoUso {
         usuarioRepositorio.eliminarPorId(usuarioId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Usuario> listarTodos() {
         autorizar("listar usuarios");
         return usuarioRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Usuario obtenerPorId(Long usuarioId) {
         autorizar("obtener usuario");

@@ -8,6 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * Punto de arranque de la aplicación de escritorio construida con JavaFX.
+ */
 public class AplicacionJavaFx extends Application {
 
     private static ContenedorDependencias contenedorDependencias;

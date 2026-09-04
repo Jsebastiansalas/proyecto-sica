@@ -41,6 +41,9 @@ public class RegistrarNoAnunciadoServicio implements RegistrarNoAnunciadoCasoUso
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Registra la información recibida en el sistema.
+     */
     @Override
     public Visita registrar(RegistrarNoAnunciadoComando comando) {
         autorizar("registrar no anunciado");

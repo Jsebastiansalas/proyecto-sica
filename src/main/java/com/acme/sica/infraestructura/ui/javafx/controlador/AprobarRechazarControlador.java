@@ -18,6 +18,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador de la interfaz JavaFX para aprobar rechazar.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class AprobarRechazarControlador {
 
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -34,6 +38,9 @@ public class AprobarRechazarControlador {
     private AprobarRechazarVisitaCasoUso casoUso;
     private ObservableList<Visita> pendientes;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         casoUso = AplicacionJavaFx.getContenedorDependencias().getAprobarRechazarCasoUso();

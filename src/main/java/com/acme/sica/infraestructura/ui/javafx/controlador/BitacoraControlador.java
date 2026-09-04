@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para bitacora.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class BitacoraControlador {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -61,6 +65,9 @@ public class BitacoraControlador {
     private ConsultarBitacoraCasoUso casoUso;
     private ObservableList<BitacoraAuditoria> registros;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getConsultarBitacoraCasoUso();

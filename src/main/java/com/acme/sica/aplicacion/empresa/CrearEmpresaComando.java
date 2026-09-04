@@ -1,5 +1,8 @@
 package com.acme.sica.aplicacion.empresa;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para crear una empresa.
+ */
 public class CrearEmpresaComando {
 
     private final String nombre;

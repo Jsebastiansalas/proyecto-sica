@@ -6,6 +6,10 @@ import com.acme.sica.dominio.puerto.salida.IncidenteRepositorioPuerto;
 import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
 import java.util.List;
 
+/**
+ * Servicio de aplicación encargado de consultar el reporte de incidentes.
+ * Contiene la lógica de negocio y coordina los puertos de entrada y salida.
+ */
 public class ConsultarReporteIncidentesServicio implements ConsultarReporteIncidentesCasoUso {
     private final IncidenteRepositorioPuerto incidenteRepositorio;
     private final ManejadorAutorizacion cadenaAutorizacion;
@@ -16,6 +20,9 @@ public class ConsultarReporteIncidentesServicio implements ConsultarReporteIncid
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Ejecuta la consulta correspondiente y retorna los resultados.
+     */
     @Override
     public List<Incidente> consultar(ConsultarReporteIncidentesComando comando) {
         cadenaAutorizacion.verificar("generar_reporte_incidentes", "generar reporte de incidentes");

@@ -40,6 +40,9 @@ public class PreRegistrarInvitadoServicio implements PreRegistrarInvitadoCasoUso
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Pre-registra un invitado para una visita futura.
+     */
     @Override
     public Visita preRegistrar(PreRegistrarInvitadoComando comando) {
         autorizar("pre registrar invitado");

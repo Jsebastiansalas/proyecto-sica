@@ -25,6 +25,9 @@ public class AuditoriaEmpresaDecorador implements GestionarEmpresaCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Empresa crear(CrearEmpresaComando comando) {
         Empresa empresa = decorado.crear(comando);
@@ -33,6 +36,9 @@ public class AuditoriaEmpresaDecorador implements GestionarEmpresaCasoUso {
         return empresa;
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Empresa editar(EditarEmpresaComando comando) {
         Empresa empresa = decorado.editar(comando);
@@ -41,6 +47,9 @@ public class AuditoriaEmpresaDecorador implements GestionarEmpresaCasoUso {
         return empresa;
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long empresaId) {
         decorado.eliminar(empresaId);
@@ -48,11 +57,17 @@ public class AuditoriaEmpresaDecorador implements GestionarEmpresaCasoUso {
                 ENTIDAD, empresaId, "Empresa eliminada: id=" + empresaId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Empresa> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Empresa obtenerPorId(Long empresaId) {
         return decorado.obtenerPorId(empresaId);

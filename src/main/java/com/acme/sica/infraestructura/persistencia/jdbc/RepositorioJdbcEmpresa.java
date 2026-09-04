@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Empresa.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -16,6 +20,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Empresa guardar(Empresa empresa) {
         if (empresa.getId() == null) {
@@ -61,6 +68,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Empresa> buscarPorId(Long id) {
         String sql = "SELECT id, nombre, ubicacion, activa FROM empresas WHERE id = ?";
@@ -79,6 +89,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Empresa> listarTodos() {
         String sql = "SELECT id, nombre, ubicacion, activa FROM empresas ORDER BY nombre";
@@ -96,6 +109,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM empresas WHERE id = ?";
@@ -109,6 +125,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    /**
+     * Verifica si ya existe una entidad con el nombre indicado.
+     */
     @Override
     public boolean existePorNombre(String nombre) {
         String sql = "SELECT 1 FROM empresas WHERE nombre = ?";
@@ -124,6 +143,9 @@ public class RepositorioJdbcEmpresa implements EmpresaRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna la cantidad total de entidades registradas.
+     */
     @Override
     public long contar() {
         String sql = "SELECT COUNT(*) FROM empresas";

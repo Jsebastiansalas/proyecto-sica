@@ -2,6 +2,9 @@ package com.acme.sica.aplicacion.usuario;
 
 import java.util.Set;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para crear un usuario.
+ */
 public class CrearUsuarioComando {
 
     private final String username;

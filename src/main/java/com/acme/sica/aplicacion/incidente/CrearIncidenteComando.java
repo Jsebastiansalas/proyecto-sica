@@ -2,6 +2,9 @@ package com.acme.sica.aplicacion.incidente;
 
 import com.acme.sica.dominio.modelo.enumerados.GravedadIncidente;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para registrar un incidente.
+ */
 public class CrearIncidenteComando {
 
     private final Long personaId;

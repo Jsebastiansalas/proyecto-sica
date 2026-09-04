@@ -8,6 +8,10 @@ import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 
 import java.util.List;
 
+/**
+ * Decorador de auditoría que envuelve el caso de uso de un incidente
+ * y registra las acciones realizadas en la bitácora de auditoría.
+ */
 public class AuditoriaIncidenteDecorador implements GestionarIncidenteCasoUso {
 
     private final GestionarIncidenteCasoUso decorado;
@@ -19,6 +23,9 @@ public class AuditoriaIncidenteDecorador implements GestionarIncidenteCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Incidente crear(CrearIncidenteComando comando) {
         Incidente incidente = decorado.crear(comando);
@@ -27,11 +34,17 @@ public class AuditoriaIncidenteDecorador implements GestionarIncidenteCasoUso {
         return incidente;
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Incidente> listarTodos() {
         return decorado.listarTodos();
     }
 
+    /**
+     * Obtiene el listado de personas registradas.
+     */
     @Override
     public List<com.acme.sica.dominio.modelo.Persona> listarPersonas() {
         return decorado.listarPersonas();

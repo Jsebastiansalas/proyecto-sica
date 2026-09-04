@@ -6,6 +6,10 @@ import com.acme.sica.dominio.puerto.salida.PermisoRepositorioPuerto;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Permiso.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -14,6 +18,9 @@ public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Permiso guardar(Permiso permiso) {
         if (permiso.getId() == null) {
@@ -57,6 +64,9 @@ public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Permiso> buscarPorId(Long id) {
         String sql = "SELECT id, codigo, descripcion FROM permisos WHERE id = ?";
@@ -93,6 +103,9 @@ public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Permiso> listarTodos() {
         String sql = "SELECT id, codigo, descripcion FROM permisos ORDER BY codigo";
@@ -110,6 +123,9 @@ public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM permisos WHERE id = ?";
@@ -138,6 +154,9 @@ public class RepositorioJdbcPermiso implements PermisoRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades asociadas a un rol.
+     */
     @Override
     public Set<Permiso> buscarPorRol(Long rolId) {
         String sql = "SELECT p.id, p.codigo, p.descripcion " +

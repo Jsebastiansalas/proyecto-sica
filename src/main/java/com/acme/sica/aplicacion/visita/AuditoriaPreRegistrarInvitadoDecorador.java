@@ -23,6 +23,9 @@ public class AuditoriaPreRegistrarInvitadoDecorador implements PreRegistrarInvit
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Pre-registra un invitado para una visita futura.
+     */
     @Override
     public Visita preRegistrar(PreRegistrarInvitadoComando comando) {
         Visita visita = decorado.preRegistrar(comando);

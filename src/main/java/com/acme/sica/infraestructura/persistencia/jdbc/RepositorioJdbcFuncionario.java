@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Funcionario.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -18,6 +22,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Funcionario guardar(Funcionario funcionario) {
         if (funcionario.getId() == null) {
@@ -67,6 +74,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Funcionario> buscarPorId(Long id) {
         String sql = construirSelectBase() + " WHERE f.id = ?";
@@ -85,6 +95,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         }
     }
 
+    /**
+     * Busca las entidades asociadas a un usuario.
+     */
     @Override
     public Optional<Funcionario> buscarPorUsuario(Long usuarioId) {
         String sql = construirSelectBase() + " WHERE f.usuario_id = ?";
@@ -103,6 +116,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         }
     }
 
+    /**
+     * Busca las entidades asociadas a una empresa.
+     */
     @Override
     public List<Funcionario> buscarPorEmpresa(Long empresaId) {
         String sql = construirSelectBase() + " WHERE f.empresa_id = ? ORDER BY f.nombre";
@@ -122,6 +138,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Funcionario> listarTodos() {
         String sql = construirSelectBase() + " ORDER BY f.nombre";
@@ -139,6 +158,9 @@ public class RepositorioJdbcFuncionario implements FuncionarioRepositorioPuerto 
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM funcionarios WHERE id = ?";

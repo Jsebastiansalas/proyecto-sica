@@ -1,5 +1,9 @@
 package com.acme.sica.dominio.modelo;
 
+/**
+ * Entidad de dominio que representa un permiso.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Permiso {
 
     private Long id;

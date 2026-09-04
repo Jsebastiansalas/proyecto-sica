@@ -4,6 +4,10 @@ import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad de dominio que representa una persona.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Persona {
 
     private Long id;

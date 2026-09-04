@@ -5,6 +5,10 @@ import com.acme.sica.dominio.modelo.Incidente;
 
 import java.util.List;
 
+/**
+ * Puerto de entrada hexagonal que define el caso de uso para gestionar incidentes.
+ * Es implementado por la capa de aplicación.
+ */
 public interface GestionarIncidenteCasoUso {
 
     Incidente crear(CrearIncidenteComando comando);

@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Visita.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -22,6 +26,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public Visita guardar(Visita visita) {
         if (visita.getId() == null) {
@@ -83,6 +90,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una entidad por su identificador único.
+     */
     @Override
     public Optional<Visita> buscarPorId(Long id) {
         String sql = construirSelectBase() + " WHERE v.id = ?";
@@ -101,6 +111,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades asociadas a una persona.
+     */
     @Override
     public List<Visita> buscarPorPersona(Long personaId) {
         String sql = construirSelectBase() + " WHERE v.persona_id = ? ORDER BY v.fecha_creacion DESC";
@@ -120,6 +133,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades asociadas a una persona y en el estado indicado.
+     */
     @Override
     public List<Visita> buscarPorPersonaYEstado(Long personaId, EstadoVisita estado) {
         String sql = construirSelectBase() + " WHERE v.persona_id = ? AND v.estado = ? ORDER BY v.fecha_creacion DESC";
@@ -140,6 +156,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca una visita abierta asociada a una persona.
+     */
     @Override
     public Optional<Visita> buscarVisitaAbiertaPorPersona(Long personaId) {
         String sql = construirSelectBase() + " WHERE v.persona_id = ? AND v.estado = 'DENTRO' ORDER BY v.fecha_creacion DESC LIMIT 1";
@@ -158,6 +177,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las visitas pendientes de una empresa.
+     */
     @Override
     public List<Visita> buscarPendientesPorEmpresa(Long empresaId) {
         String sql = construirSelectBase() + " WHERE f.empresa_id = ? AND v.estado IN ('PENDIENTE_APROBACION', 'PENDIENTE_APROBACION_OLVIDO') ORDER BY v.fecha_creacion DESC";
@@ -177,6 +199,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Visita> listarTodos() {
         String sql = construirSelectBase() + " ORDER BY v.fecha_creacion DESC";
@@ -194,6 +219,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Busca las entidades que coincidan con los filtros indicados.
+     */
     @Override
     public List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId) {
         StringBuilder sql = new StringBuilder(construirSelectBase());
@@ -232,6 +260,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna la cantidad de entidades pendientes.
+     */
     @Override
     public long contarPendientes() {
         String sql = "SELECT COUNT(*) FROM visitas WHERE estado IN ('PENDIENTE_APROBACION', 'PENDIENTE_APROBACION_OLVIDO')";
@@ -247,6 +278,9 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminarPorId(Long id) {
         String sql = "DELETE FROM visitas WHERE id = ?";

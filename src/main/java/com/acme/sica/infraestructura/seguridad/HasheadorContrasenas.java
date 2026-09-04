@@ -43,6 +43,9 @@ public class HasheadorContrasenas {
         }
     }
 
+    /**
+     * Verifica que se cumplan las condiciones de autorización requeridas.
+     */
     public boolean verificar(String contrasena, String hashAlmacenado) {
         try {
             String[] partes = hashAlmacenado.split("\\$");

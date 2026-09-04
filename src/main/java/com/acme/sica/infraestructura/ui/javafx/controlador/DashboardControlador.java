@@ -27,6 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Controlador de la interfaz JavaFX para dashboard.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class DashboardControlador {
 
     private static final DateTimeFormatter FORMATO_FECHA =
@@ -34,6 +38,9 @@ public class DashboardControlador {
     private static final DateTimeFormatter FORMATO_ACTIVIDAD =
             DateTimeFormatter.ofPattern("HH:mm", new Locale("es"));
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML private Label etiquetaBienvenida;
     @FXML private Label etiquetaRol;
     @FXML private Label etiquetaFecha;

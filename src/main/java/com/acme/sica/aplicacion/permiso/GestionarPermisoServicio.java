@@ -29,6 +29,9 @@ public class GestionarPermisoServicio implements GestionarPermisoCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Permiso crear(CrearPermisoComando comando) {
         autorizar("crear permisos");
@@ -38,6 +41,9 @@ public class GestionarPermisoServicio implements GestionarPermisoCasoUso {
         return permisoRepositorio.guardar(permiso);
     }
 
+    /**
+     * Actualiza una entidad existente con los datos del comando.
+     */
     @Override
     public Permiso editar(EditarPermisoComando comando) {
         autorizar("editar permisos");
@@ -54,6 +60,9 @@ public class GestionarPermisoServicio implements GestionarPermisoCasoUso {
         return permisoRepositorio.guardar(permiso);
     }
 
+    /**
+     * Elimina la entidad identificada por el id proporcionado.
+     */
     @Override
     public void eliminar(Long permisoId) {
         autorizar("eliminar permisos");
@@ -64,12 +73,18 @@ public class GestionarPermisoServicio implements GestionarPermisoCasoUso {
         permisoRepositorio.eliminarPorId(permisoId);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Permiso> listarTodos() {
         autorizar("listar permisos");
         return permisoRepositorio.listarTodos();
     }
 
+    /**
+     * Recupera una entidad a partir de su identificador.
+     */
     @Override
     public Permiso obtenerPorId(Long permisoId) {
         autorizar("obtener permisos");

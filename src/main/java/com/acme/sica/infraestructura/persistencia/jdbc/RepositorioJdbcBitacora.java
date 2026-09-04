@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del patrón Repository sobre JDBC para la entidad Bitacora.
+ * Adaptador de salida que persiste y recupera datos desde la base de datos relacional.
+ */
 public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
 
     private final FabricaConexiones fabricaConexiones;
@@ -16,6 +20,9 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
         this.fabricaConexiones = fabricaConexiones;
     }
 
+    /**
+     * Persiste la entidad recibida en el almacén de datos.
+     */
     @Override
     public BitacoraAuditoria guardar(BitacoraAuditoria bitacora) {
         String sql = "INSERT INTO bitacora_auditoria (usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha) " +
@@ -44,6 +51,9 @@ public class RepositorioJdbcBitacora implements BitacoraRepositorioPuerto {
         }
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<BitacoraAuditoria> listarTodos() {
         String sql = "SELECT id, usuario_id, usuario_username, accion, entidad, entidad_id, detalle, ip_address, fecha " +

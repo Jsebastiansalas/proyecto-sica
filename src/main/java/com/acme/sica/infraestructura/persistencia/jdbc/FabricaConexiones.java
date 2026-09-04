@@ -7,6 +7,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Fábrica encargada de crear y proveer conexiones JDBC a la base de datos.
+ */
 public class FabricaConexiones {
 
     private static final int TAMANO_MINIMO_IDLE = 2;

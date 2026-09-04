@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entidad de dominio que representa un usuario.
+ * Forma parte del núcleo del modelo de negocio del sistema.
+ */
 public class Usuario {
 
     private Long id;

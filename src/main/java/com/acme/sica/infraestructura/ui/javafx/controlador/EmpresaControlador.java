@@ -17,6 +17,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para una empresa.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class EmpresaControlador {
 
     @FXML
@@ -59,6 +63,9 @@ public class EmpresaControlador {
     private ObservableList<Empresa> empresas;
     private Empresa empresaSeleccionada;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarEmpresaCasoUso();

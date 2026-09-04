@@ -2,6 +2,9 @@ package com.acme.sica.aplicacion.persona;
 
 import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
 
+/**
+ * Objeto de comando (DTO) que transporta los datos necesarios para editar una persona.
+ */
 public class EditarPersonaComando {
 
     private final Long id;

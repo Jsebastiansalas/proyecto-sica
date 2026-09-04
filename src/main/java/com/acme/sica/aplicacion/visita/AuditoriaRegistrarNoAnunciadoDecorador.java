@@ -23,6 +23,9 @@ public class AuditoriaRegistrarNoAnunciadoDecorador implements RegistrarNoAnunci
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Registra la información recibida en el sistema.
+     */
     @Override
     public Visita registrar(RegistrarNoAnunciadoComando comando) {
         Visita visita = decorado.registrar(comando);

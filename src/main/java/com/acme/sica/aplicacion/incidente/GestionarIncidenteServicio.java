@@ -13,6 +13,10 @@ import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacio
 
 import java.util.List;
 
+/**
+ * Servicio de aplicación encargado de gestionar incidentes.
+ * Contiene la lógica de negocio y coordina los puertos de entrada y salida.
+ */
 public class GestionarIncidenteServicio implements GestionarIncidenteCasoUso {
 
     private static final String PERMISO_REQUERIDO = "registrar_incidente";
@@ -29,6 +33,9 @@ public class GestionarIncidenteServicio implements GestionarIncidenteCasoUso {
         this.cadenaAutorizacion = cadenaAutorizacion;
     }
 
+    /**
+     * Crea una nueva entidad a partir del comando recibido.
+     */
     @Override
     public Incidente crear(CrearIncidenteComando comando) {
         autorizar("registrar incidente");
@@ -57,12 +64,18 @@ public class GestionarIncidenteServicio implements GestionarIncidenteCasoUso {
         return incidenteRepositorio.guardar(incidente);
     }
 
+    /**
+     * Obtiene el listado completo de entidades disponibles.
+     */
     @Override
     public List<Incidente> listarTodos() {
         autorizar("listar incidentes");
         return incidenteRepositorio.listarTodos();
     }
 
+    /**
+     * Obtiene el listado de personas registradas.
+     */
     @Override
     public List<Persona> listarPersonas() {
         autorizar("registrar incidente");

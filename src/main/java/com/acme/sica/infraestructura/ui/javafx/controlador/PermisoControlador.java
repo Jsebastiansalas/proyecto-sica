@@ -16,6 +16,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.util.List;
 
+/**
+ * Controlador de la interfaz JavaFX para un permiso.
+ * Recibe eventos de la vista y delega la lógica a los casos de uso de aplicación.
+ */
 public class PermisoControlador {
 
     @FXML
@@ -52,6 +56,9 @@ public class PermisoControlador {
     private ObservableList<Permiso> permisos;
     private Permiso permisoSeleccionado;
 
+    /**
+     * Inicializa el controlador y configura los componentes de la vista.
+     */
     @FXML
     public void initialize() {
         this.casoUso = AplicacionJavaFx.getContenedorDependencias().getGestionarPermisoCasoUso();

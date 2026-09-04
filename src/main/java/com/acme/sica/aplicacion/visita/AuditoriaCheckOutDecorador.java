@@ -25,6 +25,9 @@ public class AuditoriaCheckOutDecorador implements CheckOutCasoUso {
         this.bitacoraRepositorio = bitacoraRepositorio;
     }
 
+    /**
+     * Registra la salida de una visita.
+     */
     @Override
     public Visita checkOut(CheckOutComando comando) {
         Visita visita = decorado.checkOut(comando);
