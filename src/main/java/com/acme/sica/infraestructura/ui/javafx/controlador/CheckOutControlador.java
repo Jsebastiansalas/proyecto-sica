@@ -3,6 +3,7 @@ package com.acme.sica.infraestructura.ui.javafx.controlador;
 import com.acme.sica.aplicacion.visita.CheckOutComando;
 import com.acme.sica.dominio.excepciones.EntidadNoEncontradaExcepcion;
 import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
+import com.acme.sica.dominio.modelo.Activo;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.puerto.entrada.CheckOutCasoUso;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
@@ -34,9 +35,15 @@ public class CheckOutControlador {
     @FXML private TableColumn<Visita, String> columnaNombre;
     @FXML private TableColumn<Visita, String> columnaIngreso;
     @FXML private TableColumn<Visita, String> columnaTipo;
+    @FXML private TableColumn<Visita, String> columnaVehiculo;
+
+    @FXML private TableView<Activo> tablaActivos;
+    @FXML private TableColumn<Activo, String> columnaActivoDescripcion;
+    @FXML private TableColumn<Activo, String> columnaActivoSerie;
 
     private CheckOutCasoUso casoUso;
     private ObservableList<Visita> dentro;
+    private ObservableList<Activo> activosVisita;
 
     /**
      * Inicializa el controlador y configura los componentes de la vista.
@@ -54,8 +61,29 @@ public class CheckOutControlador {
                 c.getValue().getFechaHoraIngreso() != null ? c.getValue().getFechaHoraIngreso().format(FORMATO) : ""));
         columnaTipo.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getPersona() != null ? c.getValue().getPersona().getTipo().name() : ""));
+        if (columnaVehiculo != null) {
+            columnaVehiculo.setCellValueFactory(c -> new SimpleStringProperty(
+                    c.getValue().getVehiculo() != null
+                            ? c.getValue().getVehiculo().getPlaca() + " (" + c.getValue().getVehiculo().getMarca() + ")"
+                            : "A pie"));
+        }
+
+        columnaActivoDescripcion.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDescripcion()));
+        columnaActivoSerie.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNumeroSerie()));
+
+        activosVisita = FXCollections.observableArrayList();
+        tablaActivos.setItems(activosVisita);
 
         tablaDentro.setItems(dentro);
+        
+        tablaDentro.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                activosVisita.setAll(newSelection.getActivos());
+            } else {
+                activosVisita.clear();
+            }
+        });
+
         cargarDentro();
     }
 

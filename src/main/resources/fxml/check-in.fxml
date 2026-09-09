@@ -20,8 +20,23 @@
 
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Label text="Documento:"/>
-                <TextField fx:id="campoDocumento" promptText="Documento del invitado" prefWidth="280"/>
+                <TextField fx:id="campoDocumento" promptText="Documento del invitado" prefWidth="150"/>
+                <Label text="Placa (Opc):"/>
+                <TextField fx:id="campoPlacaVehiculo" promptText="Placa" prefWidth="100"/>
+                <Label text="Marca:"/>
+                <TextField fx:id="campoMarcaVehiculo" promptText="Marca" prefWidth="100"/>
+                <Label text="Tipo:"/>
+                <TextField fx:id="campoTipoVehiculo" promptText="Tipo" prefWidth="100"/>
                 <Button text="Confirmar Ingreso" onAction="#confirmarIngreso" styleClass="dashboard-button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Activo / Equipo:"/>
+                <TextField fx:id="campoDescripcionActivo" promptText="Ej: Laptop, Herramienta" prefWidth="180"/>
+                <Label text="N° Serie:"/>
+                <TextField fx:id="campoSerieActivo" promptText="Ej: SN-12345" prefWidth="130"/>
+                <Button text="＋ Agregar Activo" onAction="#agregarActivo" styleClass="dashboard-button secondary"/>
+                <Label fx:id="etiquetaActivosDeclarados" text="0 activos declarados" style="-fx-text-fill: #a78bfa; -fx-font-weight: bold;"/>
             </HBox>
 
             <Label fx:id="etiquetaMensaje" styleClass="login-message"/>

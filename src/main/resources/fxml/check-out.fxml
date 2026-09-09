@@ -29,10 +29,19 @@
             <Label text="Personas dentro del recinto" styleClass="dashboard-subtitle"/>
             <TableView fx:id="tablaDentro" prefHeight="400">
                 <columns>
-                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="180"/>
-                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="300"/>
-                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="200"/>
-                    <TableColumn fx:id="columnaTipo" text="Tipo" prefWidth="120"/>
+                    <TableColumn fx:id="columnaDocumento" text="Documento" prefWidth="150"/>
+                    <TableColumn fx:id="columnaNombre" text="Nombre" prefWidth="250"/>
+                    <TableColumn fx:id="columnaIngreso" text="Hora de Ingreso" prefWidth="180"/>
+                    <TableColumn fx:id="columnaTipo" text="Tipo" prefWidth="100"/>
+                    <TableColumn fx:id="columnaVehiculo" text="Vehículo (Placa)" prefWidth="160"/>
+                </columns>
+            </TableView>
+
+            <Label text="Activos de la persona seleccionada" styleClass="dashboard-subtitle"/>
+            <TableView fx:id="tablaActivos" prefHeight="200">
+                <columns>
+                    <TableColumn fx:id="columnaActivoDescripcion" text="Descripción" prefWidth="250"/>
+                    <TableColumn fx:id="columnaActivoSerie" text="Número de Serie" prefWidth="200"/>
                 </columns>
             </TableView>
         </VBox>

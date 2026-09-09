@@ -2,6 +2,7 @@ package com.acme.sica.infraestructura.ui.javafx.controlador;
 
 import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 import com.acme.sica.dominio.puerto.salida.*;
 import com.acme.sica.infraestructura.ui.javafx.AplicacionJavaFx;
 import com.acme.sica.infraestructura.ui.javafx.DialogoConfirmacion;
@@ -43,6 +44,7 @@ public class DashboardControlador {
      */
     @FXML private Label etiquetaBienvenida;
     @FXML private Label etiquetaRol;
+    @FXML private Label etiquetaPuntoAcceso;
     @FXML private Label etiquetaFecha;
 
     @FXML private Label statUsuarios;
@@ -67,6 +69,7 @@ public class DashboardControlador {
     @FXML private Button botonRegistrarTrabajador;
     @FXML private Button botonRegularizarSalida;
     @FXML private Button botonCheckOut;
+    @FXML private Button botonRegistrarVehiculos;
     @FXML private Button botonGestionarIncidentes;
     @FXML private Button botonBloquearPersonas;
     @FXML private Button botonReporteAccesos;
@@ -79,6 +82,10 @@ public class DashboardControlador {
         SesionContexto.obtener().ifPresent(sesion -> {
             etiquetaBienvenida.setText("Bienvenido, " + sesion.getNombreCompleto());
             etiquetaRol.setText("@" + sesion.getUsername());
+            if (etiquetaPuntoAcceso != null) {
+                PuntoAcceso puntoAcceso = sesion.getPuntoAcceso();
+                etiquetaPuntoAcceso.setText("🚪 " + (puntoAcceso != null ? puntoAcceso.getEtiqueta() : "Puerta Principal"));
+            }
         });
 
         botonGestionarRoles.setVisible(SesionContexto.tienePermiso("gestionar_roles"));
@@ -95,6 +102,7 @@ public class DashboardControlador {
         botonRegistrarTrabajador.setVisible(SesionContexto.tienePermiso("registrar_trabajador"));
         botonRegularizarSalida.setVisible(SesionContexto.tienePermiso("regularizar_salida"));
         botonCheckOut.setVisible(SesionContexto.tienePermiso("check_out"));
+        botonRegistrarVehiculos.setVisible(SesionContexto.tienePermiso("check_in_invitado"));
         botonGestionarIncidentes.setVisible(SesionContexto.tienePermiso("registrar_incidente"));
         botonBloquearPersonas.setVisible(SesionContexto.tienePermiso("bloquear_persona"));
         botonReporteAccesos.setVisible(SesionContexto.tienePermiso("generar_reporte_accesos"));
@@ -203,6 +211,7 @@ public class DashboardControlador {
     @FXML private void abrirRegistrarTrabajador() { cargarVista("/fxml/registrar-trabajador.fxml", "SICA - Registrar Trabajador"); }
     @FXML private void abrirRegularizarSalida() { cargarVista("/fxml/regularizar-salida.fxml", "SICA - Regularizar Salidas"); }
     @FXML private void abrirCheckOut() { cargarVista("/fxml/check-out.fxml", "SICA - Check-out"); }
+    @FXML private void abrirRegistrarVehiculos() { cargarVista("/fxml/vehiculos.fxml", "SICA - Registro de Vehículos"); }
     @FXML private void abrirGestionIncidentes() { cargarVista("/fxml/incidentes.fxml", "SICA - Registrar Incidente"); }
     @FXML private void abrirBloqueoPersonas() { cargarVista("/fxml/bloqueo-personas.fxml", "SICA - Bloquear Personas"); }
     @FXML private void abrirReporteAccesos() { cargarVista("/fxml/reporte-accesos.fxml", "SICA - Reporte de Accesos"); }

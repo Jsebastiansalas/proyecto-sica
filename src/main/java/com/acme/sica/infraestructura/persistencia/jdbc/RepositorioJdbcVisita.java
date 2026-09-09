@@ -1,10 +1,12 @@
 package com.acme.sica.infraestructura.persistencia.jdbc;
 
-import com.acme.sica.dominio.modelo.Funcionario;
+import com.acme.sica.dominio.modelo.Activo;
 import com.acme.sica.dominio.modelo.Empresa;
+import com.acme.sica.dominio.modelo.Funcionario;
 import com.acme.sica.dominio.modelo.Persona;
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 import com.acme.sica.dominio.modelo.enumerados.TipoPersona;
 import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
 
@@ -39,8 +41,8 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
 
     private Visita insertar(Visita visita) {
         String sql = "INSERT INTO visitas (persona_id, funcionario_id, empresa_id, registrado_por_id, " +
-                     "fecha_hora_programada, fecha_hora_checkin, fecha_hora_checkout, estado, motivo) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "fecha_hora_programada, fecha_hora_checkin, fecha_hora_checkout, estado, motivo, placa_vehicular) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -53,6 +55,7 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
             stmt.setTimestamp(7, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
             stmt.setString(8, visita.getEstado().name());
             stmt.setString(9, visita.getMotivo());
+            stmt.setString(10, visita.getVehiculo() != null ? visita.getVehiculo().getPlaca() : null);
             stmt.executeUpdate();
 
             try (ResultSet claves = stmt.getGeneratedKeys()) {
@@ -60,6 +63,7 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
                     visita.setId(claves.getLong(1));
                 }
             }
+            guardarActivos(conn, visita);
             return visita;
         } catch (SQLException e) {
             throw new RuntimeException("Error al insertar visita", e);
@@ -69,7 +73,7 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     private Visita actualizar(Visita visita) {
         String sql = "UPDATE visitas SET persona_id = ?, funcionario_id = ?, empresa_id = ?, " +
                      "registrado_por_id = ?, fecha_hora_programada = ?, " +
-                     "fecha_hora_checkin = ?, fecha_hora_checkout = ?, estado = ?, motivo = ? WHERE id = ?";
+                     "fecha_hora_checkin = ?, fecha_hora_checkout = ?, estado = ?, motivo = ?, placa_vehicular = ? WHERE id = ?";
         try (Connection conn = fabricaConexiones.crearConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -82,8 +86,10 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
             stmt.setTimestamp(7, visita.getFechaHoraSalida() != null ? Timestamp.valueOf(visita.getFechaHoraSalida()) : null);
             stmt.setString(8, visita.getEstado().name());
             stmt.setString(9, visita.getMotivo());
-            stmt.setLong(10, visita.getId());
+            stmt.setString(10, visita.getVehiculo() != null ? visita.getVehiculo().getPlaca() : null);
+            stmt.setLong(11, visita.getId());
             stmt.executeUpdate();
+            guardarActivos(conn, visita);
             return visita;
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualizar visita", e);
@@ -223,8 +229,13 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
      * Busca las entidades que coincidan con los filtros indicados.
      */
     @Override
-    public List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId) {
+    public List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId, PuntoAcceso puntoAcceso) {
         StringBuilder sql = new StringBuilder(construirSelectBase());
+
+        if (puntoAcceso != null) {
+            sql.append(" INNER JOIN bitacora_auditoria ba ON ba.entidad = 'VISITA' AND ba.entidad_id = v.id AND ba.accion = 'CHECK_IN' ");
+        }
+
         sql.append(" WHERE 1=1 ");
         List<Object> parametros = new ArrayList<>();
 
@@ -239,6 +250,10 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         if (empresaId != null) {
             sql.append(" AND f.empresa_id = ? ");
             parametros.add(empresaId);
+        }
+        if (puntoAcceso != null) {
+            sql.append(" AND ba.punto_acceso = ? ");
+            parametros.add(puntoAcceso.name());
         }
         sql.append(" ORDER BY v.fecha_creacion DESC");
 
@@ -257,6 +272,41 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
             return visitas;
         } catch (SQLException e) {
             throw new RuntimeException("Error al filtrar visitas", e);
+        }
+    }
+
+    private void guardarActivos(Connection conn, Visita visita) throws SQLException {
+        if (visita.getId() == null) return;
+        
+        // Limpiar activos existentes
+        try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM visita_activos WHERE visita_id = ?")) {
+            stmt.setLong(1, visita.getId());
+            stmt.executeUpdate();
+        }
+        
+        if (visita.getActivos() == null || visita.getActivos().isEmpty()) return;
+        
+        // Insertar nuevos activos
+        for (Activo activo : visita.getActivos()) {
+            if (activo.getId() == null) {
+                // Insertar el activo en la tabla de activos si es nuevo
+                try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO activos (descripcion, numero_serie) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                    stmt.setString(1, activo.getDescripcion());
+                    stmt.setString(2, activo.getNumeroSerie());
+                    stmt.executeUpdate();
+                    try (ResultSet rs = stmt.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            activo.setId(rs.getLong(1));
+                        }
+                    }
+                }
+            }
+            // Vincular
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO visita_activos (visita_id, activo_id) VALUES (?, ?)")) {
+                stmt.setLong(1, visita.getId());
+                stmt.setLong(2, activo.getId());
+                stmt.executeUpdate();
+            }
         }
     }
 
@@ -297,7 +347,7 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
     private String construirSelectBase() {
         return "SELECT v.id, v.persona_id, v.funcionario_id, v.empresa_id, v.registrado_por_id, " +
                "v.fecha_hora_programada, v.fecha_hora_checkin, v.fecha_hora_checkout, " +
-               "v.estado, v.motivo, v.fecha_creacion, " +
+               "v.estado, v.motivo, v.fecha_creacion, v.placa_vehicular, " +
                "p.documento AS persona_documento, p.nombre AS persona_nombre, p.foto_url AS persona_foto_url, " +
                "p.tipo AS persona_tipo, p.bloqueada AS persona_bloqueada, " +
                "f.nombre AS funcionario_nombre, f.empresa_id AS funcionario_empresa_id, " +
@@ -322,6 +372,13 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         visita.setEstado(EstadoVisita.valueOf(rs.getString("estado")));
         visita.setMotivo(rs.getString("motivo"));
         visita.setFechaCreacion(rs.getTimestamp("fecha_creacion").toLocalDateTime());
+        
+        String placaVehicular = rs.getString("placa_vehicular");
+        if (placaVehicular != null) {
+            com.acme.sica.dominio.modelo.Vehiculo vehiculo = new com.acme.sica.dominio.modelo.Vehiculo();
+            vehiculo.setPlaca(placaVehicular);
+            visita.setVehiculo(vehiculo);
+        }
 
         Persona persona = new Persona();
         persona.setId(rs.getLong("persona_id"));
@@ -368,6 +425,27 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
             visita.setRegistradaPor(registradoPor);
         }
 
+        cargarActivosParaVisita(visita);
+
         return visita;
+    }
+
+    private void cargarActivosParaVisita(Visita visita) {
+        String sql = "SELECT a.id, a.descripcion, a.numero_serie FROM activos a " +
+                     "INNER JOIN visita_activos va ON a.id = va.activo_id " +
+                     "WHERE va.visita_id = ?";
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, visita.getId());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Activo activo = new Activo(rs.getString("descripcion"), rs.getString("numero_serie"));
+                    activo.setId(rs.getLong("id"));
+                    visita.agregarActivo(activo);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al cargar activos de visita", e);
+        }
     }
 }

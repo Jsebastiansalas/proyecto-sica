@@ -26,6 +26,6 @@ public class ConsultarReporteAccesosServicio implements ConsultarReporteAccesosC
     @Override
     public List<Visita> consultar(ConsultarReporteAccesosComando comando) {
         cadenaAutorizacion.verificar("generar_reporte_accesos", "generar reporte de accesos");
-        return visitaRepositorio.buscarPorFiltros(comando.getFechaDesde(), comando.getFechaHasta(), comando.getEmpresaId());
+        return visitaRepositorio.buscarPorFiltros(comando.getFechaDesde(), comando.getFechaHasta(), comando.getEmpresaId(), comando.getPuntoAcceso());
     }
 }

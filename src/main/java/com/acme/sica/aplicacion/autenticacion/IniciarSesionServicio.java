@@ -4,6 +4,7 @@ import com.acme.sica.dominio.excepciones.CredencialesInvalidasExcepcion;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
 import com.acme.sica.dominio.modelo.Permiso;
 import com.acme.sica.dominio.modelo.Usuario;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.entrada.IniciarSesionCasoUso;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
@@ -53,7 +54,7 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
                 || !usuarioOpt.get().isActivo()
                 || !hasheadorContrasenas.verificar(comando.getPassword(), usuarioOpt.get().getPassword())) {
 
-            registrarIntentoFallido(username);
+            registrarIntentoFallido(username, comando.getPuntoAcceso());
             throw new CredencialesInvalidasExcepcion("Credenciales inválidas");
         }
 
@@ -61,10 +62,11 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
 
         Usuario usuario = usuarioOpt.get();
         Set<String> permisos = extraerPermisos(usuario);
-        Sesion sesion = new Sesion(usuario.getId(), usuario.getUsername(), usuario.getNombreCompleto(), permisos);
+        PuntoAcceso puntoAcceso = comando.getPuntoAcceso();
+        Sesion sesion = new Sesion(usuario.getId(), usuario.getUsername(), usuario.getNombreCompleto(), permisos, puntoAcceso);
         SesionContexto.iniciar(sesion);
 
-        registrarLoginExitoso(usuario);
+        registrarLoginExitoso(usuario, puntoAcceso);
 
         return new LoginResultado(usuario.getId(), usuario.getNombreCompleto(), usuario.getUsername(), permisos);
     }
@@ -76,7 +78,7 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
                 .collect(Collectors.toSet());
     }
 
-    private void registrarLoginExitoso(Usuario usuario) {
+    private void registrarLoginExitoso(Usuario usuario, PuntoAcceso puntoAcceso) {
         BitacoraAuditoria registro = new BitacoraAuditoria(
                 usuario.getId(),
                 usuario.getUsername(),
@@ -84,12 +86,13 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
                 "USUARIO",
                 usuario.getId(),
                 "Inicio de sesión exitoso",
-                null
+                null,
+                puntoAcceso
         );
         bitacoraRepositorio.guardar(registro);
     }
 
-    private void registrarLoginFallido(String username) {
+    private void registrarLoginFallido(String username, PuntoAcceso puntoAcceso) {
         BitacoraAuditoria registro = new BitacoraAuditoria(
                 null,
                 username,
@@ -97,7 +100,8 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
                 "USUARIO",
                 null,
                 "Intento fallido de inicio de sesión",
-                null
+                null,
+                puntoAcceso
         );
         bitacoraRepositorio.guardar(registro);
     }
@@ -116,10 +120,10 @@ public class IniciarSesionServicio implements IniciarSesionCasoUso {
         }
     }
 
-    private void registrarIntentoFallido(String username) {
+    private void registrarIntentoFallido(String username, PuntoAcceso puntoAcceso) {
         IntentosLogin intentos = intentosPorUsuario.computeIfAbsent(username, k -> new IntentosLogin());
         intentos.registrarFallido();
-        registrarLoginFallido(username);
+        registrarLoginFallido(username, puntoAcceso);
     }
 
     private static class IntentosLogin {

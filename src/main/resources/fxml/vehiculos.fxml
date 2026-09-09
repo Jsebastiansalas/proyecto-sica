@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.VehiculosControlador"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="form-scroll">
+
+    <VBox alignment="TOP_CENTER" styleClass="dashboard-root">
+        <padding><Insets top="28" right="56" bottom="28" left="56"/></padding>
+
+        <VBox styleClass="form-card">
+            <HBox styleClass="screen-header">
+                <Label text="Registro de Vehículos · Control de Flota" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Buscar:" styleClass="filter-label"/>
+                <TextField fx:id="campoBuscar" promptText="Placa, marca o tipo" prefWidth="360"/>
+                <Button text="Filtrar" onAction="#filtrarVehiculos" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <GridPane hgap="10" vgap="10">
+                <Label text="Placa:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoPlaca" promptText="Ej: ABC-123" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Marca:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoMarca" promptText="Ej: Toyota" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Tipo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="campoTipo" promptText="Ej: Sedán, SUV, Camioneta" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100"/>
+                    <ColumnConstraints minWidth="450"/>
+                </columnConstraints>
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="botonGuardar" text="Guardar" onAction="#guardarVehiculo" styleClass="dashboard-button"/>
+                <Button fx:id="botonLimpiar" text="Limpiar" onAction="#limpiarFormulario" styleClass="dashboard-button secondary"/>
+            </HBox>
+
+            <Label fx:id="etiquetaMensaje" styleClass="login-message"/>
+
+            <TableView fx:id="tablaVehiculos" prefHeight="320" prefWidth="800">
+                <columns>
+                    <TableColumn fx:id="columnaPlaca" text="Placa" prefWidth="160"/>
+                    <TableColumn fx:id="columnaMarca" text="Marca" prefWidth="260"/>
+                    <TableColumn fx:id="columnaTipo" text="Tipo" prefWidth="220"/>
+                    <TableColumn fx:id="columnaEstado" text="Estado en instalación" prefWidth="140"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+</ScrollPane>

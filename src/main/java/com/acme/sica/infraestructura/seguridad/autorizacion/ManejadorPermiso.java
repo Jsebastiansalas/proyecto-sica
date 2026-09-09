@@ -3,6 +3,7 @@ package com.acme.sica.infraestructura.seguridad.autorizacion;
 import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.excepciones.PermisoDenegadoExcepcion;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 
@@ -40,7 +41,8 @@ public class ManejadorPermiso extends ManejadorAutorizacion {
                 "AUTORIZACION",
                 null,
                 "Permiso denegado: '" + permiso + "' para " + accion,
-                null
+                null,
+                SesionContexto.obtener().map(s -> s.getPuntoAcceso()).orElse(PuntoAcceso.SISTEMA)
         );
         bitacoraRepositorio.guardar(registro);
     }

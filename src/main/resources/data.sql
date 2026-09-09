@@ -157,7 +157,28 @@ WHERE p.documento = '1234567890'
   );
 
 -- =====================================================
--- BITÁCORA INICIAL
+-- VEHICULOS Y ACTIVOS DE PRUEBA
 -- =====================================================
-INSERT IGNORE INTO bitacora_auditoria (usuario_id, usuario_username, accion, entidad, entidad_id, detalle) VALUES
-    (NULL, 'sistema', 'INICIALIZACION', 'BASE_DATOS', NULL, 'Base de datos poblada con datos iniciales de prueba');
+INSERT INTO vehiculos (placa, marca, tipo) VALUES
+    ('ABC-123', 'Toyota', 'SUV'),
+    ('XYZ-987', 'Nissan', 'Camioneta'),
+    ('LKM-456', 'Hyundai', 'Sedán')
+ON DUPLICATE KEY UPDATE marca = VALUES(marca);
+
+INSERT INTO activos (descripcion, numero_serie)
+SELECT 'Laptop corporativa', 'SN-LAP-001'
+WHERE NOT EXISTS (SELECT 1 FROM activos WHERE numero_serie = 'SN-LAP-001');
+
+INSERT INTO activos (descripcion, numero_serie)
+SELECT 'Herramienta de mantenimiento', 'SN-HERR-002'
+WHERE NOT EXISTS (SELECT 1 FROM activos WHERE numero_serie = 'SN-HERR-002');
+
+INSERT INTO activos (descripcion, numero_serie)
+SELECT 'Equipo de medición', 'SN-MED-003'
+WHERE NOT EXISTS (SELECT 1 FROM activos WHERE numero_serie = 'SN-MED-003');
+
+-- =====================================================
+-- BIT�?CORA INICIAL
+-- =====================================================
+INSERT IGNORE INTO bitacora_auditoria (usuario_id, usuario_username, accion, entidad, entidad_id, detalle, punto_acceso) VALUES
+    (NULL, 'sistema', 'INICIALIZACION', 'BASE_DATOS', NULL, 'Base de datos poblada con datos iniciales de prueba', 'SISTEMA');

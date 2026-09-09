@@ -104,6 +104,18 @@ CREATE TABLE IF NOT EXISTS personas (
     CONSTRAINT fk_persona_empresa FOREIGN KEY (empresa_id) REFERENCES empresas(id)
 );
 
+CREATE TABLE IF NOT EXISTS vehiculos (
+    placa VARCHAR(20) PRIMARY KEY,
+    marca VARCHAR(100),
+    tipo VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS activos (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(200) NOT NULL,
+    numero_serie VARCHAR(100)
+);
+
 CREATE TABLE IF NOT EXISTS visitas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     persona_id BIGINT NOT NULL,
@@ -122,13 +134,22 @@ CREATE TABLE IF NOT EXISTS visitas (
         'CERRADA_POR_SISTEMA',
         'RECHAZADO'
     ) NOT NULL DEFAULT 'PENDIENTE_APROBACION',
-    placa_vehicular VARCHAR(10),
+    placa_vehicular VARCHAR(20),
     motivo TEXT,
     fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_visita_persona FOREIGN KEY (persona_id) REFERENCES personas(id),
     CONSTRAINT fk_visita_funcionario FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id),
     CONSTRAINT fk_visita_empresa FOREIGN KEY (empresa_id) REFERENCES empresas(id),
-    CONSTRAINT fk_visita_registrado_por FOREIGN KEY (registrado_por_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_visita_registrado_por FOREIGN KEY (registrado_por_id) REFERENCES usuarios(id),
+    CONSTRAINT fk_visita_vehiculo FOREIGN KEY (placa_vehicular) REFERENCES vehiculos(placa)
+);
+
+CREATE TABLE IF NOT EXISTS visita_activos (
+    visita_id BIGINT NOT NULL,
+    activo_id BIGINT NOT NULL,
+    PRIMARY KEY (visita_id, activo_id),
+    CONSTRAINT fk_va_visita FOREIGN KEY (visita_id) REFERENCES visitas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_va_activo FOREIGN KEY (activo_id) REFERENCES activos(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS incidentes (
@@ -153,6 +174,7 @@ CREATE TABLE IF NOT EXISTS bitacora_auditoria (
     entidad_id BIGINT,
     detalle TEXT,
     ip_address VARCHAR(45),
+    punto_acceso VARCHAR(255),
     fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_bitacora_usuario (usuario_id),
     INDEX idx_bitacora_entidad (entidad),

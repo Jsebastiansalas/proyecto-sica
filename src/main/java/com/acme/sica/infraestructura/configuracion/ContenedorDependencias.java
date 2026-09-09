@@ -67,6 +67,7 @@ import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcPermiso;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcPersona;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcRol;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcUsuario;
+import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVehiculo;
 import com.acme.sica.infraestructura.persistencia.jdbc.RepositorioJdbcVisita;
 import com.acme.sica.infraestructura.seguridad.HasheadorContrasenas;
 import com.acme.sica.infraestructura.seguridad.autorizacion.FabricaCadenaAutorizacion;
@@ -115,6 +116,7 @@ public class ContenedorDependencias {
     private final EmpresaRepositorioPuerto empresaRepositorio;
     private final FuncionarioRepositorioPuerto funcionarioRepositorio;
     private final PersonaRepositorioPuerto personaRepositorio;
+    private final VehiculoRepositorioPuerto vehiculoRepositorio;
     private final VisitaRepositorioPuerto visitaRepositorio;
     private final IncidenteRepositorioPuerto incidenteRepositorio;
     private final BitacoraRepositorioPuerto bitacoraRepositorio;
@@ -132,6 +134,7 @@ public class ContenedorDependencias {
         this.empresaRepositorio = new RepositorioJdbcEmpresa(fabricaConexiones);
         this.funcionarioRepositorio = new RepositorioJdbcFuncionario(fabricaConexiones);
         this.personaRepositorio = new RepositorioJdbcPersona(fabricaConexiones);
+        this.vehiculoRepositorio = new RepositorioJdbcVehiculo(fabricaConexiones);
         this.visitaRepositorio = new RepositorioJdbcVisita(fabricaConexiones);
         this.incidenteRepositorio = new RepositorioJdbcIncidente(fabricaConexiones);
         this.bitacoraRepositorio = new RepositorioJdbcBitacora(fabricaConexiones);
@@ -200,7 +203,7 @@ public class ContenedorDependencias {
         );
 
         this.checkInInvitadoCasoUso = new AuditoriaCheckInDecorador(
-                new CheckInInvitadoServicio(visitaRepositorio, personaRepositorio,
+                new CheckInInvitadoServicio(visitaRepositorio, personaRepositorio, vehiculoRepositorio,
                         cadenaAutorizacion, estrategiaCierreSistema),
                 bitacoraRepositorio
         );
@@ -277,6 +280,10 @@ public class ContenedorDependencias {
 
     public PersonaRepositorioPuerto getPersonaRepositorio() {
         return personaRepositorio;
+    }
+
+    public VehiculoRepositorioPuerto getVehiculoRepositorio() {
+        return vehiculoRepositorio;
     }
 
     public VisitaRepositorioPuerto getVisitaRepositorio() {

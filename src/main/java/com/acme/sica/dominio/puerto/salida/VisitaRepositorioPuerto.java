@@ -2,6 +2,7 @@ package com.acme.sica.dominio.puerto.salida;
 
 import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +28,11 @@ public interface VisitaRepositorioPuerto {
 
     List<Visita> listarTodos();
 
-    List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId);
+    default List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId) {
+        return buscarPorFiltros(fechaDesde, fechaHasta, empresaId, null);
+    }
+
+    List<Visita> buscarPorFiltros(LocalDateTime fechaDesde, LocalDateTime fechaHasta, Long empresaId, PuntoAcceso puntoAcceso);
 
     long contarPendientes();
 

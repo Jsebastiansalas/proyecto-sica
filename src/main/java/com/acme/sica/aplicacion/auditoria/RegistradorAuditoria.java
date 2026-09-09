@@ -2,6 +2,7 @@ package com.acme.sica.aplicacion.auditoria;
 
 import com.acme.sica.aplicacion.autenticacion.SesionContexto;
 import com.acme.sica.dominio.modelo.BitacoraAuditoria;
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
 import com.acme.sica.dominio.modelo.enumerados.TipoAccionAuditoria;
 import com.acme.sica.dominio.puerto.salida.BitacoraRepositorioPuerto;
 
@@ -27,7 +28,8 @@ public final class RegistradorAuditoria {
                 entidad,
                 entidadId,
                 detalle,
-                null
+                null,
+                SesionContexto.obtener().map(s -> s.getPuntoAcceso()).orElse(PuntoAcceso.SISTEMA)
         );
         bitacoraRepositorio.guardar(registro);
     }

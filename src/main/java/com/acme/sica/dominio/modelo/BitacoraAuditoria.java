@@ -1,5 +1,7 @@
 package com.acme.sica.dominio.modelo;
 
+import com.acme.sica.dominio.modelo.enumerados.PuntoAcceso;
+
 import java.time.LocalDateTime;
 
 /**
@@ -17,6 +19,7 @@ public class BitacoraAuditoria {
     private String detalles;
     private String ipAddress;
     private LocalDateTime fechaHora;
+    private PuntoAcceso puntoAcceso;
 
     public BitacoraAuditoria() {
         this.fechaHora = LocalDateTime.now();
@@ -24,6 +27,11 @@ public class BitacoraAuditoria {
 
     public BitacoraAuditoria(Long usuarioId, String usuarioNombre, String accion,
                              String entidad, Long entidadId, String detalles, String ipAddress) {
+        this(usuarioId, usuarioNombre, accion, entidad, entidadId, detalles, ipAddress, PuntoAcceso.SISTEMA);
+    }
+
+    public BitacoraAuditoria(Long usuarioId, String usuarioNombre, String accion,
+                             String entidad, Long entidadId, String detalles, String ipAddress, PuntoAcceso puntoAcceso) {
         this();
         this.usuarioId = usuarioId;
         this.usuarioNombre = usuarioNombre;
@@ -32,6 +40,7 @@ public class BitacoraAuditoria {
         this.entidadId = entidadId;
         this.detalles = detalles;
         this.ipAddress = ipAddress;
+        this.puntoAcceso = puntoAcceso != null ? puntoAcceso : PuntoAcceso.SISTEMA;
     }
 
     public Long getId() {
@@ -106,6 +115,14 @@ public class BitacoraAuditoria {
         this.fechaHora = fechaHora;
     }
 
+    public PuntoAcceso getPuntoAcceso() {
+        return puntoAcceso;
+    }
+
+    public void setPuntoAcceso(PuntoAcceso puntoAcceso) {
+        this.puntoAcceso = puntoAcceso;
+    }
+
     @Override
     public String toString() {
         return "BitacoraAuditoria{" +
@@ -114,6 +131,7 @@ public class BitacoraAuditoria {
                 ", accion='" + accion + '\'' +
                 ", entidad='" + entidad + '\'' +
                 ", entidadId=" + entidadId +
+                ", puntoAcceso='" + puntoAcceso + '\'' +
                 ", fechaHora=" + fechaHora +
                 '}';
     }

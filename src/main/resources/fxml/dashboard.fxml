@@ -34,7 +34,10 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT" spacing="2">
                 <Label fx:id="etiquetaBienvenida" styleClass="dashboard-welcome"/>
-                <Label fx:id="etiquetaRol" styleClass="dashboard-user-tag"/>
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Label fx:id="etiquetaRol" styleClass="dashboard-user-tag"/>
+                    <Label fx:id="etiquetaPuntoAcceso" styleClass="dashboard-user-tag" style="-fx-text-fill: #38bdf8; -fx-background-color: rgba(56, 189, 248, 0.12); -fx-padding: 2 8 2 8; -fx-background-radius: 6;"/>
+                </HBox>
                 <Label text="● SISTEMA OPERATIVO" styleClass="system-status"/>
             </VBox>
         </HBox>
@@ -69,7 +72,7 @@
             <VBox styleClass="command-sidebar" spacing="14" HBox.hgrow="ALWAYS">
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="MÓDULOS" styleClass="section-title" HBox.hgrow="ALWAYS"/>
-                    <Label text="20 ACCIONES" styleClass="module-count"/>
+                    <Label text="21 ACCIONES" styleClass="module-count"/>
                 </HBox>
                 <Label text="Selecciona una operación para continuar" styleClass="section-desc"/>
 
@@ -94,14 +97,16 @@
 
                 <VBox styleClass="command-group operations-group" spacing="8">
                     <Label text="03  OPERACIONES DE ACCESO" styleClass="command-group-title"/>
+                    <Label text="Control de ingresos, vehículos (carros) y verificación de activos" styleClass="command-desc"/>
                     <FlowPane hgap="8" vgap="8">
                         <Button fx:id="botonPreRegistrarInvitado" text="＋  Pre-registrar" onAction="#abrirPreRegistrarInvitado" styleClass="command-button"/>
-                        <Button fx:id="botonCheckIn" text="↳  Check-in" onAction="#abrirCheckIn" styleClass="command-button"/>
+                        <Button fx:id="botonCheckIn" text="↳  Check-in (Vehículos / Activos)" onAction="#abrirCheckIn" styleClass="command-button"/>
                         <Button fx:id="botonRegistrarNoAnunciado" text="◇  No anunciado" onAction="#abrirRegistrarNoAnunciado" styleClass="command-button"/>
                         <Button fx:id="botonAprobarRechazar" text="✓  Aprobar / rechazar" onAction="#abrirAprobarRechazar" styleClass="command-button"/>
                         <Button fx:id="botonRegistrarTrabajador" text="♙  Trabajador" onAction="#abrirRegistrarTrabajador" styleClass="command-button"/>
                         <Button fx:id="botonRegularizarSalida" text="↗  Salida olvidada" onAction="#abrirRegularizarSalida" styleClass="command-button"/>
-                        <Button fx:id="botonCheckOut" text="↰  Check-out" onAction="#abrirCheckOut" styleClass="command-button"/>
+                        <Button fx:id="botonCheckOut" text="↰  Check-out (Vehículos / Activos)" onAction="#abrirCheckOut" styleClass="command-button"/>
+                        <Button fx:id="botonRegistrarVehiculos" text="⛿  Registro de Vehículos" onAction="#abrirRegistrarVehiculos" styleClass="command-button"/>
                     </FlowPane>
                 </VBox>
 

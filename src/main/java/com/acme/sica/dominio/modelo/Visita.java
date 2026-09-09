@@ -3,6 +3,8 @@ package com.acme.sica.dominio.modelo;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidad de dominio que representa una visita.
@@ -21,6 +23,8 @@ public class Visita {
     private LocalDateTime fechaHoraEsperada;
     private Usuario registradaPor;
     private LocalDateTime fechaCreacion;
+    private Vehiculo vehiculo;
+    private List<Activo> activos = new ArrayList<>();
 
     public Visita() {
         this.fechaCreacion = LocalDateTime.now();
@@ -124,6 +128,26 @@ public class Visita {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+    public List<Activo> getActivos() {
+        return activos;
+    }
+
+    public void setActivos(List<Activo> activos) {
+        this.activos = activos;
+    }
+
+    public void agregarActivo(Activo activo) {
+        this.activos.add(activo);
     }
 
     public boolean estaDentro() {

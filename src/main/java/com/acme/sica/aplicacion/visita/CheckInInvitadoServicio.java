@@ -7,7 +7,9 @@ import com.acme.sica.dominio.modelo.Visita;
 import com.acme.sica.dominio.modelo.enumerados.EstadoVisita;
 import com.acme.sica.dominio.puerto.entrada.CheckInInvitadoCasoUso;
 import com.acme.sica.dominio.puerto.salida.PersonaRepositorioPuerto;
+import com.acme.sica.dominio.puerto.salida.VehiculoRepositorioPuerto;
 import com.acme.sica.dominio.puerto.salida.VisitaRepositorioPuerto;
+import com.acme.sica.dominio.modelo.Vehiculo;
 import com.acme.sica.infraestructura.seguridad.autorizacion.ManejadorAutorizacion;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
 
     private final VisitaRepositorioPuerto visitaRepositorio;
     private final PersonaRepositorioPuerto personaRepositorio;
+    private final VehiculoRepositorioPuerto vehiculoRepositorio;
     private final ManejadorAutorizacion cadenaAutorizacion;
     private final EstrategiaCierreSistema estrategiaCierreSistema;
 
@@ -34,8 +37,17 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
                                    PersonaRepositorioPuerto personaRepositorio,
                                    ManejadorAutorizacion cadenaAutorizacion,
                                    EstrategiaCierreSistema estrategiaCierreSistema) {
+        this(visitaRepositorio, personaRepositorio, null, cadenaAutorizacion, estrategiaCierreSistema);
+    }
+
+    public CheckInInvitadoServicio(VisitaRepositorioPuerto visitaRepositorio,
+                                   PersonaRepositorioPuerto personaRepositorio,
+                                   VehiculoRepositorioPuerto vehiculoRepositorio,
+                                   ManejadorAutorizacion cadenaAutorizacion,
+                                   EstrategiaCierreSistema estrategiaCierreSistema) {
         this.visitaRepositorio = visitaRepositorio;
         this.personaRepositorio = personaRepositorio;
+        this.vehiculoRepositorio = vehiculoRepositorio;
         this.cadenaAutorizacion = cadenaAutorizacion;
         this.estrategiaCierreSistema = estrategiaCierreSistema;
     }
@@ -76,6 +88,24 @@ public class CheckInInvitadoServicio implements CheckInInvitadoCasoUso {
         Visita visita = aprobadas.get(0);
         visita.setFechaHoraIngreso(LocalDateTime.now());
         visita.setEstado(EstadoVisita.DENTRO);
+        
+        if (comando.getPlacaVehiculo() != null && !comando.getPlacaVehiculo().isBlank()) {
+            Vehiculo vehiculo = vehiculoRepositorio.buscarPorPlaca(comando.getPlacaVehiculo().trim())
+                    .orElseGet(() -> {
+                        Vehiculo nuevo = new Vehiculo(
+                                comando.getPlacaVehiculo().trim(),
+                                comando.getMarcaVehiculo(),
+                                comando.getTipoVehiculo()
+                        );
+                        return vehiculoRepositorio.guardar(nuevo);
+                    });
+            visita.setVehiculo(vehiculo);
+        }
+
+        if (comando.getActivos() != null && !comando.getActivos().isEmpty()) {
+            visita.setActivos(comando.getActivos());
+        }
+
         return visitaRepositorio.guardar(visita);
     }
 
