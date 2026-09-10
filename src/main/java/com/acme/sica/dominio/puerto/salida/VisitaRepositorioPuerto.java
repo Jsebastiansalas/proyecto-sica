@@ -37,4 +37,6 @@ public interface VisitaRepositorioPuerto {
     long contarPendientes();
 
     void eliminarPorId(Long id);
+
+    List<Visita> consultarVisitasActivasPorFuncionario(String documentoFuncionario);
 }
