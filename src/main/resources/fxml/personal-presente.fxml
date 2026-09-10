@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.acme.sica.infraestructura.ui.javafx.controlador.PersonalPresenteControlador">
+    
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Ver Personal Presente en el Complejo" style="-fx-font-size: 18px; -fx-font-weight: bold;" HBox.hgrow="ALWAYS"/>
+        <Button text="← Volver" onAction="#volverAlDashboard"/>
+    </HBox>
+
+    <Label fx:id="etiquetaMensaje" style="-fx-text-fill: #c0392b;"/>
+    
+    <TableView fx:id="tablaPersonal" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDocumentoVisitante" text="Documento Identidad" prefWidth="150"/>
+            <TableColumn fx:id="colNombreVisitante" text="Nombre Completo" prefWidth="250"/>
+            <TableColumn fx:id="colTipoPersona" text="Tipo de Persona" prefWidth="120"/>
+            <TableColumn fx:id="colHoraIngreso" text="Fecha y Hora de Entrada" prefWidth="170"/>
+        </columns>
+    </TableView>
+    
+</VBox>

@@ -38,5 +38,5 @@ public interface VisitaRepositorioPuerto {
 
     void eliminarPorId(Long id);
 
-    List<Visita> consultarVisitasActivasPorFuncionario(String documentoFuncionario);
+    List<Visita> consultarPersonalPresentePorEmpresa(Long empresaId);
 }

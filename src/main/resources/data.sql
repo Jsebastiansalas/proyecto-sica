@@ -37,7 +37,8 @@ INSERT INTO permisos (codigo, descripcion) VALUES
     ('bloquear_persona', 'Bloquear o desbloquear personas'),
     ('generar_reporte_accesos', 'Generar reportes de accesos'),
     ('generar_reporte_incidentes', 'Generar reportes de incidentes'),
-    ('gestionar_usuarios', 'Crear, editar y eliminar usuarios')
+    ('gestionar_usuarios', 'Crear, editar y eliminar usuarios'),
+    ('ver_personal_presente', 'Ver el personal presente en el complejo de su empresa')
 ON DUPLICATE KEY UPDATE descripcion = VALUES(descripcion);
 
 -- =====================================================
@@ -75,7 +76,7 @@ INSERT IGNORE INTO rol_permisos (rol_id, permiso_id)
 SELECT r.id, p.id
 FROM roles r, permisos p
 WHERE r.nombre = 'FUNCIONARIO_EMPRESA'
-  AND p.codigo IN ('login', 'pre_registrar_invitado', 'aprobar_rechazar', 'registrar_persona', 'registrar_incidente');
+  AND p.codigo IN ('login', 'pre_registrar_invitado', 'aprobar_rechazar', 'registrar_persona', 'registrar_incidente', 'ver_personal_presente');
 
 -- GUARDA_SEGURIDAD
 INSERT IGNORE INTO rol_permisos (rol_id, permiso_id)
@@ -147,13 +148,34 @@ ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
 -- =====================================================
 -- VISITAS DE PRUEBA
 -- =====================================================
-INSERT INTO visitas (persona_id, funcionario_id, fecha_hora_programada, estado, motivo)
-SELECT p.id, f.id, DATE_ADD(NOW(), INTERVAL 1 HOUR), 'APROBADO', 'Visita pre-registrada de prueba'
+INSERT INTO visitas (persona_id, funcionario_id, empresa_id, fecha_hora_programada, fecha_hora_checkin, estado, motivo)
+SELECT p.id, f.id, e.id, DATE_ADD(NOW(), INTERVAL 1 HOUR), NOW(), 'APROBADO', 'Visita pre-registrada de prueba'
 FROM personas p
 JOIN funcionarios f ON f.nombre = 'Juan Pérez'
+JOIN empresas e ON e.nombre = 'Empresa A'
 WHERE p.documento = '1234567890'
   AND NOT EXISTS (
       SELECT 1 FROM visitas v WHERE v.motivo = 'Visita pre-registrada de prueba'
+  );
+
+INSERT INTO visitas (persona_id, funcionario_id, empresa_id, fecha_hora_programada, fecha_hora_checkin, estado, motivo)
+SELECT p.id, f.id, e.id, DATE_SUB(NOW(), INTERVAL 2 HOUR), DATE_SUB(NOW(), INTERVAL 2 HOUR), 'DENTRO', 'Ana en el complejo'
+FROM personas p
+JOIN funcionarios f ON f.nombre = 'Juan Pérez'
+JOIN empresas e ON e.nombre = 'Empresa A'
+WHERE p.documento = '0987654321'
+  AND NOT EXISTS (
+      SELECT 1 FROM visitas v WHERE v.motivo = 'Ana en el complejo'
+  );
+
+INSERT INTO visitas (persona_id, funcionario_id, empresa_id, fecha_hora_programada, fecha_hora_checkin, estado, motivo)
+SELECT p.id, f.id, e.id, DATE_SUB(NOW(), INTERVAL 3 HOUR), DATE_SUB(NOW(), INTERVAL 3 HOUR), 'DENTRO', 'Carlos en el complejo'
+FROM personas p
+JOIN funcionarios f ON f.nombre = 'Juan Pérez'
+JOIN empresas e ON e.nombre = 'Empresa A'
+WHERE p.documento = '1234567890'
+  AND NOT EXISTS (
+      SELECT 1 FROM visitas v WHERE v.motivo = 'Carlos en el complejo'
   );
 
 -- =====================================================

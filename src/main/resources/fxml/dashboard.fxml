@@ -107,6 +107,7 @@
                         <Button fx:id="botonRegularizarSalida" text="↗  Salida olvidada" onAction="#abrirRegularizarSalida" styleClass="command-button"/>
                         <Button fx:id="botonCheckOut" text="↰  Check-out (Vehículos / Activos)" onAction="#abrirCheckOut" styleClass="command-button"/>
                         <Button fx:id="botonRegistrarVehiculos" text="⛿  Registro de Vehículos" onAction="#abrirRegistrarVehiculos" styleClass="command-button"/>
+                        <Button fx:id="botonVerPersonalPresente" text="◉  Personal Presente" onAction="#abrirVerPersonalPresente" styleClass="command-button"/>
                     </FlowPane>
                 </VBox>
 

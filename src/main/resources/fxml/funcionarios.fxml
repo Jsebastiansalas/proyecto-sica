@@ -15,6 +15,7 @@
         <VBox styleClass="form-card">
             <HBox styleClass="screen-header">
                 <Label text="Gestión de Funcionarios" styleClass="screen-title" HBox.hgrow="ALWAYS"/>
+                <Button text="Ver personal en Zona Franca" onAction="#abrirPersonalPresente" styleClass="dashboard-button"/>
                 <Button fx:id="botonVolver" text="← Volver" onAction="#volverAlDashboard" styleClass="back-button"/>
             </HBox>
 

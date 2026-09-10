@@ -75,6 +75,7 @@ public class DashboardControlador {
     @FXML private Button botonReporteAccesos;
     @FXML private Button botonReporteIncidentes;
     @FXML private Button botonGestionarUsuarios;
+    @FXML private Button botonVerPersonalPresente;
     @FXML private Button botonCerrarSesion;
 
     @FXML
@@ -108,6 +109,7 @@ public class DashboardControlador {
         botonReporteAccesos.setVisible(SesionContexto.tienePermiso("generar_reporte_accesos"));
         botonReporteIncidentes.setVisible(SesionContexto.tienePermiso("generar_reporte_incidentes"));
         botonGestionarUsuarios.setVisible(SesionContexto.tienePermiso("gestionar_usuarios"));
+        botonVerPersonalPresente.setVisible(SesionContexto.tienePermiso("ver_personal_presente"));
 
         cargarEstadisticas();
         cargarActividadReciente();
@@ -217,6 +219,7 @@ public class DashboardControlador {
     @FXML private void abrirReporteAccesos() { cargarVista("/fxml/reporte-accesos.fxml", "SICA - Reporte de Accesos"); }
     @FXML private void abrirReporteIncidentes() { cargarVista("/fxml/reporte-incidentes.fxml", "SICA - Reporte de Incidentes"); }
     @FXML private void abrirGestionarUsuarios() { cargarVista("/fxml/gestionar-usuarios.fxml", "SICA - Gestión de Usuarios"); }
+    @FXML private void abrirVerPersonalPresente() { cargarVista("/fxml/personal-presente.fxml", "SICA - Ver Personal Presente en el Complejo"); }
 
     @FXML
     private void cerrarSesion() {

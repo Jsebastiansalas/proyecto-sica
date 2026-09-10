@@ -344,6 +344,31 @@ public class RepositorioJdbcVisita implements VisitaRepositorioPuerto {
         }
     }
 
+    /**
+     * Retorna las visitas activas (personas dentro) pertenecientes a la
+     * empresa indicada.
+     */
+    @Override
+    public List<Visita> consultarPersonalPresentePorEmpresa(Long empresaId) {
+        String sql = construirSelectBase() +
+                " WHERE v.estado = 'DENTRO' AND f.empresa_id = ? " +
+                " ORDER BY v.fecha_hora_checkin DESC";
+        List<Visita> visitas = new ArrayList<>();
+        try (Connection conn = fabricaConexiones.crearConexion();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, empresaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    visitas.add(mapearFila(rs));
+                }
+            }
+            return visitas;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al consultar el personal presente", e);
+        }
+    }
+
     private String construirSelectBase() {
         return "SELECT v.id, v.persona_id, v.funcionario_id, v.empresa_id, v.registrado_por_id, " +
                "v.fecha_hora_programada, v.fecha_hora_checkin, v.fecha_hora_checkout, " +

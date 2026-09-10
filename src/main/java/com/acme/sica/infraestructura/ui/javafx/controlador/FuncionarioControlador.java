@@ -17,8 +17,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -228,6 +233,23 @@ public class FuncionarioControlador {
     @FXML
     private void volverAlDashboard() {
         NavegacionHelper.volverAlDashboard(etiquetaMensaje);
+    }
+
+    @FXML
+    private void abrirPersonalPresente() {
+        try {
+            Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/personal-presente.fxml"));
+            Scene escena = etiquetaMensaje.getScene();
+            String css = getClass().getResource("/css/application.css").toExternalForm();
+            if (!escena.getStylesheets().contains(css)) {
+                escena.getStylesheets().add(css);
+            }
+            Stage stage = (Stage) escena.getWindow();
+            stage.setTitle("SICA - Personal Presente en la Zona Franca");
+            escena.setRoot(raiz);
+        } catch (IOException e) {
+            etiquetaMensaje.setText("Error al cargar la vista: " + e.getMessage());
+        }
     }
 
     private void cargarEmpresas() {
