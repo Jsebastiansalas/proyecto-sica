@@ -3,11 +3,11 @@
 -- Esquema de base de datos MySQL
 -- =====================================================
 
-CREATE DATABASE IF NOT EXISTS sica_db
+CREATE DATABASE IF NOT EXISTS campus
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE sica_db;
+USE campus;
 
 -- =====================================================
 -- TABLAS DE SEGURIDAD (RBAC)

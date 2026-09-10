@@ -78,7 +78,7 @@ Los permisos efectivos dependen de los roles asignados en la base de datos. Esta
 - Maven 3.8 o superior.
 - MySQL 8 o superior.
 - Sistema operativo con soporte para JavaFX.
-- Puerto MySQL `3306` disponible.
+- Puerto MySQL `3307` disponible.
 
 La aplicación fue configurada para compilar con Java 17. El driver utilizado es MySQL Connector/J 8.0.33 y también puede conectarse a instalaciones compatibles de MySQL más recientes.
 
@@ -91,16 +91,16 @@ No es necesario crear manualmente las tablas. Al iniciar la aplicación, `Inicia
 - `src/main/resources/schema.sql`
 - `src/main/resources/data.sql`
 
-El esquema crea la base de datos `sica_db`, sus tablas, índices y datos semilla de forma idempotente.
+El esquema crea la base de datos `campus`, sus tablas, índices y datos semilla de forma idempotente.
 
 ### 2. Configurar la conexión
 
 La configuración está en `src/main/resources/application.properties`:
 
 ```properties
-db.url=jdbc:mysql://localhost:3306/sica_db?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=America/Guayaquil
-db.username=root
-db.password=${DB_PASSWORD:sebastian1129.,}
+db.url=jdbc:mysql://localhost:3307/campus?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=America/Guayaquil
+db.username=campus
+db.password=campus123
 db.driver=com.mysql.cj.jdbc.Driver
 ```
 
@@ -521,14 +521,14 @@ Antes de desplegar el sistema en un ambiente real:
 4. Crear usuarios con el mínimo de permisos necesario.
 5. Mantener MySQL, Java y las dependencias actualizadas.
 6. Revisar la configuración SSL de la conexión JDBC.
-7. Respaldar periódicamente `sica_db`.
+7. Respaldar periódicamente `campus`.
 
 ## Solución de problemas
 
 ### Error de conexión a MySQL
 
 - Confirmar que MySQL esté iniciado.
-- Confirmar que escuche en `localhost:3306`.
+- Confirmar que escuche en `localhost:3307`.
 - Verificar usuario y contraseña.
 - Revisar `DB_PASSWORD` si está definida.
 

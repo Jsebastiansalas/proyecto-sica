@@ -58,9 +58,9 @@ public class ConfiguracionBaseDatos {
         // Fallback si no se encuentra application.properties en el classpath.
         // Usa los mismos valores por defecto del archivo para que la app siga
         // funcionando en entornos de desarrollo aunque falte el recurso.
-        propiedades.setProperty("db.url", "jdbc:mysql://localhost:3306/sica_db?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=America/Guayaquil");
-        propiedades.setProperty("db.username", "root");
-        propiedades.setProperty("db.password", "sebastian1129.,");
+        propiedades.setProperty("db.url", "jdbc:mysql://localhost:3307/campus?createDatabaseIfNotExist=true&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=America/Guayaquil");
+        propiedades.setProperty("db.username", "campus");
+        propiedades.setProperty("db.password", "campus123");
         propiedades.setProperty("db.driver", "com.mysql.cj.jdbc.Driver");
     }
 
